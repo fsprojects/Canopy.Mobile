@@ -1,0 +1,25 @@
+type project
+title
+    canopy.mobile
+owners
+    Steffen Forkmann, Chris Holt
+authors 
+    Steffen Forkmann, Chris Holt
+projectUrl
+    https://github.com/fsprojects/Canopy.Mobile
+iconUrl
+    https://raw.githubusercontent.com/fsprojects/Canopy.Mobile/master/docs/files/img/logo.png
+licenseUrl
+    https://github.com/fsprojects/Canopy.Mobile/blob/master/LICENSE.txt
+requireLicenseAcceptance
+    false
+copyright
+    Copyright 2015
+tags
+    canopy fsharp testing mobile
+summary
+    Canopy testing framework for mobile apps.
+description
+    Canopy testing framework for mobile apps
+
+
