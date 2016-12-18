@@ -75,6 +75,7 @@ let tests =
         
         testList "element tests" [
             testCase "can find element by Android UI Automator" <| fun () ->
+                driver.StartActivity("io.appium.android.apis", ".ApiDemos")
                 let byAndroidUIAutomator = new ByAndroidUIAutomator("new UiSelector().clickable(true)")
                 let element = driver.FindElementById("android:id/content").FindElement(byAndroidUIAutomator)
 
@@ -83,6 +84,7 @@ let tests =
                 
 
             testCase "can set immediate value" <| fun () ->
+                driver.StartActivity("io.appium.android.apis", ".ApiDemos")
                 driver.StartActivity("io.appium.android.apis", ".view.Controls1")
                 let newValue = "new value"
 
@@ -90,13 +92,24 @@ let tests =
                 editElement.SetImmediateValue(newValue)
 
                 Expect.equal editElement.Text newValue "text was changed"
+
+            testCase "can find element by XPath" <| fun () ->
+                let byXPath = "//android.widget.TextView[contains(@text, 'Animat')]"
+                Expect.isNotNull (driver.FindElementByXPath(byXPath).Text) "element was found"
+                Expect.isGreaterThanOrEqual (driver.FindElementsByXPath(byXPath).Count) 1 "at least one element was found"
+
+            testCase "can find element by XPath with canopy find" <| fun () ->
+                let element = Selector.XPath "//android.widget.TextView[contains(@text, 'Animat')]" |> find
+                Expect.isNotNull element.Text "text is set"
         ]
     ]
 
 [<EntryPoint>]
 let main args =
-    let app = downloadDemoApp()
-    start app
-    let result = runTestsInAssembly defaultConfig args
-    quit()
-    result
+    try
+        let app = downloadDemoApp()
+        start app
+        let result = runTestsInAssembly defaultConfig args
+        quit()
+        result
+    with _ -> -1
