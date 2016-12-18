@@ -15,6 +15,7 @@ open System.IO
 #load "packages/build/SourceLink.Fake/tools/Fake.fsx"
 open SourceLink
 open Fake.Testing.Expecto
+open System.Threading
 
 #endif
 
@@ -182,6 +183,19 @@ Target "StartAndroidEmulator" (fun _ ->
         info.Arguments <- " -avd Nexus_6_API_23 -no-window -no-boot-anim")
 
     run adbTool "wait-for-device" ""
+)
+
+Target "StartAppium" (fun _ ->
+    ProcessHelper.killProcess "appium.exe"
+
+    run npmTool "install appium" ""
+    let appiumTool = platformTool "appium" ("node_modules" </> ".bin" </> "appium.cmd" |> FullName)
+
+    StartProcess (fun info ->  
+        info.FileName <- appiumTool
+        info.Arguments <- "")
+
+    Thread.Sleep 5000
 )
 
 
@@ -415,6 +429,7 @@ Target "All" DoNothing
 "AssemblyInfo"
   ==> "Build"
   ==> "CopyBinaries"
+  ==> "StartAppium"
   ==> "StartAndroidEmulator"
   ==> "RunTests"
   ==> "GenerateReferenceDocs"
