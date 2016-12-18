@@ -26,10 +26,6 @@ type Selector =
 | XPath of xpath:string
 | Name of name:string
 
-[<RequireQualifiedAccess>]
-type Direction =
-| Up
-| Down
 
 let getCapabilities appName =
     match getExecutionSource() with
@@ -42,6 +38,7 @@ let getCapabilities appName =
         capabilities.SetCapability("app", appName)
         capabilities
 
+/// Starts the webdriver with the given app.
 let start appName =
     let capabilities = getCapabilities appName
 
@@ -52,4 +49,37 @@ let start appName =
     canopy.types.browser <- driver
     printfn "Done starting"
 
+/// Quits the web driver
 let quit () = if not (isNull driver) then driver.Quit()
+
+let private findElements' selector = 
+    match selector with
+    | Selector.XPath xpath -> driver.FindElements(By.XPath(xpath)) |> List.ofSeq
+    | Selector.Name name -> driver.FindElements(By.Name(name)) |> List.ofSeq
+
+/// Finds elements on the current page.
+let findElements selector reliable timeout =
+    try
+        if reliable then
+            let results = ref []
+            wait timeout (fun _ ->
+                results := findElements' selector
+
+
+                not <| List.isEmpty !results)
+            !results
+        else
+            waitResults timeout (fun _ -> findElements' selector)
+    with | :? WebDriverTimeoutException -> failwithf "can't find element with selector: %A" selector
+
+/// Returns all elements that match the given selector.
+let findAll selector = findElements selector true waitTimeout
+
+/// Returns the first element that matches the given selector.
+let find selector = findAll selector |> List.head
+
+/// Returns the first element that matches the given selector or None if no such element exists.
+let tryFind selector = findAll selector |> List.tryHead
+
+/// Returns true when the selector matches an element on the current page or otherwise false.
+let exists selector = findElements selector true waitTimeout |> List.isEmpty |> not

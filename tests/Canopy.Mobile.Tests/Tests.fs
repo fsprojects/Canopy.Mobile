@@ -5,6 +5,9 @@ open System.IO
 open Expecto
 open System.Collections.Generic
 open System.Net
+open OpenQA.Selenium.Appium
+open OpenQA.Selenium.Appium.Android
+open OpenQA.Selenium
 
 let downloadDemoApp () =
     let localFile = FileInfo("./temp/ApiDemos-debug.apk")
@@ -42,6 +45,25 @@ let tests =
             testCase "can get app strings using lang" <| fun () ->
                 let appStrings = driver.GetAppStringDictionary("en")
                 Expect.notEqual appStrings.Count 0 "app strings are not empty"
+        ]
+
+        
+        testList "element tests" [
+            testCase "can find element by Android UI Automator" <| fun () ->
+                let byAndroidUIAutomator = new ByAndroidUIAutomator("new UiSelector().clickable(true)")
+                let element = driver.FindElementById("android:id/content").FindElement(byAndroidUIAutomator)
+
+                Expect.isNotNull element.Text "text is set"
+                Expect.isGreaterThanOrEqual (driver.FindElementById("android:id/content").FindElements(byAndroidUIAutomator).Count) 1 "selects at least 1 element"
+
+            testCase "can set immediate value" <| fun () ->
+                driver.StartActivity("io.appium.android.apis", ".view.Controls1")
+                let newValue = "new value"
+
+                let editElement = driver.FindElementByAndroidUIAutomator("resourceId(\"io.appium.android.apis:id/edit\")") :?> AndroidElement 
+                editElement.SetImmediateValue(newValue)
+
+                Expect.equal editElement.Text newValue "text was changed"
         ]
     ]
 
