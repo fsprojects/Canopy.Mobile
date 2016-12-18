@@ -8,6 +8,8 @@ open System.Net
 open OpenQA.Selenium.Appium
 open OpenQA.Selenium.Appium.Android
 open OpenQA.Selenium
+open System.Threading
+open OpenQA.Selenium.Appium.Android.Enums
 
 let downloadDemoApp () =
     let localFile = FileInfo("./temp/ApiDemos-debug.apk")
@@ -35,6 +37,11 @@ let tests =
             testCase "can get dictionary data" <| fun () ->
                 let dictionary : Dictionary<string, obj> = driver.SessionDetails.["desired"] |> unbox
                 Expect.equal dictionary.Count 5 "desired data is set"
+
+            testCase "can get device time" <| fun () ->
+                let time = driver.DeviceTime
+
+                Expect.equal time.Length 28 "time has correct format"
         ]
         
         testList "app strings tests" [
@@ -46,6 +53,20 @@ let tests =
                 let appStrings = driver.GetAppStringDictionary("en")
                 Expect.notEqual appStrings.Count 0 "app strings are not empty"
         ]
+        
+        testList "key press tests" [
+            testCase "can press key code" <| fun () ->
+                driver.PressKeyCode(AndroidKeyCode.Home)
+
+            testCase "can press key code with meta state" <| fun () ->
+                driver.PressKeyCode(AndroidKeyCode.Space, AndroidKeyMetastate.Meta_Shift_On)
+
+            testCase "can long press key code" <| fun () ->
+                driver.LongPressKeyCode(AndroidKeyCode.Space)
+
+            testCase "can long press key code with meta state" <| fun () ->
+                driver.LongPressKeyCode(AndroidKeyCode.Space, AndroidKeyMetastate.Meta_Shift_On)
+        ]
 
         
         testList "element tests" [
@@ -55,6 +76,7 @@ let tests =
 
                 Expect.isNotNull element.Text "text is set"
                 Expect.isGreaterThanOrEqual (driver.FindElementById("android:id/content").FindElements(byAndroidUIAutomator).Count) 1 "selects at least 1 element"
+                
 
             testCase "can set immediate value" <| fun () ->
                 driver.StartActivity("io.appium.android.apis", ".view.Controls1")
