@@ -84,13 +84,6 @@ let platformTool tool path =
 
 let npmTool = platformTool "npm" (@"C:\Program Files\nodejs\npm.cmd" |> FullName)
 
-let androidSDKPath =
-    let p1 = ProgramFilesX86 </> "Android" </> "android-sdk"
-    if Directory.Exists p1 then FullName p1 else
-    let p2 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> "Android" </> "sdk"
-    if Directory.Exists p2 then FullName p2 else
-    failwithf "Can't find Android SDK in %s or %s" p1 p2
-
 
 // Read additional information from the release notes document
 let release = LoadReleaseNotes "RELEASE_NOTES.md"
@@ -170,30 +163,25 @@ Target "Build" (fun _ ->
 // --------------------------------------------------------------------------------------
 // Run the unit tests using test runner
 
-Target "StartEmulator" (fun _ ->
-    let adbPath = androidSDKPath </> "platform-tools/adb.exe"
-    let emulator = androidSDKPath </> "tools" </> "emulator.exe"
+Target "StartAndroidEmulator" (fun _ ->
+    let androidSDKPath =
+        let p1 = ProgramFilesX86 </> "Android" </> "android-sdk"
+        if Directory.Exists p1 then FullName p1 else
+        let p2 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> "Android" </> "sdk"
+        if Directory.Exists p2 then FullName p2 else
+        failwithf "Can't find Android SDK in %s or %s" p1 p2
+    
+    let adbTool = platformTool "adb" ( androidSDKPath </> "platform-tools/adb.exe")
 
     ProcessHelper.killProcess "adb.exe"
 
-    let args = " start-server"
-    if 0 <> ExecProcess (fun info ->  
-        info.FileName <- adbPath
-        info.Arguments <- args) TimeSpan.MaxValue
-    then
-        failwithf "starting emulator failed on %s" args
+    run adbTool "start-server" ""
     
-    let args = " -avd Nexus_6_API_23 -no-window -no-boot-anim"
     StartProcess (fun info ->  
-        info.FileName <- emulator
-        info.Arguments <- args)
+        info.FileName <- androidSDKPath </> "tools" </> "emulator.exe"
+        info.Arguments <- " -avd Nexus_6_API_23 -no-window -no-boot-anim")
 
-    let args = " wait-for-device"
-    if 0 <> ExecProcess (fun info ->  
-        info.FileName <- adbPath
-        info.Arguments <- args) TimeSpan.MaxValue
-    then
-        failwithf "starting emulator failed on %s" args
+    run adbTool "wait-for-device" ""
 )
 
 
@@ -427,7 +415,7 @@ Target "All" DoNothing
 "AssemblyInfo"
   ==> "Build"
   ==> "CopyBinaries"
-  ==> "StartEmulator"
+  ==> "StartAndroidEmulator"
   ==> "RunTests"
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
