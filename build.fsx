@@ -148,6 +148,34 @@ Target "Build" (fun _ ->
 // --------------------------------------------------------------------------------------
 // Run the unit tests using test runner
 
+Target "StartEmulator" (fun _ ->
+    let adbPath = @"C:\Users\Steffen\AppData\Local\Android\sdk\platform-tools\adb.exe"
+    let toolPath = @"C:\Users\Steffen\AppData\Local\Android\sdk\tools"
+    let emulator = toolPath </> "emulator.exe"
+
+    ProcessHelper.killProcess "adb.exe"
+
+    let args = " start-server"
+    if 0 <> ExecProcess (fun info ->  
+        info.FileName <- adbPath
+        info.Arguments <- args) TimeSpan.MaxValue
+    then
+        failwithf "starting emulator failed on %s" args
+    
+    let args = " -avd Nexus_6_API_23 -no-window -no-boot-anim"
+    StartProcess (fun info ->  
+        info.FileName <- emulator
+        info.Arguments <- args)
+
+    let args = " wait-for-device"
+    if 0 <> ExecProcess (fun info ->  
+        info.FileName <- adbPath
+        info.Arguments <- args) TimeSpan.MaxValue
+    then
+        failwithf "starting emulator failed on %s" args
+)
+
+
 Target "RunTests" (fun _ ->
     testExecutables
     |> Expecto (fun p -> { p with Parallel = false } )
@@ -378,6 +406,7 @@ Target "All" DoNothing
 "AssemblyInfo"
   ==> "Build"
   ==> "CopyBinaries"
+  ==> "StartEmulator"
   ==> "RunTests"
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
