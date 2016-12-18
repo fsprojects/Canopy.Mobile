@@ -10,6 +10,7 @@ open OpenQA.Selenium.Appium.Android
 open OpenQA.Selenium
 open System.Threading
 open OpenQA.Selenium.Appium.Android.Enums
+open OpenQA.Selenium.Appium.Interfaces
 
 let downloadDemoApp () =
     let localFile = FileInfo("./temp/ApiDemos-debug.apk")
@@ -37,7 +38,10 @@ let tests =
             testCase "can get dictionary data" <| fun () ->
                 let dictionary : Dictionary<string, obj> = driver.SessionDetails.["desired"] |> unbox
                 Expect.equal dictionary.Count 5 "desired data is set"
+        ]
 
+        
+        testList "device tests" [
             testCase "can get device time" <| fun () ->
                 let time = driver.DeviceTime
 
