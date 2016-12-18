@@ -35,11 +35,11 @@ let getCapabilities appName =
     match getExecutionSource() with
     | Console  ->
         let capabilities = DesiredCapabilities()
-        capabilities.SetCapability("platformName", "Android");
-        capabilities.SetCapability("platformVersion", "6.0");
-        capabilities.SetCapability("platform", "Android");
-        capabilities.SetCapability("deviceName", "Android Emulator");
-        capabilities.SetCapability("app", appName);
+        capabilities.SetCapability("platformName", "Android")
+        capabilities.SetCapability("platformVersion", "6.0")
+        capabilities.SetCapability("platform", "Android")
+        capabilities.SetCapability("deviceName", "Android Emulator")
+        capabilities.SetCapability("app", appName)
         capabilities
 
 let start appName =
