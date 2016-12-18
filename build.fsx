@@ -70,6 +70,28 @@ let gitRaw = environVarOrDefault "gitRaw" "https://raw.githubusercontent.com/fsp
 // END TODO: The rest of the file includes standard build steps
 // --------------------------------------------------------------------------------------
 
+let run cmd args dir =
+    if execProcess (fun info ->
+        info.FileName <- cmd
+        if not( String.IsNullOrWhiteSpace dir) then
+            info.WorkingDirectory <- dir
+        info.Arguments <- args
+    ) System.TimeSpan.MaxValue |> not then
+        failwithf "Error while running '%s' with args: %s" cmd args
+
+let platformTool tool path =
+    isUnix |> function | true -> tool | _ -> path
+
+let npmTool = platformTool "npm" (@"C:\Program Files\nodejs\npm.cmd" |> FullName)
+
+let androidSDKPath =
+    let p1 = ProgramFilesX86 </> "Android" </> "android-sdk"
+    if Directory.Exists p1 then FullName p1 else
+    let p2 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> "Android" </> "sdk"
+    if Directory.Exists p2 then FullName p2 else
+    failwithf "Can't find Android SDK in %s or %s" p1 p2
+
+
 // Read additional information from the release notes document
 let release = LoadReleaseNotes "RELEASE_NOTES.md"
 
@@ -149,9 +171,8 @@ Target "Build" (fun _ ->
 // Run the unit tests using test runner
 
 Target "StartEmulator" (fun _ ->
-    let adbPath = @"C:\Users\Steffen\AppData\Local\Android\sdk\platform-tools\adb.exe"
-    let toolPath = @"C:\Users\Steffen\AppData\Local\Android\sdk\tools"
-    let emulator = toolPath </> "emulator.exe"
+    let adbPath = androidSDKPath </> "platform-tools/adb.exe"
+    let emulator = androidSDKPath </> "tools" </> "emulator.exe"
 
     ProcessHelper.killProcess "adb.exe"
 
