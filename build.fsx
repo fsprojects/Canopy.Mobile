@@ -82,8 +82,22 @@ let run' timeout cmd args dir =
 
 let run = run' System.TimeSpan.MaxValue
 
+
+let androidSDKPath =
+    let p1 = ProgramFilesX86 </> "Android" </> "android-sdk"
+    if Directory.Exists p1 then FullName p1 else
+    let p2 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> "Android" </> "sdk"
+    if Directory.Exists p2 then FullName p2 else
+    failwithf "Can't find Android SDK in %s or %s" p1 p2
+
+setEnvironVar "ANDROID_HOME" androidSDKPath
+setEnvironVar "ANDROID_SDK_ROOT" androidSDKPath
+
+
 let platformTool tool path =
     isUnix |> function | true -> tool | _ -> path
+    
+let adbTool = platformTool "adb" ( androidSDKPath </> "platform-tools/adb.exe")
 
 let npmTool = platformTool "npm" (@"C:\Program Files\nodejs\npm.cmd" |> FullName)
 
@@ -168,18 +182,7 @@ Target "Build" (fun _ ->
 
 Target "StartAndroidEmulator" (fun _ ->
     ActivateFinalTarget "CloseAndroid"
-    let androidSDKPath =
-        let p1 = ProgramFilesX86 </> "Android" </> "android-sdk"
-        if Directory.Exists p1 then FullName p1 else
-        let p2 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> "Android" </> "sdk"
-        if Directory.Exists p2 then FullName p2 else
-        failwithf "Can't find Android SDK in %s or %s" p1 p2
-
     
-    setEnvironVar "ANDROID_HOME" androidSDKPath
-    setEnvironVar "ANDROID_SDK_ROOT" androidSDKPath
-    
-    let adbTool = platformTool "adb" ( androidSDKPath </> "platform-tools/adb.exe")
 
     ProcessHelper.killProcess "adb.exe"
     ProcessHelper.killProcess "qemu-system-i386.exe"
@@ -210,6 +213,7 @@ Target "StartAppium" (fun _ ->
 )
 
 FinalTarget "CloseAndroid" (fun _ -> 
+    run adbTool "shell reboot -p" ""
     ProcessHelper.killProcess "adb.exe"
     ProcessHelper.killProcess "appium.exe"
     ProcessHelper.killProcess "qemu-system-i386.exe"
