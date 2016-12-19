@@ -71,14 +71,16 @@ let gitRaw = environVarOrDefault "gitRaw" "https://raw.githubusercontent.com/fsp
 // END TODO: The rest of the file includes standard build steps
 // --------------------------------------------------------------------------------------
 
-let run cmd args dir =
+let run' timeout cmd args dir =
     if execProcess (fun info ->
         info.FileName <- cmd
         if not( String.IsNullOrWhiteSpace dir) then
             info.WorkingDirectory <- dir
         info.Arguments <- args
-    ) System.TimeSpan.MaxValue |> not then
+    ) timeout |> not then
         failwithf "Error while running '%s' with args: %s" cmd args
+
+let run = run' System.TimeSpan.MaxValue
 
 let platformTool tool path =
     isUnix |> function | true -> tool | _ -> path
@@ -182,7 +184,7 @@ Target "StartAndroidEmulator" (fun _ ->
         info.FileName <- androidSDKPath </> "tools" </> "emulator.exe"
         info.Arguments <- " -avd Nexus_6_API_23 -no-window -no-boot-anim")
 
-    run adbTool "wait-for-device" ""
+    run' (System.TimeSpan.FromMinutes 2.) adbTool "wait-for-device" ""
 )
 
 Target "StartAppium" (fun _ ->
