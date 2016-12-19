@@ -86,7 +86,7 @@ let tests =
                 let element = Selector.XPath "//android.widget.TextView[@text='API Demos']" |> find
                 Expect.isNotNull element.Text "headline is set"
             
-            ftestCase "can click element by XPath" <| fun () ->
+            testCase "can click element by XPath" <| fun () ->
                 Selector.XPath "//android.widget.TextView[@text='Graphics']" |> click
                 Selector.XPath "//android.widget.TextView[@text='Arcs']" |> click
 
@@ -107,6 +107,16 @@ let tests =
             testCase "can find element by XPath with canopy find" <| fun () ->
                 let element = Selector.XPath "//android.widget.TextView[@text='API Demos']" |> find
                 Expect.isNotNull element.Text "headline is set"
+
+                let element = Selector.XPath "//android.widget.TextView[contains(@text, \"Animat\")]" |> find
+                Expect.equal element.Text "Animation" "test is set"
+        ]
+
+        testList "complex android tests" [
+            testCase "can find elements" <| fun () ->
+                let element = Selector.XPath "//android.widget.TextView[contains(@text, \"Animat\")]" |> find
+                Expect.isTrue element.Displayed "element is displayed"
+
         ]
     ]
 
@@ -115,6 +125,7 @@ let main args =
     try
         let app = downloadDemoApp()
         start app
+
         let result = runTestsInAssembly defaultConfig args
         quit()
         result
