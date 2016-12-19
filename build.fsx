@@ -174,6 +174,10 @@ Target "StartAndroidEmulator" (fun _ ->
         let p2 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> "Android" </> "sdk"
         if Directory.Exists p2 then FullName p2 else
         failwithf "Can't find Android SDK in %s or %s" p1 p2
+
+    
+    setEnvironVar "ANDROID_HOME" androidSDKPath
+    setEnvironVar "ANDROID_SDK_ROOT" androidSDKPath
     
     let adbTool = platformTool "adb" ( androidSDKPath </> "platform-tools/adb.exe")
 
