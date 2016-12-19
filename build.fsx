@@ -82,7 +82,6 @@ let run' timeout cmd args dir =
 
 let run = run' System.TimeSpan.MaxValue
 
-
 let androidSDKPath =
     let p1 = ProgramFilesX86 </> "Android" </> "android-sdk"
     if Directory.Exists p1 then FullName p1 else
@@ -183,7 +182,6 @@ Target "Build" (fun _ ->
 Target "StartAndroidEmulator" (fun _ ->
     ActivateFinalTarget "CloseAndroid"
     
-
     ProcessHelper.killProcess "adb.exe"
     ProcessHelper.killProcess "qemu-system-i386.exe"
 
@@ -198,24 +196,9 @@ Target "StartAndroidEmulator" (fun _ ->
     run' (System.TimeSpan.FromMinutes 2.) adbTool "wait-for-device" ""
 )
 
-Target "StartAppium" (fun _ ->
-    ProcessHelper.killProcess "node.exe"
-    ProcessHelper.killProcess "appium.exe"
-
-    run npmTool "install appium" ""
-    let appiumTool = platformTool "appium" ("node_modules" </> ".bin" </> "appium.cmd" |> FullName)
-
-    StartProcess (fun info ->  
-        info.FileName <- appiumTool
-        info.Arguments <- "--log-level error:warn")
-
-    Thread.Sleep 5000
-)
-
 FinalTarget "CloseAndroid" (fun _ -> 
     run adbTool "shell reboot -p" ""
     ProcessHelper.killProcess "adb.exe"
-    ProcessHelper.killProcess "appium.exe"
     ProcessHelper.killProcess "qemu-system-i386.exe"
     ProcessHelper.killProcess "node.exe"
 )
@@ -452,7 +435,6 @@ Target "All" DoNothing
   ==> "Build"
   ==> "CopyBinaries"
   ==> "StartAndroidEmulator"
-  ==> "StartAppium"
   ==> "RunTests"
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"

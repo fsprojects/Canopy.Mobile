@@ -7,6 +7,7 @@ open OpenQA.Selenium.Appium
 open OpenQA.Selenium.Appium.Android
 open OpenQA.Selenium.Appium.Interfaces
 open System.Threading
+open OpenQA.Selenium.Appium.Service
 
 type ExecutionSource =
 | Console
@@ -18,6 +19,7 @@ let getTestServerAddress () =
     | Console  -> Uri "http://127.0.0.1:4723/wd/hub"
 
 let mutable driver : AndroidDriver<IWebElement> = null
+let mutable localService : AppiumLocalService = null
 
 //configuration
 let mutable waitTimeout = 10.0
@@ -27,6 +29,15 @@ let mutable waitAfterClick = 1000
 type Selector =
 | XPath of xpath:string
 | Name of name:string
+
+
+/// Starts appium as local service
+let startAppium() =
+    if localService = null then
+        let builder = AppiumServiceBuilder().WithLogFile(new System.IO.FileInfo("Log"));
+        localService <- builder.Build()
+    if not localService.IsRunning then
+        localService.Start()
 
 
 let getCapabilities appName =
@@ -42,6 +53,7 @@ let getCapabilities appName =
 
 /// Starts the webdriver with the given app.
 let start appName =
+    startAppium()
     let capabilities = getCapabilities appName
 
     let testServerAddress = getTestServerAddress ()
@@ -55,6 +67,9 @@ let start appName =
 let quit () = 
     if not (isNull driver) then 
         driver.Quit()
+    if not (isNull localService) then
+        localService.Dispose()
+        localService <- null
 
 let private findElements' selector = 
     match selector with
