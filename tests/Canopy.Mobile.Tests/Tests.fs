@@ -82,6 +82,17 @@ let tests =
                 Expect.isNotNull element.Text "text is set"
                 Expect.isGreaterThanOrEqual (driver.FindElementById("android:id/content").FindElements(byAndroidUIAutomator).Count) 1 "selects at least 1 element"
                 
+            testCase "can find element by XPath" <| fun () ->
+                let element = Selector.XPath "//android.widget.TextView[@text='API Demos']" |> find
+                Expect.isNotNull element.Text "headline is set"
+            
+            ftestCase "can click element by XPath" <| fun () ->
+                Selector.XPath "//android.widget.TextView[@text='Graphics']" |> click
+                Selector.XPath "//android.widget.TextView[@text='Arcs']" |> click
+
+                back()
+
+                Selector.XPath "//android.widget.TextView[@text='Arcs']" |> click
 
             testCase "can set immediate value" <| fun () ->
                 driver.StartActivity("io.appium.android.apis", ".ApiDemos")
@@ -93,14 +104,9 @@ let tests =
 
                 Expect.equal editElement.Text newValue "text was changed"
 
-            testCase "can find element by XPath" <| fun () ->
-                let byXPath = "//android.widget.TextView[contains(@text, 'Animat')]"
-                Expect.isNotNull (driver.FindElementByXPath(byXPath).Text) "element was found"
-                Expect.isGreaterThanOrEqual (driver.FindElementsByXPath(byXPath).Count) 1 "at least one element was found"
-
             testCase "can find element by XPath with canopy find" <| fun () ->
-                let element = Selector.XPath "//android.widget.TextView[contains(@text, 'Animat')]" |> find
-                Expect.isNotNull element.Text "text is set"
+                let element = Selector.XPath "//android.widget.TextView[@text='API Demos']" |> find
+                Expect.isNotNull element.Text "headline is set"
         ]
     ]
 

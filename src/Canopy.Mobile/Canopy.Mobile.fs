@@ -54,8 +54,8 @@ let quit () = if not (isNull driver) then driver.Quit()
 
 let private findElements' selector = 
     match selector with
-    | Selector.XPath xpath -> driver.FindElements(By.XPath(xpath)) |> List.ofSeq
-    | Selector.Name name -> driver.FindElements(By.Name(name)) |> List.ofSeq
+    | Selector.XPath xpath -> driver.FindElementsByXPath xpath |> List.ofSeq
+    | Selector.Name name -> driver.FindElementsByName name |> List.ofSeq
 
 /// Finds elements on the current page.
 let findElements selector reliable timeout =
@@ -70,7 +70,8 @@ let findElements selector reliable timeout =
             !results
         else
             waitResults timeout (fun _ -> findElements' selector)
-    with | :? WebDriverTimeoutException -> failwithf "can't find element with selector: %A" selector
+    with 
+    | :? WebDriverTimeoutException -> failwithf "can't find elements with selector: %A" selector
 
 /// Returns all elements that match the given selector.
 let findAll selector = findElements selector true waitTimeout
@@ -83,3 +84,27 @@ let tryFind selector = findAll selector |> List.tryHead
 
 /// Returns true when the selector matches an element on the current page or otherwise false.
 let exists selector = findElements selector true waitTimeout |> List.isEmpty |> not
+
+/// Clicks the first element that's found with the selector
+let click selector =
+    try
+        wait 10.0 (fun _ ->
+            try 
+                (find selector).Click()
+                true
+            with _ -> false)
+    with
+    | _ -> failwithf "Failed to click: %A" selector
+
+
+/// Clicks the Android back button
+let back () =
+    try
+        wait 10.0 (fun _ ->
+            try 
+                driver.PressKeyCode(AndroidKeyCode.Back)
+                true
+            with _ -> false)
+    with
+    | _ -> failwithf "Failed to click Android back button"
+
