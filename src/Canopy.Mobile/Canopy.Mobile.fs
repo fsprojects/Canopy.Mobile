@@ -6,6 +6,7 @@ open OpenQA.Selenium.Remote
 open OpenQA.Selenium.Appium
 open OpenQA.Selenium.Appium.Android
 open OpenQA.Selenium.Appium.Interfaces
+open System.Threading
 
 type ExecutionSource =
 | Console
@@ -20,6 +21,7 @@ let mutable driver : AndroidDriver<IWebElement> = null
 
 //configuration
 let mutable waitTimeout = 10.0
+let mutable waitAfterClick = 1000
 
 [<RequireQualifiedAccess>]
 type Selector =
@@ -50,7 +52,9 @@ let start appName =
     printfn "Done starting"
 
 /// Quits the web driver
-let quit () = if not (isNull driver) then driver.Quit()
+let quit () = 
+    if not (isNull driver) then 
+        driver.Quit()
 
 let private findElements' selector = 
     match selector with
@@ -88,9 +92,10 @@ let exists selector = findElements selector true waitTimeout |> List.isEmpty |> 
 /// Clicks the first element that's found with the selector
 let click selector =
     try
-        wait 10.0 (fun _ ->
+        wait waitTimeout (fun _ ->
             try 
                 (find selector).Click()
+                Thread.Sleep waitAfterClick
                 true
             with _ -> false)
     with
@@ -100,9 +105,10 @@ let click selector =
 /// Clicks the Android back button
 let back () =
     try
-        wait 10.0 (fun _ ->
+        wait waitTimeout (fun _ ->
             try 
                 driver.PressKeyCode(AndroidKeyCode.Back)
+                Thread.Sleep waitAfterClick
                 true
             with _ -> false)
     with

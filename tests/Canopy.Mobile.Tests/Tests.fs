@@ -27,7 +27,6 @@ let downloadDemoApp () =
 
     localFile.FullName
 
-[<Tests>]
 let tests =
     testList "android tests" [
         testList "session tests" [
@@ -94,15 +93,8 @@ let tests =
 
                 Selector.XPath "//android.widget.TextView[@text='Arcs']" |> click
 
-            testCase "can set immediate value" <| fun () ->
-                driver.StartActivity("io.appium.android.apis", ".ApiDemos")
-                driver.StartActivity("io.appium.android.apis", ".view.Controls1")
-                let newValue = "new value"
-
-                let editElement = driver.FindElementByAndroidUIAutomator("resourceId(\"io.appium.android.apis:id/edit\")") :?> AndroidElement 
-                editElement.SetImmediateValue(newValue)
-
-                Expect.equal editElement.Text newValue "text was changed"
+                back()
+                back()
 
             testCase "can find element by XPath with canopy find" <| fun () ->
                 let element = Selector.XPath "//android.widget.TextView[@text='API Demos']" |> find
@@ -125,8 +117,9 @@ let main args =
     try
         let app = downloadDemoApp()
         start app
-
-        let result = runTestsInAssembly defaultConfig args
+        let result = runTests { defaultConfig with ``parallel`` = false } tests
         quit()
         result
-    with _ -> -1
+    with e ->
+        printfn "Error: %s" e.Message
+        -1
