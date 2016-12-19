@@ -167,6 +167,7 @@ Target "Build" (fun _ ->
 // Run the unit tests using test runner
 
 Target "StartAndroidEmulator" (fun _ ->
+    ActivateFinalTarget "CloseAndroid"
     let androidSDKPath =
         let p1 = ProgramFilesX86 </> "Android" </> "android-sdk"
         if Directory.Exists p1 then FullName p1 else
@@ -179,10 +180,12 @@ Target "StartAndroidEmulator" (fun _ ->
     ProcessHelper.killProcess "adb.exe"
 
     run adbTool "start-server" ""
+
+    let image = "Nexus_6_API_23"
     
     StartProcess (fun info ->  
         info.FileName <- androidSDKPath </> "tools" </> "emulator.exe"
-        info.Arguments <- " -avd Nexus_6_API_23 -no-window -no-boot-anim")
+        info.Arguments <- sprintf " -avd %s -no-window -no-boot-anim" image)
 
     run' (System.TimeSpan.FromMinutes 2.) adbTool "wait-for-device" ""
 )
@@ -198,6 +201,11 @@ Target "StartAppium" (fun _ ->
         info.Arguments <- "")
 
     Thread.Sleep 5000
+)
+
+FinalTarget "CloseAndroid" (fun _ -> 
+    ProcessHelper.killProcess "adb.exe"
+    ProcessHelper.killProcess "appium.exe"
 )
 
 
