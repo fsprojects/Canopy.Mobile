@@ -1,6 +1,6 @@
 # Canopy.Mobile
 
-This project extends the [canopy](https://github.com/lefthandedgoat/canopy) test project with infrastructure that allows to test monile projects via [appium](http://appium.io/).
+This project extends the [canopy](https://github.com/lefthandedgoat/canopy) test project with infrastructure that allows to test mobile projects via [appium](http://appium.io/).
 
 ## Maintainer(s)
 

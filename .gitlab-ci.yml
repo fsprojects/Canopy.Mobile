@@ -1,0 +1,14 @@
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - IF EXIST build.cmd build.cmd
+  tags: 
+    - Build
+    - Android
+  except:
+    - tags
+  only:
+    - master
