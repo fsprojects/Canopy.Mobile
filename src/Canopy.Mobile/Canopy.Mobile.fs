@@ -63,12 +63,14 @@ let start appName =
     canopy.types.browser <- driver
     printfn "Done starting"
 
-/// Quits the web driver
+/// Quits the web driver and appium
 let quit () = 
     if not (isNull driver) then 
         driver.Quit()
+
     if not (isNull localService) then
-        localService.Dispose()
+        if localService.IsRunning then
+            localService.Dispose()
         localService <- null
 
 let private findElements' selector = 
