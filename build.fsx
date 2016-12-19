@@ -182,6 +182,7 @@ Target "StartAndroidEmulator" (fun _ ->
     let adbTool = platformTool "adb" ( androidSDKPath </> "platform-tools/adb.exe")
 
     ProcessHelper.killProcess "adb.exe"
+    ProcessHelper.killProcess "qemu-system-i386.exe"
 
     run adbTool "start-server" ""
 
@@ -211,6 +212,7 @@ Target "StartAppium" (fun _ ->
 FinalTarget "CloseAndroid" (fun _ -> 
     ProcessHelper.killProcess "adb.exe"
     ProcessHelper.killProcess "appium.exe"
+    ProcessHelper.killProcess "qemu-system-i386.exe"
     ProcessHelper.killProcess "node.exe"
 )
 
