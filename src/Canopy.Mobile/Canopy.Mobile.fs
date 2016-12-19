@@ -1,6 +1,7 @@
 module canopy.mobile
 
 open System
+open System.IO
 open OpenQA.Selenium
 open OpenQA.Selenium.Remote
 open OpenQA.Selenium.Appium
@@ -20,6 +21,7 @@ let getTestServerAddress () =
 
 let mutable driver : AndroidDriver<IWebElement> = null
 let mutable localService : AppiumLocalService = null
+let logFile = "./temp/AppiumLog.txt"
 
 //configuration
 let mutable waitTimeout = 10.0
@@ -34,7 +36,11 @@ type Selector =
 /// Starts appium as local service
 let startAppium() =
     if localService = null then
-        let builder = AppiumServiceBuilder().WithLogFile(new System.IO.FileInfo("Log"));
+        let fi = FileInfo logFile
+        if not fi.Directory.Exists then
+            fi.Directory.Create()
+
+        let builder = AppiumServiceBuilder().WithLogFile(fi)
         localService <- builder.Build()
     if not localService.IsRunning then
         localService.Start()
