@@ -98,6 +98,8 @@ let platformTool tool path =
     
 let adbTool = platformTool "adb" ( androidSDKPath </> "platform-tools/adb.exe")
 
+let npmTool = platformTool "npm" (@"C:\Program Files\nodejs\npm.cmd" |> FullName)
+
 // Read additional information from the release notes document
 let release = LoadReleaseNotes "RELEASE_NOTES.md"
 
@@ -191,6 +193,8 @@ Target "StartAndroidEmulator" (fun _ ->
         info.Arguments <- sprintf " -avd %s -no-window -no-boot-anim" image)
 
     run' (System.TimeSpan.FromMinutes 2.) adbTool "wait-for-device" ""
+
+    run npmTool "install appium" ""
 )
 
 FinalTarget "CloseAndroid" (fun _ -> 
