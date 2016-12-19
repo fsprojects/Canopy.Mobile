@@ -195,6 +195,7 @@ Target "StartAndroidEmulator" (fun _ ->
 )
 
 Target "StartAppium" (fun _ ->
+    ProcessHelper.killProcess "node.exe"
     ProcessHelper.killProcess "appium.exe"
 
     run npmTool "install appium" ""
@@ -202,7 +203,7 @@ Target "StartAppium" (fun _ ->
 
     StartProcess (fun info ->  
         info.FileName <- appiumTool
-        info.Arguments <- "")
+        info.Arguments <- "--log-level error:warn")
 
     Thread.Sleep 5000
 )
@@ -210,6 +211,7 @@ Target "StartAppium" (fun _ ->
 FinalTarget "CloseAndroid" (fun _ -> 
     ProcessHelper.killProcess "adb.exe"
     ProcessHelper.killProcess "appium.exe"
+    ProcessHelper.killProcess "node.exe"
 )
 
 
