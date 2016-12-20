@@ -23,8 +23,8 @@ let start() =
         let builder = 
             let fi = FileInfo(configuration.appiumToolPath)
             if fi.Exists then 
-                Environment.SetEnvironmentVariable(AppiumServiceConstants.AppiumBinaryPath, fi.FullName)
-                builder.WithAppiumJS fi
+                Environment.SetEnvironmentVariable(AppiumServiceConstants.AppiumBinaryPath, fi.Directory.FullName)
+                builder.WithAppiumJS fi.Directory.FullName
             else 
                 builder
 
