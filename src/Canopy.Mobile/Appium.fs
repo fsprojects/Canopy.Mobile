@@ -16,17 +16,13 @@ let start() =
         if not fi.Directory.Exists then
             fi.Directory.Create()
 
+        let fi = FileInfo(configuration.appiumToolPath)
+        if fi.Exists then 
+            Environment.SetEnvironmentVariable(AppiumServiceConstants.AppiumBinaryPath, fi.Directory.FullName)
+
         let builder = 
             AppiumServiceBuilder()
               .WithLogFile(fi)
-
-        let builder = 
-            let fi = FileInfo(configuration.appiumToolPath)
-            if fi.Exists then 
-                Environment.SetEnvironmentVariable(AppiumServiceConstants.AppiumBinaryPath, fi.Directory.FullName)
-                builder.WithAppiumJS fi.Directory.FullName
-            else 
-                builder
 
         localService <- builder.Build()
     if not localService.IsRunning then
