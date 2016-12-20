@@ -36,6 +36,7 @@ let getCapabilities appName =
         capabilities.SetCapability("platformVersion", "6.0")
         capabilities.SetCapability("platform", "Android")
         capabilities.SetCapability("avd", "Nexus_6_API_23")
+        capabilities.SetCapability("avdArgs", "-no-window -no-boot-anim")
         capabilities.SetCapability("deviceName", "Android Emulator")
         capabilities.SetCapability("app", appName)
         capabilities
