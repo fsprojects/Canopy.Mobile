@@ -8,5 +8,15 @@ let mutable waitTimeout = 10.0
 /// Wait time after every click.
 let mutable waitAfterClick = 1000
 
+let rec private findNodeModulesPath (di:DirectoryInfo) = 
+    if Directory.Exists(Path.Combine(di.FullName,"node_modules")) then
+        Path.Combine(di.FullName,"node_modules")
+    elif di.Parent <> null then 
+        findNodeModulesPath di.Parent 
+    else
+        Path.Combine(".", "node_modules")
+
+let nodeModules = findNodeModulesPath (DirectoryInfo("."))
+    
 /// Appium installation directory
-let mutable appiumToolPath = Path.Combine(".", "node_modules", "appium", "bin", "appium.js")
+let mutable appiumToolPath = Path.Combine(nodeModules, "appium", "bin", "appium.js")
