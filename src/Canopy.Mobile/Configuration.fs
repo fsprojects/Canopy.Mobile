@@ -19,4 +19,4 @@ let rec private findNodeModulesPath (di:DirectoryInfo) =
 let nodeModules = findNodeModulesPath (DirectoryInfo("."))
     
 /// Appium installation directory
-let mutable appiumToolPath = Path.Combine(nodeModules, "appium", "bin", "appium.js")
+let mutable appiumToolPath = Path.Combine(nodeModules, "appium", "lib", "appium.js")
