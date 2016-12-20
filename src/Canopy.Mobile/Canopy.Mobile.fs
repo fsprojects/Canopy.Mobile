@@ -35,6 +35,7 @@ let getCapabilities appName =
         capabilities.SetCapability("platformName", "Android")
         capabilities.SetCapability("platformVersion", "6.0")
         capabilities.SetCapability("platform", "Android")
+        capabilities.SetCapability("avd", "Nexus_6_API_23")
         capabilities.SetCapability("deviceName", "Android Emulator")
         capabilities.SetCapability("app", appName)
         capabilities
