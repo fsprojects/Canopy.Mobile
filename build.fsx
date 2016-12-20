@@ -194,7 +194,7 @@ Target "StartAndroidEmulator" (fun _ ->
 
     run' (System.TimeSpan.FromMinutes 2.) adbTool "wait-for-device" ""
 
-    run npmTool "install appium -g" ""
+    run npmTool "install appium" ""
 )
 
 FinalTarget "CloseAndroid" (fun _ -> 
