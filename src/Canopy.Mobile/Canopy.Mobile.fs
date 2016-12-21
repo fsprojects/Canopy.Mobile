@@ -66,6 +66,8 @@ let getCapabilities appName =
     capabilities.SetCapability("avdArgs", "-no-window -no-boot-anim")
     capabilities.SetCapability("deviceName", "Android Emulator")
     capabilities.SetCapability("autoLaunch", "true")
+    capabilities.SetCapability("deviceReadyTimeout", 1000)
+    capabilities.SetCapability("androidDeviceReadyTimeout", 1000)
     capabilities.SetCapability("app", appName)
     capabilities
 
