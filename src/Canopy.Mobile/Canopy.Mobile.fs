@@ -22,7 +22,7 @@ type Selector =
 | XPath of xpath:string
 | Name of name:string
 
-let checkAVD name = 
+let checkAndroidHome () = 
     let home = Environment.GetEnvironmentVariable("HOME")
     if String.IsNullOrEmpty home then
         failwithf "Environment variable HOME is not set."
@@ -37,32 +37,16 @@ let checkAVD name =
     let sdkRoot = Environment.GetEnvironmentVariable("ANDROID_SDK_ROOT")
     if String.IsNullOrEmpty sdkRoot then
         Environment.SetEnvironmentVariable("ANDROID_SDK_ROOT",androidHome,EnvironmentVariableTarget.Process)
-
-    let avdHome =
-        let avdHome = Environment.GetEnvironmentVariable("ANDROID_AVD_HOME")
-        if String.IsNullOrEmpty avdHome then
-            let avdHome = Path.Combine(home, @".android\avd")
-            Environment.SetEnvironmentVariable("ANDROID_AVD_HOME",avdHome,EnvironmentVariableTarget.Process)
-            avdHome
-        else
-            avdHome
-
-    if not (Directory.Exists avdHome) then
-        failwithf "ANDROID_AVD_HOME directory %s does not exist." avdHome
-
-    let avdDir = Path.Combine(avdHome,name + ".avd")
-    if not (Directory.Exists avdDir) then
-        failwithf "AVD %s does not exist in %s." name avdHome
     
     
 let getCapabilities appName =
-    checkAVD "Nexus_6_API_23"
+    checkAndroidHome()
     let capabilities = DesiredCapabilities()
     capabilities.SetCapability("platformName", "Android")
     capabilities.SetCapability("platformVersion", "6.0")
     capabilities.SetCapability("platform", "Android")
     capabilities.SetCapability("automationName", "Appium")
-    capabilities.SetCapability("avd", "Nexus_6_API_23")
+    capabilities.SetCapability("avd", "AVD_for_Nexus_6_by_Google")
     capabilities.SetCapability("avdArgs", "-no-window -no-boot-anim")
     capabilities.SetCapability("deviceName", "Android Emulator")
     capabilities.SetCapability("autoLaunch", "true")
