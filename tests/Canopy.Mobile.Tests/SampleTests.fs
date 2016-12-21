@@ -115,11 +115,12 @@ let tests =
 [<EntryPoint>]
 let main args =
     try
-        let app = downloadDemoApp()
-        start app
-        let result = runTests { defaultConfig with ``parallel`` = false } tests
+        try
+            let app = downloadDemoApp()
+            start app
+            runTests { defaultConfig with ``parallel`` = false } tests
+        with e ->
+            printfn "Error: %s" e.Message
+            -1
+    finally
         quit()
-        result
-    with e ->
-        printfn "Error: %s" e.Message
-        -1

@@ -78,9 +78,6 @@ let getCapabilities appName =
 /// Starts the webdriver with the given app.
 let start appName =
     let capabilities = getCapabilities appName
-    for env in Environment.GetEnvironmentVariables() do
-        let env = env :?> System.Collections.DictionaryEntry 
-        printfn "%A %A" env.Key env.Value
     appium.start()
 
     let testServerAddress = getTestServerAddress ()
