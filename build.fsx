@@ -83,6 +83,9 @@ let run' timeout cmd args dir =
 let run = run' System.TimeSpan.MaxValue
 
 let androidSDKPath =
+    let androidHome = Environment.GetEnvironmentVariable("ANDROID_HOME")
+    if not (String.IsNullOrEmpty androidHome) then androidHome else
+
     let p1 = ProgramFilesX86 </> "Android" </> "android-sdk"
     if Directory.Exists p1 then FullName p1 else
     let p2 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> "Android" </> "android-sdk"
