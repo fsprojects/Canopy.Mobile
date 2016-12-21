@@ -28,15 +28,27 @@ type Selector =
 | Name of name:string
 
 let checkAndroidHome() = 
+    let home = Environment.GetEnvironmentVariable("HOME")
+    if String.IsNullOrEmpty home then
+        failwithf "Environment variable HOME is not set."
+
     let androidHome = Environment.GetEnvironmentVariable("ANDROID_HOME")
     if String.IsNullOrEmpty androidHome then
         failwithf "Environment variable ANDROID_HOME is not set."
+
     if not (Directory.Exists androidHome) then
         failwithf "Environment variable ANDROID_HOME is set to %s. But this directory does not exist." androidHome
+
     let sdkRoot = Environment.GetEnvironmentVariable("ANDROID_SDK_ROOT")
     if String.IsNullOrEmpty sdkRoot then
         Environment.SetEnvironmentVariable("ANDROID_SDK_ROOT",androidHome,EnvironmentVariableTarget.Process)
 
+    let avdHome = Environment.GetEnvironmentVariable("ANDROID_AVD_HOME")
+    if String.IsNullOrEmpty avdHome then
+        let avdHome = Path.Combine(home, @".android\avd")
+        if Directory.Exists avdHome then
+            Environment.SetEnvironmentVariable("ANDROID_AVD_HOME",avdHome,EnvironmentVariableTarget.Process)
+    
 let getCapabilities appName =
     match getExecutionSource() with
     | Console  ->
