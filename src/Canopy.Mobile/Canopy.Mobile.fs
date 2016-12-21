@@ -22,6 +22,16 @@ type Selector =
 | XPath of xpath:string
 | Name of name:string
 
+type AndroidSettings = {
+    AVDName : string
+    Silent : bool
+}
+
+let DefaultAndroidSettings = {
+    AVDName = null
+    Silent = true
+}
+
 let checkAndroidHome () = 
     let home = Environment.GetEnvironmentVariable("HOME")
     if String.IsNullOrEmpty home then
@@ -39,15 +49,18 @@ let checkAndroidHome () =
         Environment.SetEnvironmentVariable("ANDROID_SDK_ROOT",androidHome,EnvironmentVariableTarget.Process)
     
     
-let getCapabilities appName =
+let getAndroidCapabilities (settings:AndroidSettings) appName =
     checkAndroidHome()
     let capabilities = DesiredCapabilities()
     capabilities.SetCapability("platformName", "Android")
     capabilities.SetCapability("platformVersion", "6.0")
     capabilities.SetCapability("platform", "Android")
     capabilities.SetCapability("automationName", "Appium")
-    capabilities.SetCapability("avd", "AVD_for_Nexus_6_by_Google")
-    capabilities.SetCapability("avdArgs", "-no-window -no-boot-anim")
+    capabilities.SetCapability("avd", settings.AVDName)
+
+    if settings.Silent then
+        capabilities.SetCapability("avdArgs", "-no-window -no-boot-anim")
+
     capabilities.SetCapability("deviceName", "Android Emulator")
     capabilities.SetCapability("autoLaunch", "true")
     capabilities.SetCapability("deviceReadyTimeout", 1000)
@@ -56,13 +69,12 @@ let getCapabilities appName =
     capabilities
 
 /// Starts the webdriver with the given app.
-let start appName =
-    let capabilities = getCapabilities appName
+let start settings appName =
+    let capabilities = getAndroidCapabilities settings appName
     appium.start()
 
     let testServerAddress = Uri "http://127.0.0.1:4723/wd/hub"
-    driver <- new AndroidDriver<IWebElement>(testServerAddress, capabilities, TimeSpan.FromSeconds(120.0))
-    
+    driver <- new AndroidDriver<IWebElement>(testServerAddress, capabilities, TimeSpan.FromSeconds(120.0))    
 
     //driver.ExecuteScript(mechanicjs.source) |> ignore
     canopy.types.browser <- driver

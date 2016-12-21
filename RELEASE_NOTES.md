@@ -1,4 +1,4 @@
-### 1.0.6 - 20.12.2016
+### 1.0.7 - 20.12.2016
 * Allows to start local appium directly from Canopy.Mobile
 * Added support for XPath selectors
 * Added support for clicking elements

@@ -6,4 +6,4 @@ open System.IO
 let mutable waitTimeout = 10.0
 
 /// Wait time after every click.
-let mutable waitAfterClick = 1000
+let mutable waitAfterClick = 1500
