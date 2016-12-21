@@ -178,30 +178,8 @@ Target "Build" (fun _ ->
 // --------------------------------------------------------------------------------------
 // Run the unit tests using test runner
 
-Target "StartAndroidEmulator" (fun _ ->
-    ActivateFinalTarget "CloseAndroid"
-    
-    ProcessHelper.killProcess "adb.exe"
-    ProcessHelper.killProcess "qemu-system-i386.exe"
-
-    run adbTool "start-server" ""
-
-    let image = "Nexus_6_API_23"
-//    
-//    StartProcess (fun info ->  
-//        info.FileName <- androidSDKPath </> "tools" </> "emulator.exe"
-//        info.Arguments <- sprintf " -avd %s -no-window -no-boot-anim" image)
-//
-//    run' (System.TimeSpan.FromMinutes 2.) adbTool "wait-for-device" ""
-
+Target "InstallAppium" (fun _ ->
     run npmTool "install appium -g" ""
-)
-
-FinalTarget "CloseAndroid" (fun _ -> 
-    run adbTool "shell reboot -p" ""
-    ProcessHelper.killProcess "adb.exe"
-    ProcessHelper.killProcess "qemu-system-i386.exe"
-    ProcessHelper.killProcess "node.exe"
 )
 
 
@@ -435,7 +413,7 @@ Target "All" DoNothing
 "AssemblyInfo"
   ==> "Build"
   ==> "CopyBinaries"
-  ==> "StartAndroidEmulator"
+  ==> "InstallAppium"
   ==> "RunTests"
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
