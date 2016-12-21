@@ -92,7 +92,6 @@ let androidSDKPath =
 setEnvironVar "ANDROID_HOME" androidSDKPath
 setEnvironVar "ANDROID_SDK_ROOT" androidSDKPath
 
-
 let platformTool tool path =
     isUnix |> function | true -> tool | _ -> path
     

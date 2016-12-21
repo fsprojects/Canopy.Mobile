@@ -27,10 +27,20 @@ type Selector =
 | XPath of xpath:string
 | Name of name:string
 
+let checkAndroidHome() = 
+    let androidHome = Environment.GetEnvironmentVariable("ANDROID_HOME")
+    if String.IsNullOrEmpty androidHome then
+        failwithf "Environment variable ANDROID_HOME is not set."
+    if not (Directory.Exists androidHome) then
+        failwithf "Environment variable ANDROID_HOME is set to %s. But this directory does not exist." androidHome
+    let sdkRoot = Environment.GetEnvironmentVariable("ANDROID_SDK_ROOT")
+    if String.IsNullOrEmpty sdkRoot then
+        Environment.SetEnvironmentVariable("ANDROID_SDK_ROOT",androidHome,EnvironmentVariableTarget.Process)
 
 let getCapabilities appName =
     match getExecutionSource() with
     | Console  ->
+        checkAndroidHome()
         let capabilities = DesiredCapabilities()
         capabilities.SetCapability("platformName", "Android")
         capabilities.SetCapability("platformVersion", "6.0")
