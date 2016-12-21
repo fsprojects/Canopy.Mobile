@@ -77,11 +77,15 @@ let getCapabilities appName =
 
 /// Starts the webdriver with the given app.
 let start appName =
-    appium.start()
     let capabilities = getCapabilities appName
+    for env in Environment.GetEnvironmentVariables() do
+        let env = env :?> System.Collections.DictionaryEntry 
+        printfn "%A %A" env.Key env.Value
+    appium.start()
 
     let testServerAddress = getTestServerAddress ()
     driver <- new AndroidDriver<IWebElement>(testServerAddress, capabilities, TimeSpan.FromSeconds(120.0))
+    
 
     //driver.ExecuteScript(mechanicjs.source) |> ignore
     canopy.types.browser <- driver
