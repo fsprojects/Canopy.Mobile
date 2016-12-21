@@ -15,12 +15,6 @@ open System.Diagnostics
 type ExecutionSource =
 | Console
 
-let getExecutionSource() = Console
-
-let getTestServerAddress () =
-    match getExecutionSource() with
-    | Console  -> Uri "http://127.0.0.1:4723/wd/hub"
-
 let mutable driver : AndroidDriver<IWebElement> = null
 
 [<RequireQualifiedAccess>]
@@ -62,25 +56,25 @@ let checkAVD name =
     
     
 let getCapabilities appName =
-    match getExecutionSource() with
-    | Console  ->
-        checkAVD "Nexus_6_API_23"
-        let capabilities = DesiredCapabilities()
-        capabilities.SetCapability("platformName", "Android")
-        capabilities.SetCapability("platformVersion", "6.0")
-        capabilities.SetCapability("platform", "Android")
-        capabilities.SetCapability("avd", "Nexus_6_API_23")
-        capabilities.SetCapability("avdArgs", "-no-window -no-boot-anim")
-        capabilities.SetCapability("deviceName", "Android Emulator")
-        capabilities.SetCapability("app", appName)
-        capabilities
+    checkAVD "Nexus_6_API_23"
+    let capabilities = DesiredCapabilities()
+    capabilities.SetCapability("platformName", "Android")
+    capabilities.SetCapability("platformVersion", "6.0")
+    capabilities.SetCapability("platform", "Android")
+    capabilities.SetCapability("automationName", "Appium")
+    capabilities.SetCapability("avd", "Nexus_6_API_23")
+    capabilities.SetCapability("avdArgs", "-no-window -no-boot-anim")
+    capabilities.SetCapability("deviceName", "Android Emulator")
+    capabilities.SetCapability("autoLaunch", "true")
+    capabilities.SetCapability("app", appName)
+    capabilities
 
 /// Starts the webdriver with the given app.
 let start appName =
     let capabilities = getCapabilities appName
     appium.start()
 
-    let testServerAddress = getTestServerAddress ()
+    let testServerAddress = Uri "http://127.0.0.1:4723/wd/hub"
     driver <- new AndroidDriver<IWebElement>(testServerAddress, capabilities, TimeSpan.FromSeconds(120.0))
     
 
