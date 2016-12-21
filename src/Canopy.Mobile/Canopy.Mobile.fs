@@ -89,8 +89,10 @@ let quit () =
 
     appium.stop()
     
-    Process.Start ("adb","shell reboot -p") |> ignore
-
+    let pi = ProcessStartInfo("adb","shell reboot -p")
+    pi.UseShellExecute <- false
+    let proc = Process.Start pi
+    proc.WaitForExit()
     
 let private findElements' selector = 
     match selector with
