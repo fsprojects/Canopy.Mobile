@@ -10,6 +10,7 @@ open OpenQA.Selenium.Appium.Android
 open OpenQA.Selenium.Appium.Interfaces
 open System.Threading
 open canopy
+open System.Diagnostics
 
 type ExecutionSource =
 | Console
@@ -81,7 +82,10 @@ let quit () =
         driver.Quit()
 
     appium.stop()
+    
+    Process.Start ("adb","shell reboot -p")
 
+    
 let private findElements' selector = 
     match selector with
     | Selector.XPath xpath -> driver.FindElementsByXPath xpath |> List.ofSeq
