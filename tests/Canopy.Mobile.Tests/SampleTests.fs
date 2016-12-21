@@ -36,7 +36,7 @@ let tests =
 
             testCase "can get dictionary data" <| fun () ->
                 let dictionary : Dictionary<string, obj> = driver.SessionDetails.["desired"] |> unbox
-                Expect.equal dictionary.Count 5 "desired data is set"
+                Expect.isGreaterThan dictionary.Count 0 "desired data is set"
         ]
 
         
