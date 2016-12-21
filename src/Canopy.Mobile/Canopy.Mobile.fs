@@ -32,11 +32,7 @@ let DefaultAndroidSettings = {
     Silent = true
 }
 
-let checkAndroidHome () = 
-    let home = Environment.GetEnvironmentVariable("HOME")
-    if String.IsNullOrEmpty home then
-        failwithf "Environment variable HOME is not set."
-
+let checkAndroidHome () =
     let androidHome = Environment.GetEnvironmentVariable("ANDROID_HOME")
     if String.IsNullOrEmpty androidHome then
         failwithf "Environment variable ANDROID_HOME is not set."
