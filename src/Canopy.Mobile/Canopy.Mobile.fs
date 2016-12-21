@@ -28,7 +28,7 @@ type Selector =
 | XPath of xpath:string
 | Name of name:string
 
-let checkAndroidHome() = 
+let checkAVD name = 
     let home = Environment.GetEnvironmentVariable("HOME")
     if String.IsNullOrEmpty home then
         failwithf "Environment variable HOME is not set."
@@ -44,22 +44,33 @@ let checkAndroidHome() =
     if String.IsNullOrEmpty sdkRoot then
         Environment.SetEnvironmentVariable("ANDROID_SDK_ROOT",androidHome,EnvironmentVariableTarget.Process)
 
-    let avdHome = Environment.GetEnvironmentVariable("ANDROID_AVD_HOME")
-    if String.IsNullOrEmpty avdHome then
-        let avdHome = Path.Combine(home, @".android\avd")
-        if Directory.Exists avdHome then
+    let avdHome =
+        let avdHome = Environment.GetEnvironmentVariable("ANDROID_AVD_HOME")
+        if String.IsNullOrEmpty avdHome then
+            let avdHome = Path.Combine(home, @".android\avd")
             Environment.SetEnvironmentVariable("ANDROID_AVD_HOME",avdHome,EnvironmentVariableTarget.Process)
+            avdHome
+        else
+            avdHome
+
+    if not (Directory.Exists avdHome) then
+        failwithf "ANDROID_AVD_HOME directory %s does not exist." avdHome
+
+    let avdDir = Path.Combine(avdHome,name + ".avd")
+    if not (Directory.Exists avdDir) then
+        failwithf "AVD %s does not exist in %s." name avdHome
+    
     
 let getCapabilities appName =
     match getExecutionSource() with
     | Console  ->
-        checkAndroidHome()
+        checkAVD "Nexus_6_API_23"
         let capabilities = DesiredCapabilities()
         capabilities.SetCapability("platformName", "Android")
         capabilities.SetCapability("platformVersion", "6.0")
         capabilities.SetCapability("platform", "Android")
         capabilities.SetCapability("avd", "Nexus_6_API_23")
-        capabilities.SetCapability("avdArgs", "-no-window -no-boot-anim")
+        capabilities.SetCapability("avdArgs", "-no-window -no-boot-anim -noaudio")
         capabilities.SetCapability("deviceName", "Android Emulator")
         capabilities.SetCapability("app", appName)
         capabilities
@@ -83,7 +94,7 @@ let quit () =
 
     appium.stop()
     
-    Process.Start ("adb","shell reboot -p")
+    Process.Start ("adb","shell reboot -p") |> ignore
 
     
 let private findElements' selector = 
