@@ -220,6 +220,20 @@ let ( == ) selector value =
     | :? WebDriverTimeoutException -> failwithf "Equality checked failed.  Expected: %s Got: %s" value (find selector).Text
     | _ as ex -> failwithf "Equality checked failed for unknown reasons.  Inner Message: %s" ex.Message
 
+///Check that an element is displayed
+let displayed selector = 
+    try
+        wait configuration.assertionTimeout (fun _ ->
+            try 
+                (find selector).Displayed
+            with 
+            | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Displayed check for : %A failed because it could not be found" selector)
+            | _ -> false)
+    with
+    | :? CanopyException as ce -> raise(ce)
+    | :? WebDriverTimeoutException -> failwith "Displayed checked failed."
+    | _ as ex -> failwithf "Displayed checked failed for unknown reasons.  Inner Message: %s" ex.Message
+
 /// Takes a screenshot of the emulator and saves it as png.
 let screenshot path fileName = 
     let screenShot = driver.GetScreenshot()

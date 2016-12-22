@@ -120,23 +120,18 @@ let tests =
                 waitFor "tv:API Demos"
                 waitFor "tv:Graphics"
 
-            testCase "can find element by XPath with canopy find" <| fun () ->
-                let element = find "tv:API Demos"
-                Expect.isNotNull element.Text "headline is set"
-
-                let element = find "tv:Animation"
-                Expect.equal element.Text "Animation" "test is set"
+            testCase "equality check for API Demos and Animation" <| fun () ->
+                "tv:API Demos" == "API Demos"
+                "tv:Animation" == "Animation"
         ]
 
         testList "complex android tests" [
             testCase "can take screenshot" <| fun () ->
-                let element = find "tv:Animation"
-                Expect.isTrue element.Displayed "element is displayed"
+                displayed "tv:Animation"
 
                 let filename = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
                 screenshot screenShotDir filename
                 Expect.isTrue (File.Exists(Path.Combine(screenShotDir,filename + ".png"))) "Screenshot exists"
-
         ]
     ]
 
