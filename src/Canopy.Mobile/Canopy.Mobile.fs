@@ -188,3 +188,13 @@ let back () =
     with
     | _ -> failwithf "Failed to click Android back button"
 
+
+/// Takes a screenshot of the emulator and saves it as png.
+let screenshot path fileName = 
+    let screenShot = driver.GetScreenshot()
+    if not (Directory.Exists path) then
+        Directory.CreateDirectory path |> ignore
+
+    let fileName = Path.ChangeExtension(Path.Combine(path,fileName),".png")
+        
+    screenShot.SaveAsFile(fileName, Drawing.Imaging.ImageFormat.Png)

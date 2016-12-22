@@ -11,6 +11,7 @@ open OpenQA.Selenium
 open System.Threading
 open OpenQA.Selenium.Appium.Android.Enums
 open OpenQA.Selenium.Appium.Interfaces
+open System
 
 let downloadDemoApp () =
     let localFile = FileInfo("./temp/ApiDemos-debug.apk")
@@ -26,6 +27,8 @@ let downloadDemoApp () =
         printfn "app downloaded"
 
     localFile.FullName
+
+let screenShotDir = "./temp/screenshots"
 
 let tests =
     testList "android tests" [
@@ -105,9 +108,13 @@ let tests =
         ]
 
         testList "complex android tests" [
-            testCase "can find elements" <| fun () ->
+            testCase "can take screenshot" <| fun () ->
                 let element = Selector.XPath "//android.widget.TextView[contains(@text, \"Animat\")]" |> find
                 Expect.isTrue element.Displayed "element is displayed"
+
+                let filename = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
+                screenshot screenShotDir filename
+                Expect.isTrue (File.Exists(Path.Combine(screenShotDir,filename + ".png"))) "Screenshot exists"
 
         ]
     ]
