@@ -8,6 +8,7 @@ open OpenQA.Selenium.Remote
 open OpenQA.Selenium.Appium
 open OpenQA.Selenium.Appium.Android
 open OpenQA.Selenium.Appium.Interfaces
+open OpenQA.Selenium.Appium.Android.Enums
 open System.Threading
 open System.Diagnostics
 open System.Text
@@ -159,6 +160,22 @@ let exists selector = findElements selector true configuration.elementTimeout |>
 
 /// Waits until the given selector returns an element or throws an exception when the timeout is reached.
 let waitFor selector = find selector |> ignore
+
+//keys
+let home = AndroidKeyCode.Home
+let space = AndroidKeyCode.Space
+
+///Press a key
+let press key = driver.PressKeyCode(key)
+
+///Press a key with meta state
+let pressMeta key = driver.PressKeyCode(key, AndroidKeyMetastate.Meta_Shift_On)
+
+///Long press a key
+let longPress key = driver.LongPressKeyCode(key)
+
+///Long press a key with meta state
+let longPressMeta key = driver.LongPressKeyCode(key, AndroidKeyMetastate.Meta_Shift_On)
 
 /// Clicks the first element that's found with the selector
 let click selector =

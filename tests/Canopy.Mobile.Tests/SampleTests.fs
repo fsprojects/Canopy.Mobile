@@ -62,18 +62,17 @@ let tests =
         
         testList "key press tests" [
             testCase "can press key code" <| fun () ->
-                driver.PressKeyCode(AndroidKeyCode.Home)
+                press home
 
             testCase "can press key code with meta state" <| fun () ->
-                driver.PressKeyCode(AndroidKeyCode.Space, AndroidKeyMetastate.Meta_Shift_On)
+                pressMeta space
 
             testCase "can long press key code" <| fun () ->
-                driver.LongPressKeyCode(AndroidKeyCode.Space)
+                longPress space
 
             testCase "can long press key code with meta state" <| fun () ->
-                driver.LongPressKeyCode(AndroidKeyCode.Space, AndroidKeyMetastate.Meta_Shift_On)
+                longPressMeta space                
         ]
-
         
         testList "element tests" [
             testCase "can find element by Android UI Automator" <| fun () ->
