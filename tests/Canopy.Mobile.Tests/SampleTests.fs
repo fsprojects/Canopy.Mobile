@@ -78,48 +78,47 @@ let tests =
             testCase "can find element by Android UI Automator" <| fun () ->
                 driver.StartActivity("io.appium.android.apis", ".ApiDemos")
                 let byAndroidUIAutomator = new ByAndroidUIAutomator("new UiSelector().clickable(true)")
-                let element = (find (Selector.Id "android:id/content")).FindElement(byAndroidUIAutomator)
+                let element = (find "#content").FindElement(byAndroidUIAutomator)
 
                 Expect.isNotNull element.Text "text is set"
-                Expect.isGreaterThanOrEqual ((find (Selector.Id "android:id/content")).FindElements(byAndroidUIAutomator).Count) 1 "selects at least 1 element"
+                Expect.isGreaterThanOrEqual ((find "#content").FindElements(byAndroidUIAutomator).Count) 1 "selects at least 1 element"
                 
             testCase "can find element by XPath" <| fun () ->
-                let element = Selector.XPath "//android.widget.TextView[@text='API Demos']" |> find
+                let element = find "//android.widget.TextView[@text='API Demos']"
                 Expect.isNotNull element.Text "headline is set"
             
             testCase "can click element by XPath" <| fun () ->
-                Selector.XPath "//android.widget.TextView[@text='API Demos']" |> waitFor
-                Selector.XPath "//android.widget.TextView[@text='Graphics']" |> click
-                Selector.XPath "//android.widget.TextView[@text='Arcs']" |> click
+                waitFor "//android.widget.TextView[@text='API Demos']" // an example of a full qualified xml selector
+                click "Graphics" //shortcut for text = 'Graphics'
+                click "Arcs"
 
                 back()
-                Selector.XPath "//android.widget.TextView[@text='API Demos']" |> waitFor
-                Selector.XPath "//android.widget.TextView[@text='Arcs']" |> click
+                click "Arcs"
 
                 back()
-                Selector.XPath "//android.widget.TextView[@text='API Demos']" |> waitFor
-                Selector.XPath "//android.widget.TextView[@text='Arcs']" |> waitFor
+                waitFor "API Demos"
+                waitFor "Arcs"
 
                 back()
-                Selector.XPath "//android.widget.TextView[@text='API Demos']" |> waitFor
-                Selector.XPath "//android.widget.TextView[@text='Graphics']" |> waitFor
+                waitFor "API Demos"
+                waitFor "Graphics"
 
             testCase "can click element by canopy selector" <| fun () ->
-                textView "API Demos" |> waitFor
-                textView "Graphics" |> click
-                textView "Arcs" |> click
+                waitFor <| textView "API Demos"
+                click <| textView "Graphics"
+                click <| textView "Arcs"
 
                 back()
-                textView "API Demos" |> waitFor
-                textView "Arcs" |> click
+                waitFor <| textView "API Demos"
+                click <| textView "Arcs"
 
                 back()
-                textView "API Demos" |> waitFor
-                textView "Arcs" |> waitFor
+                waitFor <| textView "API Demos"
+                waitFor <| textView "Arcs"
 
                 back()
-                textView "API Demos" |> waitFor
-                textView "Graphics" |> waitFor
+                waitFor <| textView "API Demos"
+                waitFor <| textView "Graphics"
 
             testCase "can find element by XPath with canopy find" <| fun () ->
                 let element = textView "API Demos" |> find

@@ -125,38 +125,41 @@ let quit () =
 
     appium.stop()
     stopEmulator()
-    
-let private findElements' selector = 
-    match selector with
-    | Selector.XPath xpath -> driver.FindElementsByXPath xpath |> List.ofSeq
-    | Selector.Name name -> driver.FindElementsByName name |> List.ofSeq
-    | Selector.Id id -> driver.FindElementsById id |> List.ofSeq
 
-/// Finds elements on the current page.
-let findElements selector reliable timeout =
+/// Finds elements on the current page for a given By.
+let findElementsBy by reliable timeout =
     try
         if reliable then
             let results = ref []
             wait timeout (fun _ ->
-                results := findElements' selector
+                results := driver.FindElements by |> List.ofSeq
                 not <| List.isEmpty !results)
             !results
         else
-            waitResults timeout (fun _ -> findElements' selector)
+            waitResults timeout (fun _ -> driver.FindElements by |> List.ofSeq)
     with 
-    | :? WebDriverTimeoutException -> raise <| CanopyElementNotFoundException(sprintf "can't find elements with selector: %A" selector)
+    | :? WebDriverTimeoutException -> raise <| CanopyElementNotFoundException(sprintf "can't find elements with By: %A" by)
+
+/// Returns all elements for a given By.
+let findAllBy by = findElementsBy by true configuration.elementTimeout
 
 /// Returns all elements that match the given selector.
-let findAll selector = findElements selector true configuration.elementTimeout
+let findAll selector = findElementsBy (toBy selector)
+
+/// Returns the first element for a given By.
+let findBy by = findAllBy by |> List.head
 
 /// Returns the first element that matches the given selector.
-let find selector = findAll selector |> List.head
+let find selector = findBy (toBy selector)
+
+/// Returns the first element for a given By or None if no such element exists.
+let tryFindBy by = findAllBy by |> List.tryHead
 
 /// Returns the first element that matches the given selector or None if no such element exists.
-let tryFind selector = findAll selector |> List.tryHead
+let tryFind selector = findAllBy (toBy selector)
 
 /// Returns true when the selector matches an element on the current page or otherwise false.
-let exists selector = findElements selector true configuration.elementTimeout |> List.isEmpty |> not
+let exists selector = findElementsBy (toBy selector) true configuration.elementTimeout |> List.isEmpty |> not
 
 /// Waits until the given selector returns an element or throws an exception when the timeout is reached.
 let waitFor selector = find selector |> ignore
@@ -214,7 +217,7 @@ let ( == ) selector value =
             | _ -> false)
     with
     | :? CanopyException as ce -> raise(ce)
-    | :? WebDriverTimeoutException as ex -> failwithf "Equality checked failed.  Expected: %s Got: %s" value (find selector).Text
+    | :? WebDriverTimeoutException -> failwithf "Equality checked failed.  Expected: %s Got: %s" value (find selector).Text
     | _ as ex -> failwithf "Equality checked failed for unknown reasons.  Inner Message: %s" ex.Message
 
 /// Takes a screenshot of the emulator and saves it as png.
