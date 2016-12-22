@@ -26,8 +26,7 @@
     <StartAction>Project</StartAction>
     <StartProgram>
     </StartProgram>
-    <StartArguments>
-    </StartArguments>
+    <StartArguments>debug</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

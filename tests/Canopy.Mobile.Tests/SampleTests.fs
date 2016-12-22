@@ -124,7 +124,12 @@ let main args =
     try
         try
             let app = downloadDemoApp()
-            let setings = { DefaultAndroidSettings with AVDName = "AVD_for_Nexus_6_by_Google"}
+            
+            let setings = 
+                { DefaultAndroidSettings with 
+                    AVDName = "AVD_for_Nexus_6_by_Google"
+                    Silent = args |> Array.contains "debug" |> not }
+
             start setings app
             runTests { defaultConfig with ``parallel`` = false } tests
         with e ->
