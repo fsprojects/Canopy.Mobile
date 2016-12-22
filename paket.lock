@@ -31,18 +31,18 @@ NUGET
     SourceLink.Fake (1.1)
 GITHUB
   remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (bcd9ebe464148b4c1aa150d3063bdefa9f5d5683)
+    modules/Octokit/Octokit.fsx (eb92235e5092e5c3358cd11b7ebce64015d3f099)
       Octokit (>= 0.20)
 GROUP Test
 FRAMEWORK: >= NET451
 NUGET
   remote: https://www.nuget.org/api/v2
     Argu (3.2)
-    Expecto (2.0)
+    Expecto (2.1.1)
       Argu (>= 3.2)
       FSharp.Core (>= 3.1.2.5)
-    Expecto.FsCheck (2.0)
-      Expecto (>= 2.0)
+    Expecto.FsCheck (2.1.1)
+      Expecto (>= 2.1.1)
       FsCheck (>= 2.6.2)
       FSharp.Core (>= 3.1.2.5)
     Expecto.PerfUtil (1.0.12)
