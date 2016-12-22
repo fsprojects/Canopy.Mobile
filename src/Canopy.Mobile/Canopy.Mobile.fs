@@ -202,6 +202,21 @@ let back () =
     with
     | _ as ex -> failwithf "Failed to go back%sInner Message: %s" System.Environment.NewLine ex.Message
 
+//Assertions
+///Check that an element has a specific value
+let ( == ) selector value = 
+    try
+        wait configuration.assertionTimeout (fun _ ->
+            try 
+                (find selector).Text = value
+            with 
+            | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Equality check for : %A failed because it could not be found" selector)
+            | _ -> false)
+    with
+    | :? CanopyException as ce -> raise(ce)
+    | :? WebDriverTimeoutException as ex -> failwithf "Equality checked failed.  Expected: %s Got: %s" value (find selector).Text
+    | _ as ex -> failwithf "Equality checked failed for unknown reasons.  Inner Message: %s" ex.Message
+
 /// Takes a screenshot of the emulator and saves it as png.
 let screenshot path fileName = 
     let screenShot = driver.GetScreenshot()
