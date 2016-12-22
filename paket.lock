@@ -6,15 +6,12 @@ NUGET
       Newtonsoft.Json (>= 9.0.1)
       Selenium.Support (>= 2.53.1)
       Selenium.WebDriver (>= 2.53.1)
-    canopy (1.0.5)
-      FSharp.Core (>= 3.0.2)
-      Selenium.WebDriver (3.0)
     Castle.Core (3.3.3)
     FSharp.Core (4.0.0.1) - redirects: force
     Newtonsoft.Json (9.0.1)
-    Selenium.Support (3.0)
-      Selenium.WebDriver (>= 3.0)
-    Selenium.WebDriver (3.0)
+    Selenium.Support (3.0.1)
+      Selenium.WebDriver (>= 3.0.1)
+    Selenium.WebDriver (3.0.1)
 
 GROUP Build
 FRAMEWORK: >= NET451

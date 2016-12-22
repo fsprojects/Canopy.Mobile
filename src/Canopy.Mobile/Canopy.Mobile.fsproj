@@ -73,6 +73,8 @@
     <Compile Include="Configuration.fs" />
     <Compile Include="Appium.fs" />
     <Compile Include="Selectors.fs" />
+    <Compile Include="Exceptions.fs" />
+    <Compile Include="Wait.fs" />
     <Compile Include="Canopy.Mobile.fs" />
     <None Include="paket.references" />
     <None Include="paket.template" />
@@ -89,17 +91,6 @@
       <ItemGroup>
         <Reference Include="appium-dotnet-driver">
           <HintPath>..\..\packages\Appium.WebDriver\lib\net45\appium-dotnet-driver.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
-      <ItemGroup>
-        <Reference Include="canopy">
-          <HintPath>..\..\packages\canopy\lib\canopy.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
