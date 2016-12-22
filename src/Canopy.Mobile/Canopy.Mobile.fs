@@ -129,6 +129,7 @@ let private findElements' selector =
     match selector with
     | Selector.XPath xpath -> driver.FindElementsByXPath xpath |> List.ofSeq
     | Selector.Name name -> driver.FindElementsByName name |> List.ofSeq
+    | Selector.Id id -> driver.FindElementsById id |> List.ofSeq
 
 /// Finds elements on the current page.
 let findElements selector reliable timeout =

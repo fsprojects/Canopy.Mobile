@@ -79,10 +79,10 @@ let tests =
             testCase "can find element by Android UI Automator" <| fun () ->
                 driver.StartActivity("io.appium.android.apis", ".ApiDemos")
                 let byAndroidUIAutomator = new ByAndroidUIAutomator("new UiSelector().clickable(true)")
-                let element = driver.FindElementById("android:id/content").FindElement(byAndroidUIAutomator)
+                let element = (find (Selector.Id "android:id/content")).FindElement(byAndroidUIAutomator)
 
                 Expect.isNotNull element.Text "text is set"
-                Expect.isGreaterThanOrEqual (driver.FindElementById("android:id/content").FindElements(byAndroidUIAutomator).Count) 1 "selects at least 1 element"
+                Expect.isGreaterThanOrEqual ((find (Selector.Id "android:id/content")).FindElements(byAndroidUIAutomator).Count) 1 "selects at least 1 element"
                 
             testCase "can find element by XPath" <| fun () ->
                 let element = Selector.XPath "//android.widget.TextView[@text='API Demos']" |> find
