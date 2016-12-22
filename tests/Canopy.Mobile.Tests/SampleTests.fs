@@ -132,7 +132,7 @@ let tests =
 
         testList "complex android tests" [
             testCase "can take screenshot" <| fun () ->
-                let element = Selector.XPath "//android.widget.TextView[contains(@text, \"Animat\")]" |> find
+                let element = textView "Animation" |> find
                 Expect.isTrue element.Displayed "element is displayed"
 
                 let filename = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")

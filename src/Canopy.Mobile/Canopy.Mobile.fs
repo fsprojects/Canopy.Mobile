@@ -167,6 +167,7 @@ let click selector =
         wait configuration.waitTimeout (fun _ ->
             try 
                 (find selector).Click()
+                Thread.Sleep (TimeSpan.FromSeconds configuration.waitAfterClick)
                 true
             with _ -> false)
     with
@@ -179,6 +180,7 @@ let back () =
         wait configuration.waitTimeout (fun _ ->
             try 
                 driver.PressKeyCode(AndroidKeyCode.Back)
+                Thread.Sleep (TimeSpan.FromSeconds configuration.waitAfterClick)
                 true
             with _ -> false)
     with

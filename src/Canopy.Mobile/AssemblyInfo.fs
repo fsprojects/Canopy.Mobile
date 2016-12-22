@@ -5,8 +5,8 @@ open System.Reflection
 [<assembly: AssemblyTitleAttribute("Canopy.Mobile")>]
 [<assembly: AssemblyProductAttribute("Canopy.Mobile")>]
 [<assembly: AssemblyDescriptionAttribute("Canopy testing framework for mobile apps.")>]
-[<assembly: AssemblyVersionAttribute("1.0.12")>]
-[<assembly: AssemblyFileVersionAttribute("1.0.12")>]
+[<assembly: AssemblyVersionAttribute("1.0.13")>]
+[<assembly: AssemblyFileVersionAttribute("1.0.13")>]
 [<assembly: AssemblyConfigurationAttribute("Release")>]
 do ()
 
@@ -14,6 +14,6 @@ module internal AssemblyVersionInformation =
     let [<Literal>] AssemblyTitle = "Canopy.Mobile"
     let [<Literal>] AssemblyProduct = "Canopy.Mobile"
     let [<Literal>] AssemblyDescription = "Canopy testing framework for mobile apps."
-    let [<Literal>] AssemblyVersion = "1.0.12"
-    let [<Literal>] AssemblyFileVersion = "1.0.12"
+    let [<Literal>] AssemblyVersion = "1.0.13"
+    let [<Literal>] AssemblyFileVersion = "1.0.13"
     let [<Literal>] AssemblyConfiguration = "Release"
