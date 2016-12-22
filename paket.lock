@@ -20,7 +20,7 @@ GROUP Build
 FRAMEWORK: >= NET451
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (4.47)
+    FAKE (4.47.1)
     FSharp.Compiler.Service (2.0.0.6)
     FSharp.Formatting (2.14.4)
       FSharp.Compiler.Service (2.0.0.6)
@@ -31,7 +31,7 @@ NUGET
     SourceLink.Fake (1.1)
 GITHUB
   remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (eb92235e5092e5c3358cd11b7ebce64015d3f099)
+    modules/Octokit/Octokit.fsx (4f838ccbf9aa304811c9bb0e7a1e03a6dd0b41f0)
       Octokit (>= 0.20)
 GROUP Test
 FRAMEWORK: >= NET451
