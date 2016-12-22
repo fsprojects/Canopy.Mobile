@@ -12,6 +12,7 @@ open System.Threading
 open System.Diagnostics
 open System.Text
 open Wait
+open Exceptions
 
 let mutable driver : AndroidDriver<IWebElement> = null
 
@@ -136,17 +137,15 @@ let findElements selector reliable timeout =
             let results = ref []
             wait timeout (fun _ ->
                 results := findElements' selector
-
-
                 not <| List.isEmpty !results)
             !results
         else
             waitResults timeout (fun _ -> findElements' selector)
     with 
-    | :? WebDriverTimeoutException -> failwithf "can't find elements with selector: %A" selector
+    | :? WebDriverTimeoutException -> raise <| CanopyElementNotFoundException(sprintf "can't find elements with selector: %A" selector)
 
 /// Returns all elements that match the given selector.
-let findAll selector = findElements selector true configuration.waitTimeout
+let findAll selector = findElements selector true configuration.elementTimeout
 
 /// Returns the first element that matches the given selector.
 let find selector = findAll selector |> List.head
@@ -155,7 +154,7 @@ let find selector = findAll selector |> List.head
 let tryFind selector = findAll selector |> List.tryHead
 
 /// Returns true when the selector matches an element on the current page or otherwise false.
-let exists selector = findElements selector true configuration.waitTimeout |> List.isEmpty |> not
+let exists selector = findElements selector true configuration.elementTimeout |> List.isEmpty |> not
 
 /// Waits until the given selector returns an element or throws an exception when the timeout is reached.
 let waitFor selector = find selector |> ignore
@@ -163,28 +162,27 @@ let waitFor selector = find selector |> ignore
 /// Clicks the first element that's found with the selector
 let click selector =
     try
-        wait configuration.waitTimeout (fun _ ->
+        wait configuration.interactionTimeout (fun _ ->
             try 
                 (find selector).Click()
-                Thread.Sleep (TimeSpan.FromSeconds configuration.waitAfterClick)
                 true
-            with _ -> false)
+            with 
+            | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Failed to click: %A because it could not be found" selector)
+            | _ -> false)
     with
-    | _ -> failwithf "Failed to click: %A" selector
-
+    | :? CanopyException as ce -> raise(ce)
+    | _ as ex -> failwithf "Failed to click: %A%sInner Message: %A" selector System.Environment.NewLine ex
 
 /// Clicks the Android back button
 let back () =
     try
-        wait configuration.waitTimeout (fun _ ->
+        wait configuration.interactionTimeout (fun _ ->
             try 
                 driver.PressKeyCode(AndroidKeyCode.Back)
-                Thread.Sleep (TimeSpan.FromSeconds configuration.waitAfterClick)
                 true
             with _ -> false)
     with
-    | _ -> failwithf "Failed to click Android back button"
-
+    | _ as ex -> failwithf "Failed to go back%sInner Message: %s" System.Environment.NewLine ex.Message
 
 /// Takes a screenshot of the emulator and saves it as png.
 let screenshot path fileName = 
