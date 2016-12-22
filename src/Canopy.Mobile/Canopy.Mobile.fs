@@ -164,20 +164,7 @@ let tryFind selector = findAll selector |> List.tryHead
 let exists selector = findElements selector true configuration.waitTimeout |> List.isEmpty |> not
 
 /// Waits until the given selector returns an element or throws an exception when the timeout is reached.
-let waitForWithTimeOut timeout selector = 
-    let started = System.DateTime.Now
-    let timeout = started.Add timeout
-    let rec next () = 
-        match selector |> tryFind with
-        | Some _ -> ()
-        | None when System.DateTime.Now < timeout -> 
-            Thread.Sleep 100
-            next ()
-        | _ -> selector |> find |> ignore // throw proper message
-    next()
-
-/// Waits until the given selector returns an element or throws an exception when the timeout is reached.
-let waitFor selector = waitForWithTimeOut configuration.waitForTimeout selector
+let waitFor selector = find selector |> ignore
 
 /// Clicks the first element that's found with the selector
 let click selector =
