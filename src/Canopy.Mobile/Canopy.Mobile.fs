@@ -49,9 +49,18 @@ let androidHome = lazy (
 
     androidHome)
 
+/// Checks whether an Android emulator is already running
+let isAndroidEmulatorRunning() =
+    if not (isNull emulatorProcess) && not emulatorProcess.HasExited then true else
+    let emulatorProcesses = 
+        Process.GetProcesses()
+        |> Array.filter (fun p -> p.ProcessName.StartsWith "qemu-system")
+
+    Array.isEmpty emulatorProcesses |> not
+
 /// Start an emulator process
 let startEmulator settings = 
-    if not (isNull emulatorProcess) && not emulatorProcess.HasExited then () else
+    if isAndroidEmulatorRunning() then printfn "Android emulator is already running" else
     let emulatorToolPath = Path.Combine(androidHome.Force(), "tools", "emulator.exe")
     
     let argsSB = StringBuilder()
