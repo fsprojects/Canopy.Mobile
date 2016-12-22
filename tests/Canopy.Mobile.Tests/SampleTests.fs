@@ -106,7 +106,7 @@ let tests =
                 Selector.XPath "//android.widget.TextView[@text='Graphics']" |> waitFor
 
             testCase "can click element by canopy selector" <| fun () ->
-                textView "Animation" |> find |> ignore
+                textView "API Demos" |> find |> ignore
                 textView "Graphics" |> click
                 textView "Arcs" |> click
 
