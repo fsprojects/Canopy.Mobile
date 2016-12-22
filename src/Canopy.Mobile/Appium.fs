@@ -28,5 +28,6 @@ let start() =
 let stop() =
     if not (isNull localService) then
         if localService.IsRunning then
+            printfn "Stopping Appium"
             localService.Dispose()
         localService <- null

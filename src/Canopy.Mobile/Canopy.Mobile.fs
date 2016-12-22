@@ -104,6 +104,9 @@ let start settings appName =
 let stopEmulator() =
     if isNull emulatorProcess then () else
     if emulatorProcess.HasExited then () else
+    
+    printfn "Closing emulator"
+
     emulatorProcess.Kill()
 
     let pi = ProcessStartInfo("adb","shell reboot -p")
@@ -114,7 +117,7 @@ let stopEmulator() =
 
 /// Quits the web driver and appium
 let quit () = 
-    if not (isNull driver) then 
+    if not (isNull driver) then
         driver.Quit()
 
     appium.stop()
