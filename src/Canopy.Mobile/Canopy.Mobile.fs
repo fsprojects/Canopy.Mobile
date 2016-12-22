@@ -11,11 +11,14 @@ open OpenQA.Selenium.Appium.Interfaces
 open System.Threading
 open canopy
 open System.Diagnostics
+open System.Text
 
 type ExecutionSource =
 | Console
 
 let mutable driver : AndroidDriver<IWebElement> = null
+
+let mutable private emulatorProcess : Process = null
 
 [<RequireQualifiedAccess>]
 type Selector =
@@ -32,7 +35,7 @@ let DefaultAndroidSettings = {
     Silent = true
 }
 
-let checkAndroidHome () =
+let androidHome = lazy (
     let androidHome = Environment.GetEnvironmentVariable("ANDROID_HOME")
     if String.IsNullOrEmpty androidHome then
         failwithf "Environment variable ANDROID_HOME is not set."
@@ -43,20 +46,36 @@ let checkAndroidHome () =
     let sdkRoot = Environment.GetEnvironmentVariable("ANDROID_SDK_ROOT")
     if String.IsNullOrEmpty sdkRoot then
         Environment.SetEnvironmentVariable("ANDROID_SDK_ROOT",androidHome,EnvironmentVariableTarget.Process)
+
+    androidHome)
+
+/// Start an emulator process
+let startEmulator settings = 
+    if not (isNull emulatorProcess) && not emulatorProcess.HasExited then () else
+    let emulatorToolPath = Path.Combine(androidHome.Force(), "tools", "emulator.exe")
+    
+    let argsSB = StringBuilder()
+
+    argsSB.AppendFormat(" -avd {0}",settings.AVDName) |> ignore
+
+    if settings.Silent then
+        argsSB.Append(" -no-window -no-boot-anim") |> ignore
+
+    let args = argsSB.ToString()
+
+    let pi = ProcessStartInfo(emulatorToolPath,args)
+    pi.UseShellExecute <- false
+    emulatorProcess <- Process.Start pi
     
     
 let getAndroidCapabilities (settings:AndroidSettings) appName =
-    checkAndroidHome()
+    startEmulator settings
+
     let capabilities = DesiredCapabilities()
     capabilities.SetCapability("platformName", "Android")
     capabilities.SetCapability("platformVersion", "6.0")
     capabilities.SetCapability("platform", "Android")
     capabilities.SetCapability("automationName", "Appium")
-    capabilities.SetCapability("avd", settings.AVDName)
-
-    if settings.Silent then
-        capabilities.SetCapability("avdArgs", "-no-window -no-boot-anim")
-
     capabilities.SetCapability("deviceName", "Android Emulator")
     capabilities.SetCapability("autoLaunch", "true")
     capabilities.SetCapability("deviceReadyTimeout", 1000)
@@ -75,6 +94,12 @@ let start settings appName =
     //driver.ExecuteScript(mechanicjs.source) |> ignore
     canopy.types.browser <- driver
     printfn "Done starting"
+
+/// Stops the emulator process that was started with canopy mobile
+let stopEmulator() =
+    if isNull emulatorProcess then () else
+    if emulatorProcess.HasExited then () else
+    emulatorProcess.Kill()
 
 /// Quits the web driver and appium
 let quit () = 
