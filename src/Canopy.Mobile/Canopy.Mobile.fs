@@ -110,17 +110,19 @@ let stopEmulator() =
     if emulatorProcess.HasExited then () else
     emulatorProcess.Kill()
 
+    let pi = ProcessStartInfo("adb","shell reboot -p")
+    pi.UseShellExecute <- false
+    let proc = Process.Start pi
+    proc.WaitForExit()
+
+
 /// Quits the web driver and appium
 let quit () = 
     if not (isNull driver) then 
         driver.Quit()
 
     appium.stop()
-    
-    let pi = ProcessStartInfo("adb","shell reboot -p")
-    pi.UseShellExecute <- false
-    let proc = Process.Start pi
-    proc.WaitForExit()
+    stopEmulator()
     
 let private findElements' selector = 
     match selector with

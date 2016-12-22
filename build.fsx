@@ -97,8 +97,6 @@ setEnvironVar "ANDROID_SDK_ROOT" androidSDKPath
 
 let platformTool tool path =
     isUnix |> function | true -> tool | _ -> path
-    
-let adbTool = platformTool "adb" ( androidSDKPath </> "platform-tools/adb.exe")
 
 let npmTool = platformTool "npm" (@"C:\Program Files\nodejs\npm.cmd" |> FullName)
 
