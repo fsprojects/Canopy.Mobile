@@ -9,9 +9,9 @@ open OpenQA.Selenium.Appium
 open OpenQA.Selenium.Appium.Android
 open OpenQA.Selenium.Appium.Interfaces
 open System.Threading
-open canopy
 open System.Diagnostics
 open System.Text
+open Wait
 
 let mutable driver : AndroidDriver<IWebElement> = null
 
@@ -98,8 +98,7 @@ let start settings appName =
 
     let testServerAddress = Uri "http://127.0.0.1:4723/wd/hub"
     driver <- new AndroidDriver<IWebElement>(testServerAddress, capabilities, TimeSpan.FromSeconds(120.0))    
-
-    canopy.types.browser <- driver
+        
     printfn "Done starting"
 
 /// Stops the emulator process that was started with canopy mobile
