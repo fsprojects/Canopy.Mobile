@@ -1,5 +1,6 @@
-### 1.0.7 - 20.12.2016
-* Allows to start local appium directly from Canopy.Mobile
+### 1.0.8 - 22.12.2016
+* Starts Android emulator directly from Canopy.Mobile
+* Start appium directly from Canopy.Mobile
 * Added support for XPath selectors
 * Added support for clicking elements
 * Added support for back button in android
