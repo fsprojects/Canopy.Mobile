@@ -13,9 +13,6 @@ open canopy
 open System.Diagnostics
 open System.Text
 
-type ExecutionSource =
-| Console
-
 let mutable driver : AndroidDriver<IWebElement> = null
 
 let mutable private emulatorProcess : Process = null
@@ -100,7 +97,6 @@ let start settings appName =
     let testServerAddress = Uri "http://127.0.0.1:4723/wd/hub"
     driver <- new AndroidDriver<IWebElement>(testServerAddress, capabilities, TimeSpan.FromSeconds(120.0))    
 
-    //driver.ExecuteScript(mechanicjs.source) |> ignore
     canopy.types.browser <- driver
     printfn "Done starting"
 
