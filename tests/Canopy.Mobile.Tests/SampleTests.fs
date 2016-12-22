@@ -89,23 +89,44 @@ let tests =
                 Expect.isNotNull element.Text "headline is set"
             
             testCase "can click element by XPath" <| fun () ->
+                Selector.XPath "//android.widget.TextView[@text='API Demos']" |> waitFor
                 Selector.XPath "//android.widget.TextView[@text='Graphics']" |> click
                 Selector.XPath "//android.widget.TextView[@text='Arcs']" |> click
 
                 back()
+                Selector.XPath "//android.widget.TextView[@text='API Demos']" |> waitFor
                 Selector.XPath "//android.widget.TextView[@text='Arcs']" |> click
 
                 back()
+                Selector.XPath "//android.widget.TextView[@text='API Demos']" |> waitFor
                 Selector.XPath "//android.widget.TextView[@text='Arcs']" |> waitFor
 
                 back()
+                Selector.XPath "//android.widget.TextView[@text='API Demos']" |> waitFor
                 Selector.XPath "//android.widget.TextView[@text='Graphics']" |> waitFor
 
+            testCase "can click element by canopy selector" <| fun () ->
+                textView "Animation" |> find |> ignore
+                textView "Graphics" |> click
+                textView "Arcs" |> click
+
+                back()
+                textView "API Demos" |> find |> ignore
+                textView "Arcs" |> click
+
+                back()
+                textView "API Demos" |> find |> ignore
+                textView "Arcs" |> ignore
+
+                back()
+                textView "API Demos" |> find |> ignore
+                textView "Graphics" |> ignore
+
             testCase "can find element by XPath with canopy find" <| fun () ->
-                let element = Selector.XPath "//android.widget.TextView[@text='API Demos']" |> find
+                let element = textView "API Demos" |> find
                 Expect.isNotNull element.Text "headline is set"
 
-                let element = Selector.XPath "//android.widget.TextView[contains(@text, \"Animat\")]" |> find
+                let element = textView "Animation" |> find
                 Expect.equal element.Text "Animation" "test is set"
         ]
 

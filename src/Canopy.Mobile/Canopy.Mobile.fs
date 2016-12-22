@@ -17,11 +17,6 @@ let mutable driver : AndroidDriver<IWebElement> = null
 
 let mutable private emulatorProcess : Process = null
 
-[<RequireQualifiedAccess>]
-type Selector =
-| XPath of xpath:string
-| Name of name:string
-
 type AndroidSettings = {
     AVDName : string
     Silent : bool

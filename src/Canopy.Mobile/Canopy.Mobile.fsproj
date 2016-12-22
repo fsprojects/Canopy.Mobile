@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Configuration.fs" />
     <Compile Include="Appium.fs" />
+    <Compile Include="Selectors.fs" />
     <Compile Include="Canopy.Mobile.fs" />
     <None Include="paket.references" />
     <None Include="paket.template" />
