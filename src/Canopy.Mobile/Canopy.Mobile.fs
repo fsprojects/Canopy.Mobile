@@ -72,6 +72,13 @@ let startEmulator settings =
     let pi = ProcessStartInfo(emulatorToolPath,args)
     pi.UseShellExecute <- false
     emulatorProcess <- Process.Start pi
+
+    let adbToolPath = Path.Combine(androidHome.Force(), "platform-tools", "adb.exe")
+
+    let pi = ProcessStartInfo(adbToolPath,"wait-for-device")
+    pi.UseShellExecute <- false
+    let adbProcess = Process.Start pi
+    adbProcess.WaitForExit()
     
     
 let getAndroidCapabilities (settings:AndroidSettings) appName =
