@@ -8,10 +8,12 @@ open OpenQA.Selenium.Remote
 open OpenQA.Selenium.Appium
 open OpenQA.Selenium.Appium.Android
 open OpenQA.Selenium.Appium.Interfaces
+open OpenQA.Selenium.Appium.Android.Enums
 open System.Threading
 open System.Diagnostics
 open System.Text
 open Wait
+open Exceptions
 
 let mutable driver : AndroidDriver<IWebElement> = null
 
@@ -123,68 +125,114 @@ let quit () =
 
     appium.stop()
     stopEmulator()
-    
-let private findElements' selector = 
-    match selector with
-    | Selector.XPath xpath -> driver.FindElementsByXPath xpath |> List.ofSeq
-    | Selector.Name name -> driver.FindElementsByName name |> List.ofSeq
 
-/// Finds elements on the current page.
-let findElements selector reliable timeout =
+/// Finds elements on the current page for a given By.
+let findElementsBy by reliable timeout =
     try
         if reliable then
             let results = ref []
             wait timeout (fun _ ->
-                results := findElements' selector
-
-
+                results := driver.FindElements by |> List.ofSeq
                 not <| List.isEmpty !results)
             !results
         else
-            waitResults timeout (fun _ -> findElements' selector)
+            waitResults timeout (fun _ -> driver.FindElements by |> List.ofSeq)
     with 
-    | :? WebDriverTimeoutException -> failwithf "can't find elements with selector: %A" selector
+    | :? WebDriverTimeoutException -> raise <| CanopyElementNotFoundException(sprintf "can't find elements with By: %A" by)
+
+/// Returns all elements for a given By.
+let findAllBy by = findElementsBy by true configuration.elementTimeout
 
 /// Returns all elements that match the given selector.
-let findAll selector = findElements selector true configuration.waitTimeout
+let findAll selector = findElementsBy (toBy selector)
+
+/// Returns the first element for a given By.
+let findBy by = findAllBy by |> List.head
 
 /// Returns the first element that matches the given selector.
-let find selector = findAll selector |> List.head
+let find selector = findBy (toBy selector)
+
+/// Returns the first element for a given By or None if no such element exists.
+let tryFindBy by = findAllBy by |> List.tryHead
 
 /// Returns the first element that matches the given selector or None if no such element exists.
-let tryFind selector = findAll selector |> List.tryHead
+let tryFind selector = findAllBy (toBy selector)
 
 /// Returns true when the selector matches an element on the current page or otherwise false.
-let exists selector = findElements selector true configuration.waitTimeout |> List.isEmpty |> not
+let exists selector = findElementsBy (toBy selector) true configuration.elementTimeout |> List.isEmpty |> not
 
 /// Waits until the given selector returns an element or throws an exception when the timeout is reached.
 let waitFor selector = find selector |> ignore
 
+//keys
+let home = AndroidKeyCode.Home
+let space = AndroidKeyCode.Space
+
+///Press a key
+let press key = driver.PressKeyCode(key)
+
+///Press a key with meta state
+let pressMeta key = driver.PressKeyCode(key, AndroidKeyMetastate.Meta_Shift_On)
+
+///Long press a key
+let longPress key = driver.LongPressKeyCode(key)
+
+///Long press a key with meta state
+let longPressMeta key = driver.LongPressKeyCode(key, AndroidKeyMetastate.Meta_Shift_On)
+
 /// Clicks the first element that's found with the selector
 let click selector =
     try
-        wait configuration.waitTimeout (fun _ ->
+        wait configuration.interactionTimeout (fun _ ->
             try 
                 (find selector).Click()
-                Thread.Sleep (TimeSpan.FromSeconds configuration.waitAfterClick)
                 true
-            with _ -> false)
+            with 
+            | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Failed to click: %A because it could not be found" selector)
+            | _ -> false)
     with
-    | _ -> failwithf "Failed to click: %A" selector
-
+    | :? CanopyException as ce -> raise(ce)
+    | _ as ex -> failwithf "Failed to click: %A%sInner Message: %A" selector System.Environment.NewLine ex
 
 /// Clicks the Android back button
 let back () =
     try
-        wait configuration.waitTimeout (fun _ ->
+        wait configuration.interactionTimeout (fun _ ->
             try 
                 driver.PressKeyCode(AndroidKeyCode.Back)
-                Thread.Sleep (TimeSpan.FromSeconds configuration.waitAfterClick)
                 true
             with _ -> false)
     with
-    | _ -> failwithf "Failed to click Android back button"
+    | _ as ex -> failwithf "Failed to go back%sInner Message: %s" System.Environment.NewLine ex.Message
 
+//Assertions
+///Check that an element has a specific value
+let ( == ) selector value = 
+    try
+        wait configuration.assertionTimeout (fun _ ->
+            try 
+                (find selector).Text = value
+            with 
+            | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Equality check for : %A failed because it could not be found" selector)
+            | _ -> false)
+    with
+    | :? CanopyException as ce -> raise(ce)
+    | :? WebDriverTimeoutException -> failwithf "Equality checked failed.  Expected: %s Got: %s" value (find selector).Text
+    | _ as ex -> failwithf "Equality checked failed for unknown reasons.  Inner Message: %s" ex.Message
+
+///Check that an element is displayed
+let displayed selector = 
+    try
+        wait configuration.assertionTimeout (fun _ ->
+            try 
+                (find selector).Displayed
+            with 
+            | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Displayed check for : %A failed because it could not be found" selector)
+            | _ -> false)
+    with
+    | :? CanopyException as ce -> raise(ce)
+    | :? WebDriverTimeoutException -> failwith "Displayed checked failed."
+    | _ as ex -> failwithf "Displayed checked failed for unknown reasons.  Inner Message: %s" ex.Message
 
 /// Takes a screenshot of the emulator and saves it as png.
 let screenshot path fileName = 

@@ -62,83 +62,76 @@ let tests =
         
         testList "key press tests" [
             testCase "can press key code" <| fun () ->
-                driver.PressKeyCode(AndroidKeyCode.Home)
+                press home
 
             testCase "can press key code with meta state" <| fun () ->
-                driver.PressKeyCode(AndroidKeyCode.Space, AndroidKeyMetastate.Meta_Shift_On)
+                pressMeta space
 
             testCase "can long press key code" <| fun () ->
-                driver.LongPressKeyCode(AndroidKeyCode.Space)
+                longPress space
 
             testCase "can long press key code with meta state" <| fun () ->
-                driver.LongPressKeyCode(AndroidKeyCode.Space, AndroidKeyMetastate.Meta_Shift_On)
+                longPressMeta space                
         ]
-
         
         testList "element tests" [
             testCase "can find element by Android UI Automator" <| fun () ->
                 driver.StartActivity("io.appium.android.apis", ".ApiDemos")
                 let byAndroidUIAutomator = new ByAndroidUIAutomator("new UiSelector().clickable(true)")
-                let element = driver.FindElementById("android:id/content").FindElement(byAndroidUIAutomator)
+                let element = (find "#content").FindElement(byAndroidUIAutomator)
 
                 Expect.isNotNull element.Text "text is set"
-                Expect.isGreaterThanOrEqual (driver.FindElementById("android:id/content").FindElements(byAndroidUIAutomator).Count) 1 "selects at least 1 element"
+                Expect.isGreaterThanOrEqual ((find "#content").FindElements(byAndroidUIAutomator).Count) 1 "selects at least 1 element"
                 
             testCase "can find element by XPath" <| fun () ->
-                let element = Selector.XPath "//android.widget.TextView[@text='API Demos']" |> find
+                let element = find "//android.widget.TextView[@text='API Demos']"
                 Expect.isNotNull element.Text "headline is set"
             
             testCase "can click element by XPath" <| fun () ->
-                Selector.XPath "//android.widget.TextView[@text='API Demos']" |> waitFor
-                Selector.XPath "//android.widget.TextView[@text='Graphics']" |> click
-                Selector.XPath "//android.widget.TextView[@text='Arcs']" |> click
+                waitFor "//android.widget.TextView[@text='API Demos']" // an example of a full qualified xml selector
+                click "Graphics" //shortcut for text = 'Graphics'
+                click "Arcs"
 
                 back()
-                Selector.XPath "//android.widget.TextView[@text='API Demos']" |> waitFor
-                Selector.XPath "//android.widget.TextView[@text='Arcs']" |> click
+                click "Arcs"
 
                 back()
-                Selector.XPath "//android.widget.TextView[@text='API Demos']" |> waitFor
-                Selector.XPath "//android.widget.TextView[@text='Arcs']" |> waitFor
+                waitFor "API Demos"
+                waitFor "Arcs"
 
                 back()
-                Selector.XPath "//android.widget.TextView[@text='API Demos']" |> waitFor
-                Selector.XPath "//android.widget.TextView[@text='Graphics']" |> waitFor
+                waitFor "API Demos"
+                waitFor "Graphics"
 
             testCase "can click element by canopy selector" <| fun () ->
-                textView "API Demos" |> waitFor
-                textView "Graphics" |> click
-                textView "Arcs" |> click
+                waitFor "tv:API Demos"
+                click "tv:Graphics"
+                click "tv:Arcs"
 
                 back()
-                textView "API Demos" |> waitFor
-                textView "Arcs" |> click
+                waitFor "tv:API Demos"
+                click "tv:Arcs"
 
                 back()
-                textView "API Demos" |> waitFor
-                textView "Arcs" |> waitFor
+                waitFor "tv:API Demos"
+                waitFor "tv:Arcs"
 
                 back()
-                textView "API Demos" |> waitFor
-                textView "Graphics" |> waitFor
+                waitFor "tv:API Demos"
+                waitFor "tv:Graphics"
 
-            testCase "can find element by XPath with canopy find" <| fun () ->
-                let element = textView "API Demos" |> find
-                Expect.isNotNull element.Text "headline is set"
-
-                let element = textView "Animation" |> find
-                Expect.equal element.Text "Animation" "test is set"
+            testCase "equality check for API Demos and Animation" <| fun () ->
+                "tv:API Demos" == "API Demos"
+                "tv:Animation" == "Animation"
         ]
 
         testList "complex android tests" [
             testCase "can take screenshot" <| fun () ->
-                let element = textView "Animation" |> find
-                Expect.isTrue element.Displayed "element is displayed"
+                displayed "tv:Animation"
 
                 let filename = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
                 screenshot screenShotDir filename
                 Expect.isTrue (File.Exists(Path.Combine(screenShotDir,filename + ".png"))) "Screenshot exists"
-
         ]
     ]
 
