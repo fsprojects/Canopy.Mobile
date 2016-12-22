@@ -106,21 +106,21 @@ let tests =
                 Selector.XPath "//android.widget.TextView[@text='Graphics']" |> waitFor
 
             testCase "can click element by canopy selector" <| fun () ->
-                textView "API Demos" |> find |> ignore
+                textView "API Demos" |> waitFor
                 textView "Graphics" |> click
                 textView "Arcs" |> click
 
                 back()
-                textView "API Demos" |> find |> ignore
+                textView "API Demos" |> waitFor
                 textView "Arcs" |> click
 
                 back()
-                textView "API Demos" |> find |> ignore
-                textView "Arcs" |> ignore
+                textView "API Demos" |> waitFor
+                textView "Arcs" |> waitFor
 
                 back()
-                textView "API Demos" |> find |> ignore
-                textView "Graphics" |> ignore
+                textView "API Demos" |> waitFor
+                textView "Graphics" |> waitFor
 
             testCase "can find element by XPath with canopy find" <| fun () ->
                 let element = textView "API Demos" |> find
