@@ -5,6 +5,7 @@ module canopy.mobile.selectors
 let mutable selectorConventions =
     [
         fun (selector : string) -> if selector.StartsWith("#") then Some (OpenQA.Selenium.By.Id(selector.Replace("#", "android:id/"))) else None
+        fun (selector : string) -> if selector.StartsWith("tv:") then Some (OpenQA.Selenium.By.XPath(sprintf """//android.widget.TextView[@text="%s"]""" (selector.Replace("tv:", "")))) else None
         fun (selector : string) -> if selector.StartsWith("android:id") then Some (OpenQA.Selenium.By.Id(selector)) else None
         fun (selector : string) -> if selector.StartsWith("//") then Some (OpenQA.Selenium.By.XPath(selector)) else None
     ]
@@ -22,7 +23,4 @@ let toBy (selector : string) =
 
     match convention with
     | Some(by) -> by
-    | None -> defaultSelectorConvention selector    
-
-/// Selects an android.widget.TextView with the given text
-let textView text = sprintf """//android.widget.TextView[@text="%s"]""" text
+    | None -> defaultSelectorConvention selector

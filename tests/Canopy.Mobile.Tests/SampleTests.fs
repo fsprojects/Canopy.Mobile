@@ -104,33 +104,33 @@ let tests =
                 waitFor "Graphics"
 
             testCase "can click element by canopy selector" <| fun () ->
-                waitFor <| textView "API Demos"
-                click <| textView "Graphics"
-                click <| textView "Arcs"
+                waitFor "tv:API Demos"
+                click "tv:Graphics"
+                click "tv:Arcs"
 
                 back()
-                waitFor <| textView "API Demos"
-                click <| textView "Arcs"
+                waitFor "tv:API Demos"
+                click "tv:Arcs"
 
                 back()
-                waitFor <| textView "API Demos"
-                waitFor <| textView "Arcs"
+                waitFor "tv:API Demos"
+                waitFor "tv:Arcs"
 
                 back()
-                waitFor <| textView "API Demos"
-                waitFor <| textView "Graphics"
+                waitFor "tv:API Demos"
+                waitFor "tv:Graphics"
 
             testCase "can find element by XPath with canopy find" <| fun () ->
-                let element = textView "API Demos" |> find
+                let element = find "tv:API Demos"
                 Expect.isNotNull element.Text "headline is set"
 
-                let element = textView "Animation" |> find
+                let element = find "tv:Animation"
                 Expect.equal element.Text "Animation" "test is set"
         ]
 
         testList "complex android tests" [
             testCase "can take screenshot" <| fun () ->
-                let element = textView "Animation" |> find
+                let element = find "tv:Animation"
                 Expect.isTrue element.Displayed "element is displayed"
 
                 let filename = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
