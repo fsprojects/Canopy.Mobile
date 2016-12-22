@@ -163,13 +163,28 @@ let tryFind selector = findAll selector |> List.tryHead
 /// Returns true when the selector matches an element on the current page or otherwise false.
 let exists selector = findElements selector true configuration.waitTimeout |> List.isEmpty |> not
 
+/// Waits until the given selector returns an element or throws an exception when the timeout is reached.
+let waitForWithTimeOut timeout selector = 
+    let started = System.DateTime.Now
+    let timeout = started.Add timeout
+    let rec next () = 
+        match selector |> tryFind with
+        | Some _ -> ()
+        | None when System.DateTime.Now < timeout -> 
+            Thread.Sleep 100
+            next ()
+        | _ -> selector |> find |> ignore // throw proper message
+    next()
+
+/// Waits until the given selector returns an element or throws an exception when the timeout is reached.
+let waitFor selector = waitForWithTimeOut configuration.waitForTimeout selector
+
 /// Clicks the first element that's found with the selector
 let click selector =
     try
         wait configuration.waitTimeout (fun _ ->
             try 
                 (find selector).Click()
-                Thread.Sleep configuration.waitAfterClick
                 true
             with _ -> false)
     with
@@ -182,7 +197,6 @@ let back () =
         wait configuration.waitTimeout (fun _ ->
             try 
                 driver.PressKeyCode(AndroidKeyCode.Back)
-                Thread.Sleep configuration.waitAfterClick
                 true
             with _ -> false)
     with

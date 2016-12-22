@@ -93,11 +93,13 @@ let tests =
                 Selector.XPath "//android.widget.TextView[@text='Arcs']" |> click
 
                 back()
-
                 Selector.XPath "//android.widget.TextView[@text='Arcs']" |> click
 
                 back()
+                Selector.XPath "//android.widget.TextView[@text='Arcs']" |> waitFor
+
                 back()
+                Selector.XPath "//android.widget.TextView[@text='Graphics']" |> waitFor
 
             testCase "can find element by XPath with canopy find" <| fun () ->
                 let element = Selector.XPath "//android.widget.TextView[@text='API Demos']" |> find
