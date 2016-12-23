@@ -220,6 +220,20 @@ let ( == ) selector value =
     | :? WebDriverTimeoutException -> failwithf "Equality checked failed.  Expected: %s Got: %s" value (find selector).Text
     | _ as ex -> failwithf "Equality checked failed for unknown reasons.  Inner Message: %s" ex.Message
 
+///Check that an element does not have a specific value
+let ( != ) selector value = 
+    try
+        wait configuration.assertionTimeout (fun _ ->
+            try 
+                (find selector).Text <> value
+            with 
+            | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Not Equal check for : %A failed because it could not be found" selector)
+            | _ -> false)
+    with
+    | :? CanopyException as ce -> raise(ce)
+    | :? WebDriverTimeoutException -> failwithf "Not Equal checked failed.  Expected NOT: %s Got: %s" value (find selector).Text
+    | _ as ex -> failwithf "Not Equal checked failed for unknown reasons.  Inner Message: %s" ex.Message
+
 ///Check that an element is displayed
 let displayed selector = 
     try
@@ -233,6 +247,20 @@ let displayed selector =
     | :? CanopyException as ce -> raise(ce)
     | :? WebDriverTimeoutException -> failwith "Displayed checked failed."
     | _ as ex -> failwithf "Displayed checked failed for unknown reasons.  Inner Message: %s" ex.Message
+
+///Check that an element is not displayed
+let notDisplayed selector = 
+    try
+        wait configuration.assertionTimeout (fun _ ->
+            try 
+                (find selector).Displayed = false
+            with 
+            | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Not displayed check for : %A failed because it could not be found" selector)
+            | _ -> false)
+    with
+    | :? CanopyException as ce -> raise(ce)
+    | :? WebDriverTimeoutException -> failwith "Not displayed checked failed."
+    | _ as ex -> failwithf "Not displayed checked failed for unknown reasons.  Inner Message: %s" ex.Message
 
 /// Takes a screenshot of the emulator and saves it as png.
 let screenshot path fileName = 
