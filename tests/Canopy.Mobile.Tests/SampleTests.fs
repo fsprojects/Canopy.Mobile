@@ -123,6 +123,10 @@ let tests =
             testCase "equality check for API Demos and Animation" <| fun () ->
                 "tv:API Demos" == "API Demos"
                 "tv:Animation" == "Animation"
+
+            testCase "not equality check for API Demos and Animation" <| fun () ->
+                "API Demos" != "Blah"
+                "Animation" != "Blah Blah"
         ]
 
         testList "complex android tests" [
