@@ -168,16 +168,16 @@ let waitFor selector = find selector |> ignore
 let home = AndroidKeyCode.Home
 let space = AndroidKeyCode.Space
 
-///Press a key
+/// Press a key
 let press key = driver.PressKeyCode(key)
 
-///Press a key with meta state
+/// Press a key with meta state
 let pressMeta key = driver.PressKeyCode(key, AndroidKeyMetastate.Meta_Shift_On)
 
-///Long press a key
+/// Long press a key
 let longPress key = driver.LongPressKeyCode(key)
 
-///Long press a key with meta state
+/// Long press a key with meta state
 let longPressMeta key = driver.LongPressKeyCode(key, AndroidKeyMetastate.Meta_Shift_On)
 
 /// Clicks the first element that's found with the selector
@@ -206,7 +206,7 @@ let back () =
     | _ as ex -> failwithf "Failed to go back%sInner Message: %s" System.Environment.NewLine ex.Message
 
 //Assertions
-///Check that an element has a specific value
+/// Check that an element has a specific value
 let ( == ) selector value = 
     try
         wait configuration.assertionTimeout (fun _ ->
@@ -220,7 +220,7 @@ let ( == ) selector value =
     | :? WebDriverTimeoutException -> failwithf "Equality checked failed.  Expected: %s Got: %s" value (find selector).Text
     | _ as ex -> failwithf "Equality checked failed for unknown reasons.  Inner Message: %s" ex.Message
 
-///Check that an element does not have a specific value
+/// Check that an element does not have a specific value
 let ( != ) selector value = 
     try
         wait configuration.assertionTimeout (fun _ ->
@@ -234,7 +234,7 @@ let ( != ) selector value =
     | :? WebDriverTimeoutException -> failwithf "Not Equal checked failed.  Expected NOT: %s Got: %s" value (find selector).Text
     | _ as ex -> failwithf "Not Equal checked failed for unknown reasons.  Inner Message: %s" ex.Message
 
-///Check that an element is displayed
+/// Check that an element is displayed
 let displayed selector = 
     try
         wait configuration.assertionTimeout (fun _ ->
@@ -248,7 +248,7 @@ let displayed selector =
     | :? WebDriverTimeoutException -> failwith "Displayed checked failed."
     | _ as ex -> failwithf "Displayed checked failed for unknown reasons.  Inner Message: %s" ex.Message
 
-///Check that an element is not displayed
+/// Check that an element is not displayed
 let notDisplayed selector = 
     try
         wait configuration.assertionTimeout (fun _ ->
