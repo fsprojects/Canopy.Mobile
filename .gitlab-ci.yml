@@ -12,7 +12,7 @@ build:
     - tags
   only:
     - master
-    
-artifacts:
-  paths:
-    - **/temp/screenshots
+  artifacts:
+    when: always
+    paths:
+      - /temp/screenshots/

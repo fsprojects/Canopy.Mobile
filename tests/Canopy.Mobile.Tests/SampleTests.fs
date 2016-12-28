@@ -13,13 +13,13 @@ open OpenQA.Selenium.Appium.Android.Enums
 open OpenQA.Selenium.Appium.Interfaces
 open System
 
-
-let screenShotDir = "./temp/screenshots"
+let screenShotDir = "../../../../temp/screenshots"
 let testCase name fn =
   testCase 
     name
     (fun () -> 
-        try fn () 
+        try 
+            fn () 
         with 
         | _ -> 
             screenshot screenShotDir (name + ".png")
