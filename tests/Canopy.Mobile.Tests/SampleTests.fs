@@ -15,22 +15,19 @@ open System
 
 let screenShotDir = "../../../../temp/screenshots"
 
-let log = new List<_>()
 let testCase name fn =
   testCase 
     name
     (fun () -> 
         try 
-            log.Clear()
             fn ()
         with 
-        | ex -> 
+        | _ -> 
             screenshot screenShotDir (name + ".png")
-            failwithf "Log: %s%s%sMessage: %s" Environment.NewLine (String.concat Environment.NewLine log) Environment.NewLine ex.Message 
             reraise())
 
-let back() = log.Add "back"; back()
-let click selector = log.Add selector; click selector
+let back() = printfn "back"; back()
+let click selector = printfn "%s" selector; click selector
 
 let downloadDemoApp () =
     let localFile = FileInfo("./temp/ApiDemos-debug.apk")
@@ -165,7 +162,7 @@ let main args =
             let settings = 
                 { DefaultAndroidSettings with 
                     AVDName = "AVD_for_Nexus_6_by_Google"
-                    Silent = args |> Array.contains "debug" |> not }
+                    Silent = false } //args |> Array.contains "debug" |> not }
 
             start settings app
             runTests { defaultConfig with ``parallel`` = false } tests
