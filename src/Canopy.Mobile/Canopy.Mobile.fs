@@ -191,7 +191,7 @@ let click selector =
             | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Failed to click: %A because it could not be found" selector)
             | _ -> false)
     with
-    | :? CanopyException as ce -> raise(ce)
+    | :? CanopyException -> reraise()
     | _ as ex -> failwithf "Failed to click: %A%sInner Message: %A" selector System.Environment.NewLine ex
 
 /// Clicks the Android back button
@@ -216,9 +216,9 @@ let ( == ) selector value =
             | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Equality check for : %A failed because it could not be found" selector)
             | _ -> false)
     with
-    | :? CanopyException as ce -> raise(ce)
-    | :? WebDriverTimeoutException -> failwithf "Equality checked failed.  Expected: %s Got: %s" value (find selector).Text
-    | _ as ex -> failwithf "Equality checked failed for unknown reasons.  Inner Message: %s" ex.Message
+    | :? CanopyException -> reraise()
+    | :? WebDriverTimeoutException -> failwithf "Equality check failed.%sExpected: %s Got: %s" System.Environment.NewLine value (find selector).Text
+    | _ as ex -> failwithf "Equality check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
 
 /// Check that an element does not have a specific value
 let ( != ) selector value = 
@@ -230,9 +230,9 @@ let ( != ) selector value =
             | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Not Equal check for : %A failed because it could not be found" selector)
             | _ -> false)
     with
-    | :? CanopyException as ce -> raise(ce)
-    | :? WebDriverTimeoutException -> failwithf "Not Equal checked failed.  Expected NOT: %s Got: %s" value (find selector).Text
-    | _ as ex -> failwithf "Not Equal checked failed for unknown reasons.  Inner Message: %s" ex.Message
+    | :? CanopyException -> reraise()
+    | :? WebDriverTimeoutException -> failwithf "Not Equal check failed.%sExpected NOT: %s Got: %s" System.Environment.NewLine value (find selector).Text
+    | _ as ex -> failwithf "Not Equal check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
 
 /// Check that an element is displayed
 let displayed selector = 
@@ -244,9 +244,9 @@ let displayed selector =
             | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Displayed check for : %A failed because it could not be found" selector)
             | _ -> false)
     with
-    | :? CanopyException as ce -> raise(ce)
-    | :? WebDriverTimeoutException -> failwith "Displayed checked failed."
-    | _ as ex -> failwithf "Displayed checked failed for unknown reasons.  Inner Message: %s" ex.Message
+    | :? CanopyException -> reraise()
+    | :? WebDriverTimeoutException -> failwith "Displayed check failed."
+    | _ as ex -> failwithf "Displayed check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
 
 /// Check that an element is not displayed
 let notDisplayed selector = 
@@ -258,9 +258,9 @@ let notDisplayed selector =
             | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Not displayed check for : %A failed because it could not be found" selector)
             | _ -> false)
     with
-    | :? CanopyException as ce -> raise(ce)
-    | :? WebDriverTimeoutException -> failwith "Not displayed checked failed."
-    | _ as ex -> failwithf "Not displayed checked failed for unknown reasons.  Inner Message: %s" ex.Message
+    | :? CanopyException -> reraise()
+    | :? WebDriverTimeoutException -> failwith "Not displayed check failed."
+    | _ as ex -> failwithf "Not displayed check failed for unknown reasons.  Inner Message: %s" ex.Message
 
 /// Takes a screenshot of the emulator and saves it as png.
 let screenshot path fileName = 
