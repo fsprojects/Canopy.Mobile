@@ -13,6 +13,18 @@ open OpenQA.Selenium.Appium.Android.Enums
 open OpenQA.Selenium.Appium.Interfaces
 open System
 
+
+let screenShotDir = "./temp/screenshots"
+let testCase name fn =
+  testCase 
+    name
+    (fun () -> 
+        try fn () 
+        with 
+        | _ -> 
+            screenshot screenShotDir (name + ".png")
+            reraise())
+
 let downloadDemoApp () =
     let localFile = FileInfo("./temp/ApiDemos-debug.apk")
     if File.Exists localFile.FullName then
@@ -27,8 +39,6 @@ let downloadDemoApp () =
         printfn "app downloaded"
 
     localFile.FullName
-
-let screenShotDir = "./temp/screenshots"
 
 let tests =
     testList "android tests" [
