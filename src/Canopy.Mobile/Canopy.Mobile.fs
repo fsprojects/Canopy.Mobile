@@ -260,7 +260,7 @@ let notDisplayed selector =
     with
     | :? CanopyException -> reraise()
     | :? WebDriverTimeoutException -> failwith "Not displayed check failed."
-    | _ as ex -> failwithf "Not displayed check failed for unknown reasons.  Inner Message: %s" ex.Message
+    | _ as ex -> failwithf "Not displayed check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
 
 /// Takes a screenshot of the emulator and saves it as png.
 let screenshot path fileName = 
