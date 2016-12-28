@@ -14,16 +14,23 @@ open OpenQA.Selenium.Appium.Interfaces
 open System
 
 let screenShotDir = "../../../../temp/screenshots"
+
+let log = new List<_>()
 let testCase name fn =
   testCase 
     name
     (fun () -> 
         try 
-            fn () 
+            log.Clear()
+            fn ()
         with 
-        | _ -> 
+        | ex -> 
             screenshot screenShotDir (name + ".png")
+            failwithf "Log: %s%s%sMessage: %s" Environment.NewLine (String.concat Environment.NewLine log) Environment.NewLine ex.Message 
             reraise())
+
+let back() = log.Add "back"; back()
+let click selector = log.Add selector; click selector
 
 let downloadDemoApp () =
     let localFile = FileInfo("./temp/ApiDemos-debug.apk")
