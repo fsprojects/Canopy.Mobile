@@ -15,4 +15,4 @@ build:
   artifacts:
     when: always
     paths:
-      - /temp/screenshots/
+      - temp/screenshots/
