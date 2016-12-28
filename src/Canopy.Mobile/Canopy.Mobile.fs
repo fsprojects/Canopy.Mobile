@@ -269,5 +269,7 @@ let screenshot path fileName =
         Directory.CreateDirectory path |> ignore
 
     let fileName = Path.ChangeExtension(Path.Combine(path,fileName),".png")
+    if File.Exists fileName then
+        File.Delete fileName
         
     screenShot.SaveAsFile(fileName, Drawing.Imaging.ImageFormat.Png)
