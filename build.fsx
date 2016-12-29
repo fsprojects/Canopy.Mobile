@@ -359,16 +359,16 @@ Target "AddLangDocs" (fun _ ->
 
 FinalTarget "CloseAndroid" (fun _ ->
     if isLocalBuild then () else
-    ProcessHelper.killProcess "adb.exe"
-    ProcessHelper.killProcess "qemu-system-i386.exe"
-    ProcessHelper.killProcess "qemu-system-aarch64.exe"
-    ProcessHelper.killProcess "qemu-system-armel.exe"
-    ProcessHelper.killProcess "qemu-system-mips64el.exe"
-    ProcessHelper.killProcess "qemu-system-mipsel.exe"
-    ProcessHelper.killProcess "qemu-system-x86_64.exe"
-    ProcessHelper.killProcess "emulator-crash-service.exe"
-    ProcessHelper.killProcess "emulator64-crash-service.exe"
-    ProcessHelper.killProcess "node.exe"
+    ProcessHelper.killProcess "adb"
+    ProcessHelper.killProcess "qemu-system-i386"
+    ProcessHelper.killProcess "qemu-system-aarch64"
+    ProcessHelper.killProcess "qemu-system-armel"
+    ProcessHelper.killProcess "qemu-system-mips64el"
+    ProcessHelper.killProcess "qemu-system-mipsel"
+    ProcessHelper.killProcess "qemu-system-x86_64"
+    ProcessHelper.killProcess "emulator-crash-service"
+    ProcessHelper.killProcess "emulator64-crash-service"
+    ProcessHelper.killProcess "node"
 )
 
 // --------------------------------------------------------------------------------------
