@@ -99,13 +99,20 @@ let tests =
                 Expect.isNotNull element.Text "headline is set"
 
 
-            // testCase "can click back button" <| fun () ->
-            //     waitFor "tv:API Demos"
-            //     click "tv:Graphics"
-            //     back()
-            //     click "tv:Graphics"
-            //     back()
-            //     waitFor "tv:API Demos"
+            testCase "can click back button" <| fun () ->
+                waitFor "tv:Animation"
+
+                click "tv:Graphics"
+                waitFor "tv:BitmapDecode"
+                
+                back()
+                waitFor "tv:Animation"
+
+                click "tv:Graphics"
+                waitFor "tv:BitmapDecode"
+
+                back()
+                waitFor "tv:Animation"
             
             // testCase "can click element by XPath" <| fun () ->
             //     waitFor "//android.widget.TextView[@text='API Demos']" // an example of a full qualified xml selector
@@ -153,7 +160,7 @@ let tests =
             testCase "can take screenshot" <| fun () ->
                 displayed "tv:Animation"
                 click "tv:Graphics"
-                Thread.Sleep 4000
+                waitFor "tv:BitmapDecode"
 
                 let filename = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
                 screenshot screenShotDir filename
