@@ -366,6 +366,8 @@ FinalTarget "CloseAndroid" (fun _ ->
     ProcessHelper.killProcess "qemu-system-mips64el.exe"
     ProcessHelper.killProcess "qemu-system-mipsel.exe"
     ProcessHelper.killProcess "qemu-system-x86_64.exe"
+    ProcessHelper.killProcess "emulator-crash-service.exe"
+    ProcessHelper.killProcess "emulator64-crash-service.exe"
     ProcessHelper.killProcess "node.exe"
 )
 
