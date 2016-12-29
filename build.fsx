@@ -180,6 +180,7 @@ Target "Build" (fun _ ->
 
 Target "InstallAppium" (fun _ ->
     run npmTool "install appium -g" ""
+    ActivateFinalTarget "CloseAndroid"
 )
 
 
@@ -354,6 +355,18 @@ Target "AddLangDocs" (fun _ ->
         Copy langTemplateDir [ templateDir </> templateFileName ]
 
         createIndexFsx lang)
+)
+
+FinalTarget "CloseAndroid" (fun _ ->
+    if isLocalBuild then () else
+    ProcessHelper.killProcess "adb.exe"
+    ProcessHelper.killProcess "qemu-system-i386.exe"
+    ProcessHelper.killProcess "qemu-system-aarch64.exe"
+    ProcessHelper.killProcess "qemu-system-armel.exe"
+    ProcessHelper.killProcess "qemu-system-mips64el.exe"
+    ProcessHelper.killProcess "qemu-system-mipsel.exe"
+    ProcessHelper.killProcess "qemu-system-x86_64.exe"
+    ProcessHelper.killProcess "node.exe"
 )
 
 // --------------------------------------------------------------------------------------
