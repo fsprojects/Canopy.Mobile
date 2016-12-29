@@ -199,8 +199,7 @@ let back () =
     try
         wait configuration.interactionTimeout (fun _ ->
             try 
-                driver.Navigate().Back() //PressKeyCode(AndroidKeyCode.Back)
-                Thread.Sleep(1000)
+                driver.PressKeyCode(AndroidKeyCode.Back)
                 true
             with 
             | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Failed to click back button.")
