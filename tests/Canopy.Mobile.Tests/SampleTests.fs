@@ -98,6 +98,7 @@ let tests =
                 let element = find "//android.widget.TextView[@text='API Demos']"
                 Expect.isNotNull element.Text "headline is set"
 
+
             testCase "can click back button" <| fun () ->
                 waitFor "tv:API Demos"
                 click "tv:Graphics"
@@ -151,7 +152,9 @@ let tests =
         testList "complex android tests" [
             testCase "can take screenshot" <| fun () ->
                 displayed "tv:Animation"
-
+                click "tv:Graphics"
+                Thread.Sleep 4000
+                
                 let filename = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
                 screenshot screenShotDir filename
                 Expect.isTrue (File.Exists(Path.Combine(screenShotDir,filename + ".png"))) "Screenshot exists"
