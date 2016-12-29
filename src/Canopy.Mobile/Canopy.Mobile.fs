@@ -247,7 +247,7 @@ let ( != ) selector value =
     | :? WebDriverTimeoutException -> failwithf "Not Equal check failed.%sExpected NOT: %s Got: %s" System.Environment.NewLine value (find selector).Text
     | ex -> failwithf "Not Equal check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
 
-/// Check that an element is displayed
+/// Check that an element exists and is displayed.
 let displayed selector = 
     try
         wait configuration.assertionTimeout (fun _ ->
@@ -261,7 +261,7 @@ let displayed selector =
     | :? WebDriverTimeoutException -> failwith "Displayed check failed."
     | ex -> failwithf "Displayed check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
 
-/// Check that an element is not displayed
+/// Check that an element exists but is not displayed.
 let notDisplayed selector = 
     try
         wait configuration.assertionTimeout (fun _ ->
@@ -280,6 +280,10 @@ let screenshot path fileName =
     let screenShot = driver.GetScreenshot()
     if not (Directory.Exists path) then
         Directory.CreateDirectory path |> ignore
+    
+    let extension = Path.GetExtension fileName 
+    if not (String.IsNullOrEmpty extension) && extension <> ".png" then
+        failwithf "Only png files are allowed for Screenshots. %s is not allowed." extension
 
     let fileName = Path.ChangeExtension(Path.Combine(path,fileName),".png")
     if File.Exists fileName then
