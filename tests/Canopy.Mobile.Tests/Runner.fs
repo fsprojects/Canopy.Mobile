@@ -5,6 +5,8 @@ open Canopy.Mobile.ExpectoHelper
 open System
 open System.IO
 open System.Net
+open canopy.mobile
+open Expecto
 
 let downloadDemoApp () =
     let localFile = FileInfo("./temp/ApiDemos-debug.apk")
