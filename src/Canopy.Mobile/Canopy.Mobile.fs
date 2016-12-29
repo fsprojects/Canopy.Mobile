@@ -199,7 +199,7 @@ let back () =
     try
         wait configuration.interactionTimeout (fun _ ->
             try 
-                driver.PressKeyCode(AndroidKeyCode.Back)
+                driver.Navigate().Back() //PressKeyCode(AndroidKeyCode.Back)
                 Thread.Sleep(1000)
                 true
             with 
