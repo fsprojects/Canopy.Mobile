@@ -179,7 +179,7 @@ let main args =
             let settings = 
                 { DefaultAndroidSettings with 
                     AVDName = "AVD_for_Nexus_6_by_Google"
-                    Silent = false } //args |> Array.contains "debug" |> not }
+                    Silent = args |> Array.contains "debug" |> not }
 
             start settings app
             runTests { defaultConfig with ``parallel`` = false } tests
