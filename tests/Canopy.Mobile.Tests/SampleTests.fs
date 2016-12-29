@@ -114,21 +114,23 @@ let tests =
                 back()
                 waitFor "tv:Animation"
             
-            // testCase "can click element by XPath" <| fun () ->
-            //     waitFor "//android.widget.TextView[@text='API Demos']" // an example of a full qualified xml selector
-            //     click "Graphics" //shortcut for text = 'Graphics'
-            //     click "Arcs"
+            testCase "can click element by XPath" <| fun () ->
+                waitFor "//android.widget.TextView[@text='API Demos']" // an example of a full qualified xml selector
+                click "Graphics" //shortcut for text = 'Graphics'
+                click "Arcs"
+                waitFor "tv:Graphics/Arcs"
 
-            //     back()
-            //     click "Arcs"
+                back()
+                waitFor "tv:BitmapDecode"
 
-            //     back()
-            //     waitFor "API Demos"
-            //     waitFor "Arcs"
+                click "Arcs"
+                waitFor "tv:Graphics/Arcs"
 
-            //     back()
-            //     waitFor "API Demos"
-            //     waitFor "Graphics"
+                back()
+                waitFor "tv:BitmapDecode"
+
+                back()
+                waitFor "tv:Animation"
 
             // testCase "can click element by canopy selector" <| fun () ->
             //     waitFor "tv:API Demos"

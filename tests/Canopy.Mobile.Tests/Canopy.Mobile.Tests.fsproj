@@ -81,6 +81,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Canopy.Mobile\Canopy.Mobile.fsproj">
       <Name>Canopy.Mobile</Name>
       <Project>{7b2bb6f6-0122-4d8d-982b-534af5f6aca9}</Project>
