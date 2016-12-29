@@ -26,9 +26,6 @@ let testCase name fn =
             screenshot screenShotDir (name + ".png")
             reraise())
 
-let back() = printfn "back"; back()
-let click selector = printfn "%s" selector; click selector
-
 let downloadDemoApp () =
     let localFile = FileInfo("./temp/ApiDemos-debug.apk")
     if File.Exists localFile.FullName then
