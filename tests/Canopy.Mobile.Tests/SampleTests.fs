@@ -153,7 +153,7 @@ let tests =
             testCase "can take screenshot" <| fun () ->
                 displayed "tv:Animation"
                 click "tv:Graphics"
-                Thread.Sleep 2000
+                Thread.Sleep 4000
 
                 let filename = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
                 screenshot screenShotDir filename
