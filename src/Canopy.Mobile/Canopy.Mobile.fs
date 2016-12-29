@@ -112,7 +112,8 @@ let stopEmulator() =
 
     emulatorProcess.Kill()
 
-    let pi = ProcessStartInfo("adb","shell reboot -p")
+    let adbToolPath = Path.Combine(androidHome.Force(), "platform-tools", "adb.exe")
+    let pi = ProcessStartInfo(adbToolPath,"shell reboot -p")
     pi.UseShellExecute <- false
     let proc = Process.Start pi
     proc.WaitForExit()
