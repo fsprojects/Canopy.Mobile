@@ -180,7 +180,7 @@ let longPress key = driver.LongPressKeyCode(key)
 /// Long press a key with meta state
 let longPressMeta key = driver.LongPressKeyCode(key, AndroidKeyMetastate.Meta_Shift_On)
 
-/// Clicks the first element that's found with the selector
+/// Clicks the first element that is found with the selector
 let click selector =
     try
         wait configuration.interactionTimeout (fun _ ->
@@ -193,6 +193,11 @@ let click selector =
     with
     | :? CanopyException -> reraise()
     | ex -> failwithf "Failed to click: %A%sInner Message: %A" selector System.Environment.NewLine ex
+
+/// Clicks an element and waits for the waitSelector to appear.
+let clickAndWait clickSelector waitSelector =
+    click clickSelector
+    waitFor waitSelector
 
 /// Clicks the Android back button
 let back () =
@@ -207,7 +212,13 @@ let back () =
     with
     | ex -> failwithf "Failed to go back%sInner Message: %s" System.Environment.NewLine ex.Message
 
-//Assertions
+/// Clicks the Android back button and waits for the waitSelector to appear.
+let backAndWait waitSelector =
+    back()
+    waitFor waitSelector
+
+// Assertions
+
 /// Check that an element has a specific value
 let ( == ) selector value = 
     try

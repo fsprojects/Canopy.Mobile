@@ -117,37 +117,28 @@ let tests =
             testCase "can click element by XPath" <| fun () ->
                 waitFor "//android.widget.TextView[@text='API Demos']" // an example of a full qualified xml selector
                 click "Graphics" //shortcut for text = 'Graphics'
-                click "Arcs"
-                waitFor "tv:Graphics/Arcs"
+                clickAndWait "Arcs" "tv:Graphics/Arcs"
 
-                back()
-                waitFor "tv:BitmapDecode"
+                backAndWait "tv:BitmapDecode"
 
-                click "Arcs"
-                waitFor "tv:Graphics/Arcs"
+                clickAndWait "Arcs" "tv:Graphics/Arcs"
 
-                back()
-                waitFor "tv:BitmapDecode"
+                backAndWait "tv:BitmapDecode"
 
-                back()
-                waitFor "tv:Animation"
+                backAndWait "tv:Animation"
 
-            // testCase "can click element by canopy selector" <| fun () ->
-            //     waitFor "tv:API Demos"
-            //     click "tv:Graphics"
-            //     click "tv:Arcs"
+            testCase "can click element by canopy selector" <| fun () ->
+                waitFor "tv:API Demos"
+                click "tv:Graphics"
+                clickAndWait "tv:Arcs" "tv:Graphics/Arcs"
 
-            //     back()
-            //     waitFor "tv:API Demos"
-            //     click "tv:Arcs"
+                backAndWait "tv:BitmapDecode"
 
-            //     back()
-            //     waitFor "tv:API Demos"
-            //     waitFor "tv:Arcs"
+                clickAndWait "tv:Arcs" "tv:Graphics/Arcs"
 
-            //     back()
-            //     waitFor "tv:API Demos"
-            //     waitFor "tv:Graphics"
+                backAndWait "tv:BitmapDecode"
+
+                backAndWait "tv:Animation"
 
             testCase "equality check for API Demos and Animation" <| fun () ->
                 "tv:API Demos" == "API Demos"
@@ -161,8 +152,7 @@ let tests =
         testList "complex android tests" [
             testCase "can take screenshot" <| fun () ->
                 displayed "tv:Animation"
-                click "tv:Graphics"
-                waitFor "tv:BitmapDecode"
+                clickAndWait "tv:Graphics" "tv:BitmapDecode"
 
                 let filename = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
                 screenshot screenShotDir filename
