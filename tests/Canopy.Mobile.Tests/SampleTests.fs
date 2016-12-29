@@ -1,10 +1,9 @@
-module Canopy.Mobile.Tests
+module Canopy.Mobile.SampleTests
 
 open canopy.mobile
 open System.IO
 open Expecto
 open System.Collections.Generic
-open System.Net
 open OpenQA.Selenium.Appium
 open OpenQA.Selenium.Appium.Android
 open OpenQA.Selenium
@@ -12,34 +11,7 @@ open System.Threading
 open OpenQA.Selenium.Appium.Android.Enums
 open OpenQA.Selenium.Appium.Interfaces
 open System
-
-let screenShotDir = "../../../../temp/screenshots"
-
-let testCase name fn =
-  testCase 
-    name
-    (fun () -> 
-        try 
-            fn ()
-        with 
-        | _ -> 
-            screenshot screenShotDir (name + ".png")
-            reraise())
-
-let downloadDemoApp () =
-    let localFile = FileInfo("./temp/ApiDemos-debug.apk")
-    if File.Exists localFile.FullName then
-        printfn "app %s already exists" localFile.FullName
-    else
-        let appOnServer = "http://appium.github.io/appium/assets/ApiDemos-debug.apk"
-        Directory.CreateDirectory localFile.Directory.FullName |> ignore
-        use client = new WebClient()
-        
-        printfn "downloading %s to %s" appOnServer localFile.FullName
-        client.DownloadFile(appOnServer, localFile.FullName)
-        printfn "app downloaded"
-
-    localFile.FullName
+open Canopy.Mobile.ExpectoHelper
 
 let tests =
     testList "android tests" [
@@ -160,21 +132,3 @@ let tests =
         ]
     ]
 
-[<EntryPoint>]
-let main args =
-    try
-        try
-            let app = downloadDemoApp()
-            
-            let settings = 
-                { DefaultAndroidSettings with 
-                    AVDName = "AVD_for_Nexus_6_by_Google"
-                    Silent = args |> Array.contains "debug" |> not }
-
-            start settings app
-            runTests { defaultConfig with ``parallel`` = false } tests
-        with e ->
-            printfn "Error: %s" e.Message
-            -1
-    finally
-        quit()

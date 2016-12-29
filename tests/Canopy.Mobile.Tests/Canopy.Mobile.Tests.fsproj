@@ -72,7 +72,9 @@
   -->
   <Import Project="..\..\.paket\paket.targets" />
   <ItemGroup>
+    <Compile Include="ExpectoHelper.fs" />
     <Compile Include="SampleTests.fs" />
+    <Compile Include="Runner.fs" />
     <None Include="paket.references" />
     <Content Include="App.config" />
   </ItemGroup>
