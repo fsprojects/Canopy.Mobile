@@ -186,7 +186,6 @@ let click selector =
         wait configuration.interactionTimeout (fun _ ->
             try 
                 (find selector).Click()
-                Thread.Sleep 4000
                 true
             with 
             | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Failed to click: %A because it could not be found" selector)
@@ -201,7 +200,6 @@ let back () =
         wait configuration.interactionTimeout (fun _ ->
             try 
                 driver.PressKeyCode(AndroidKeyCode.Back)
-                Thread.Sleep 4000
                 true
             with 
             | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Failed to click back button.")
