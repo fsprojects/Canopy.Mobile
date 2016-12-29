@@ -127,7 +127,7 @@ let quit () =
     stopEmulator()
 
 /// Finds elements on the current page for a given By.
-let findElementsBy by reliable timeout =
+let private findElementsBy by reliable timeout =
     try
         if reliable then
             let results = ref []
@@ -141,25 +141,34 @@ let findElementsBy by reliable timeout =
     | :? WebDriverTimeoutException -> raise <| CanopyElementNotFoundException(sprintf "can't find elements with By: %A" by)
 
 /// Returns all elements for a given By.
-let findAllBy by = findElementsBy by true configuration.elementTimeout
-
-/// Returns all elements that match the given selector.
-let findAll selector = findElementsBy (toBy selector)
+let findAllBy by = 
+    try
+        findElementsBy by true configuration.elementTimeout
+    with
+    | _ -> []
 
 /// Returns the first element for a given By.
-let findBy by = findAllBy by |> List.head
+let findBy by = findElementsBy by true configuration.elementTimeout |> List.head
 
 /// Returns the first element that matches the given selector.
 let find selector = findBy (toBy selector)
 
 /// Returns the first element for a given By or None if no such element exists.
-let tryFindBy by = findAllBy by |> List.tryHead
+let tryFindBy by = 
+    try 
+        findAllBy by |> List.tryHead
+    with
+    | _ -> None
 
 /// Returns the first element that matches the given selector or None if no such element exists.
 let tryFind selector = findAllBy (toBy selector)
 
 /// Returns true when the selector matches an element on the current page or otherwise false.
-let exists selector = findElementsBy (toBy selector) true configuration.elementTimeout |> List.isEmpty |> not
+let exists selector = 
+    try
+        findElementsBy (toBy selector) true 0. |> List.isEmpty |> not
+    with
+    | _ -> false
 
 /// Waits until the given selector returns an element or throws an exception when the timeout is reached.
 let waitFor selector = find selector |> ignore
