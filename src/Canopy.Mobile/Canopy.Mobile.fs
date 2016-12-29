@@ -194,10 +194,6 @@ let click selector =
     | :? CanopyException -> reraise()
     | ex -> failwithf "Failed to click: %A%sInner Message: %A" selector System.Environment.NewLine ex
 
-/// Clicks an element and waits for the waitSelector to appear.
-let clickAndWait clickSelector waitSelector =
-    click clickSelector
-    waitFor waitSelector
 
 /// Clicks the Android back button
 let back () =
@@ -211,11 +207,6 @@ let back () =
             | _ -> false)
     with
     | ex -> failwithf "Failed to go back%sInner Message: %s" System.Environment.NewLine ex.Message
-
-/// Clicks the Android back button and waits for the waitSelector to appear.
-let backAndWait waitSelector =
-    back()
-    waitFor waitSelector
 
 // Assertions
 
@@ -286,3 +277,17 @@ let screenshot path fileName =
         File.Delete fileName
         
     screenShot.SaveAsFile(fileName, Drawing.Imaging.ImageFormat.Png)
+
+/// Clicks an element and waits for the waitSelector to appear.
+let clickAndWait clickSelector waitSelector =
+    if exists waitSelector then
+        failwithf "The selector %s already matched before the click. This makes it impossible to detect page transistions." waitSelector
+    click clickSelector
+    waitFor waitSelector
+
+/// Clicks the Android back button and waits for the waitSelector to appear.
+let backAndWait waitSelector =
+    if exists waitSelector then
+        failwithf "The selector %s already matched before the click of the Android back button. This makes it impossible to detect page transistions." waitSelector
+    back()
+    waitFor waitSelector
