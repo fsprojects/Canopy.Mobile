@@ -97,39 +97,47 @@ let tests =
             testCase "can find element by XPath" <| fun () ->
                 let element = find "//android.widget.TextView[@text='API Demos']"
                 Expect.isNotNull element.Text "headline is set"
-            
-            testCase "can click element by XPath" <| fun () ->
-                waitFor "//android.widget.TextView[@text='API Demos']" // an example of a full qualified xml selector
-                click "Graphics" //shortcut for text = 'Graphics'
-                click "Arcs"
 
-                back()
-                click "Arcs"
-
-                back()
-                waitFor "API Demos"
-                waitFor "Arcs"
-
-                back()
-                waitFor "API Demos"
-                waitFor "Graphics"
-
-            testCase "can click element by canopy selector" <| fun () ->
+            testCase "can click back button" <| fun () ->
                 waitFor "tv:API Demos"
                 click "tv:Graphics"
-                click "tv:Arcs"
-
+                back()
+                click "tv:Graphics"
                 back()
                 waitFor "tv:API Demos"
-                click "tv:Arcs"
+            
+            // testCase "can click element by XPath" <| fun () ->
+            //     waitFor "//android.widget.TextView[@text='API Demos']" // an example of a full qualified xml selector
+            //     click "Graphics" //shortcut for text = 'Graphics'
+            //     click "Arcs"
 
-                back()
-                waitFor "tv:API Demos"
-                waitFor "tv:Arcs"
+            //     back()
+            //     click "Arcs"
 
-                back()
-                waitFor "tv:API Demos"
-                waitFor "tv:Graphics"
+            //     back()
+            //     waitFor "API Demos"
+            //     waitFor "Arcs"
+
+            //     back()
+            //     waitFor "API Demos"
+            //     waitFor "Graphics"
+
+            // testCase "can click element by canopy selector" <| fun () ->
+            //     waitFor "tv:API Demos"
+            //     click "tv:Graphics"
+            //     click "tv:Arcs"
+
+            //     back()
+            //     waitFor "tv:API Demos"
+            //     click "tv:Arcs"
+
+            //     back()
+            //     waitFor "tv:API Demos"
+            //     waitFor "tv:Arcs"
+
+            //     back()
+            //     waitFor "tv:API Demos"
+            //     waitFor "tv:Graphics"
 
             testCase "equality check for API Demos and Animation" <| fun () ->
                 "tv:API Demos" == "API Demos"
