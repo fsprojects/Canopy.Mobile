@@ -147,6 +147,12 @@ let findAllBy by =
     with
     | _ -> []
 
+/// Returns all elements for a given selector.
+let findAll selector = findAllBy (toBy selector)
+
+/// Returns all elements on the current page.
+let getAllElements() = findAllBy (toBy "//*")
+
 /// Returns the first element for a given By.
 let findBy by = findElementsBy by true configuration.elementTimeout |> List.head
 

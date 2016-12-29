@@ -1,4 +1,4 @@
-### 1.1.3 - 29.12.2016
+### 1.1.4 - 29.12.2016
 * Starts Android emulator directly from Canopy.Mobile
 * Start appium directly from Canopy.Mobile
 * Allow to take screenshot
