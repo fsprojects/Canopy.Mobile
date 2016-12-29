@@ -186,13 +186,14 @@ let click selector =
         wait configuration.interactionTimeout (fun _ ->
             try 
                 (find selector).Click()
+                Thread.Sleep 4000
                 true
             with 
             | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Failed to click: %A because it could not be found" selector)
             | _ -> false)
     with
     | :? CanopyException -> reraise()
-    | _ as ex -> failwithf "Failed to click: %A%sInner Message: %A" selector System.Environment.NewLine ex
+    | ex -> failwithf "Failed to click: %A%sInner Message: %A" selector System.Environment.NewLine ex
 
 /// Clicks the Android back button
 let back () =
@@ -200,12 +201,13 @@ let back () =
         wait configuration.interactionTimeout (fun _ ->
             try 
                 driver.PressKeyCode(AndroidKeyCode.Back)
+                Thread.Sleep 4000
                 true
             with 
             | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Failed to click back button.")
             | _ -> false)
     with
-    | _ as ex -> failwithf "Failed to go back%sInner Message: %s" System.Environment.NewLine ex.Message
+    | ex -> failwithf "Failed to go back%sInner Message: %s" System.Environment.NewLine ex.Message
 
 //Assertions
 /// Check that an element has a specific value
@@ -220,7 +222,7 @@ let ( == ) selector value =
     with
     | :? CanopyException -> reraise()
     | :? WebDriverTimeoutException -> failwithf "Equality check failed.%sExpected: %s Got: %s" System.Environment.NewLine value (find selector).Text
-    | _ as ex -> failwithf "Equality check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
+    | ex -> failwithf "Equality check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
 
 /// Check that an element does not have a specific value
 let ( != ) selector value = 
@@ -234,7 +236,7 @@ let ( != ) selector value =
     with
     | :? CanopyException -> reraise()
     | :? WebDriverTimeoutException -> failwithf "Not Equal check failed.%sExpected NOT: %s Got: %s" System.Environment.NewLine value (find selector).Text
-    | _ as ex -> failwithf "Not Equal check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
+    | ex -> failwithf "Not Equal check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
 
 /// Check that an element is displayed
 let displayed selector = 
@@ -248,7 +250,7 @@ let displayed selector =
     with
     | :? CanopyException -> reraise()
     | :? WebDriverTimeoutException -> failwith "Displayed check failed."
-    | _ as ex -> failwithf "Displayed check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
+    | ex -> failwithf "Displayed check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
 
 /// Check that an element is not displayed
 let notDisplayed selector = 
@@ -262,7 +264,7 @@ let notDisplayed selector =
     with
     | :? CanopyException -> reraise()
     | :? WebDriverTimeoutException -> failwith "Not displayed check failed."
-    | _ as ex -> failwithf "Not displayed check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
+    | ex -> failwithf "Not displayed check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
 
 /// Takes a screenshot of the emulator and saves it as png.
 let screenshot path fileName = 
