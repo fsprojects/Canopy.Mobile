@@ -35,11 +35,11 @@ FRAMEWORK: >= NET451
 NUGET
   remote: https://www.nuget.org/api/v2
     Argu (3.2)
-    Expecto (2.3.1)
+    Expecto (2.4)
       Argu (>= 3.2)
       FSharp.Core (>= 3.1.2.5)
-    Expecto.FsCheck (2.3.1)
-      Expecto (>= 2.3.1)
+    Expecto.FsCheck (2.4)
+      Expecto (>= 2.4)
       FsCheck (>= 2.6.2)
       FSharp.Core (>= 3.1.2.5)
     Expecto.PerfUtil (1.0.12)
