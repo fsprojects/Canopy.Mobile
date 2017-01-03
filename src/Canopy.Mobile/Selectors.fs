@@ -16,6 +16,10 @@ let mutable defaultSelectorConvention = fun selector -> OpenQA.Selenium.By.XPath
 
 /// Using conventions convert a string representing a selector to a Selenium By
 let toBy (selector : string) = 
+    let selector = 
+        UTF8Umlauts.replacements @ UTF16Umlauts.replacements
+        |> List.fold (fun (text:string) (c,c') -> text.Replace(c,c')) selector
+
     let convention = 
         selectorConventions 
         |> List.map (fun convention -> convention selector) 
