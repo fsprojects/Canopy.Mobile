@@ -72,6 +72,8 @@
   <ItemGroup>
     <Compile Include="Configuration.fs" />
     <Compile Include="Appium.fs" />
+    <Compile Include="UmlautsUTF8.fs" />
+    <Compile Include="UmlautsUTF16.fs" />
     <Compile Include="Selectors.fs" />
     <Compile Include="Exceptions.fs" />
     <Compile Include="Wait.fs" />
