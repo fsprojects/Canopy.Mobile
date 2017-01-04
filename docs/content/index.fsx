@@ -4,7 +4,7 @@
 #I "../../bin"
 
 (**
-canopy.mobile- f#rictionless mobile testing
+canopy.mobile - f#rictionless mobile testing
 ===========================================
 
 <div class="row">
