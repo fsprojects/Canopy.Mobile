@@ -260,7 +260,6 @@ let WriteIntoElement closeKeyboard selector text =
     driver.Keyboard.SendKeys text
     if closeKeyboard then
         driver.HideKeyboard()
-    selector == text
 
 /// Writes the given text into the element that was found by the given selector and waits until the text was completely entered.
 /// After running this function the keyboard will be closed.
