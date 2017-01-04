@@ -1,7 +1,8 @@
-﻿module Wait
+﻿/// Contains canopy specifc wait helpers.
+module canopy.mobile.Wait
 
 open OpenQA.Selenium
-open Exceptions
+open canopy.mobile.Exceptions
 
 let mutable waitSleep = 0.5
 

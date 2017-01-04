@@ -1,4 +1,5 @@
 ﻿[<AutoOpen>]
+/// Contains convetions that allow easier access to elements.
 module canopy.mobile.selectors
 
 /// Selector conventions that determine if a selector matches a pattern and if it does what the resulting By is

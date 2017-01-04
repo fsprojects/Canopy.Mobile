@@ -1,4 +1,5 @@
-﻿module Exceptions
+﻿/// Contains canopy specific exception
+module canopy.mobile.Exceptions
 
 open System
 

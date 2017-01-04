@@ -1,7 +1,6 @@
 ﻿module Canopy.Mobile.Runner
 
 open SampleTests
-open Canopy.Mobile.ExpectoHelper
 open System
 open System.IO
 open System.Net

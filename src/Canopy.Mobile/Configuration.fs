@@ -1,6 +1,5 @@
-﻿module canopy.mobile.configuration
-
-open System.IO
+﻿/// Contains configuration settings.
+module canopy.mobile.configuration
 
 /// TimeOut for find operations
 let mutable elementTimeout = 20.0

@@ -3,11 +3,9 @@ module canopy.mobile.appium
 
 open System.IO
 open OpenQA.Selenium.Appium.Service
-open System
 
 let mutable localService : AppiumLocalService = null
 let mutable logFile = "./temp/AppiumLog.txt"
-
 
 /// Starts appium as local service
 let start() =

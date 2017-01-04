@@ -1,15 +1,13 @@
 [<AutoOpen>]
+/// Contains all canopy core functions.
 module canopy.mobile.core
 
 open System
 open System.IO
 open OpenQA.Selenium
 open OpenQA.Selenium.Remote
-open OpenQA.Selenium.Appium
 open OpenQA.Selenium.Appium.Android
-open OpenQA.Selenium.Appium.Interfaces
 open OpenQA.Selenium.Appium.Android.Enums
-open System.Threading
 open System.Diagnostics
 open System.Text
 open Wait

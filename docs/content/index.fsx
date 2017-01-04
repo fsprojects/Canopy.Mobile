@@ -30,6 +30,8 @@ canopy.mobile is a mobile testing framework with one goal in mind, make UI testi
 
 * MIT License.
 
+In order to get started take a look at the [sample project](https://github.com/fsprojects/Canopy.Mobile/tree/master/tests/Canopy.Mobile.Tests).
+
 
 <a href="img/appium.gif"><img src="img/appium-small.gif"></a>
 
