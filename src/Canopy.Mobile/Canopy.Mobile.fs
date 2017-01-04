@@ -254,6 +254,13 @@ let ( != ) selector value =
     | :? WebDriverTimeoutException -> failwithf "Not Equal check failed.%sExpected NOT: %s Got: %s" System.Environment.NewLine value (find selector).Text
     | ex -> failwithf "Not Equal check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
 
+/// Writes the given text into the element that was found by the given selector and waits until the text was completely entered.
+let ( << ) selector text =
+    click selector
+    driver.Keyboard.SendKeys text
+    driver.HideKeyboard()
+    selector == text
+
 /// Check that an element exists and is displayed.
 let displayed selector = 
     try
