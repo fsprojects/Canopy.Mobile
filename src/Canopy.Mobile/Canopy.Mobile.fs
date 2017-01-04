@@ -173,7 +173,7 @@ let tryFind selector = findAllBy (toBy selector)
 /// Returns true when the selector matches an element on the current page or otherwise false.
 let exists selector = 
     try
-        findElementsBy (toBy selector) true 0. |> List.isEmpty |> not
+        findElementsBy (toBy selector) true 1.0 |> List.isEmpty |> not
     with
     | _ -> false
 
