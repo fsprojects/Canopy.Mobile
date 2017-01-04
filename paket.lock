@@ -17,7 +17,7 @@ GROUP Build
 FRAMEWORK: >= NET451
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (4.47.2)
+    FAKE (4.47.4)
     FSharp.Compiler.Service (2.0.0.6)
     FSharp.Formatting (2.14.4)
       FSharp.Compiler.Service (2.0.0.6)
@@ -28,18 +28,18 @@ NUGET
     SourceLink.Fake (1.1)
 GITHUB
   remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (be6e4b2b513b5f2cd64ec689fe7f1f45c39f4e92)
+    modules/Octokit/Octokit.fsx (73e7fea28f73811155feaab0c6ce63f51e48139e)
       Octokit (>= 0.20)
 GROUP Test
 FRAMEWORK: >= NET451
 NUGET
   remote: https://www.nuget.org/api/v2
     Argu (3.2)
-    Expecto (2.4)
+    Expecto (2.4.1)
       Argu (>= 3.2)
       FSharp.Core (>= 3.1.2.5)
-    Expecto.FsCheck (2.4)
-      Expecto (>= 2.4)
+    Expecto.FsCheck (2.4.1)
+      Expecto (>= 2.4.1)
       FsCheck (>= 2.6.2)
       FSharp.Core (>= 3.1.2.5)
     Expecto.PerfUtil (1.0.12)

@@ -36,7 +36,7 @@ let main args =
                     Silent = args |> Array.contains "debug" |> not }
 
             start settings app
-            runTests { defaultConfig with ``parallel`` = false } tests
+            runTestsWithArgs { defaultConfig with ``parallel`` = false } args tests
         with e ->
             printfn "Error: %s" e.Message
             -1
