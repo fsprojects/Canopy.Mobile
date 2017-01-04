@@ -4,10 +4,8 @@
 #I "../../bin"
 
 (**
-Canopy.Mobile
-======================
-
-Documentation
+canopy.mobile- f#rictionless mobile testing
+===========================================
 
 <div class="row">
   <div class="span1"></div>
@@ -20,10 +18,18 @@ Documentation
   <div class="span1"></div>
 </div>
 
-This project extends the [canopy](https://github.com/lefthandedgoat/canopy) test project with infrastructure that allows to test monile projects via [appium](http://appium.io/).
+canopy.mobile is a mobile testing framework with one goal in mind, make UI testing simple:
 
+* Solid stabilization layer built on top of [Appium](http://appium.io/). Death to "brittle, quirky, UI tests".
+
+* Quick to learn. Even if you've never done UI Automation, and don't know F#.
+
+* Clean, concise API. Whenever possible we stick to [canopy](https://github.com/lefthandedgoat/canopy)'s way of doing things.
+
+* MIT License.
 
 *)
+
 
 (** 
 Contributing and copyright

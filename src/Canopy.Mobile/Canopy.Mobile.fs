@@ -270,7 +270,11 @@ let writeIntoElement closeKeyboard selector text =
 
 /// Writes the given text into the element that was found by the given selector and waits until the text was completely entered.
 /// After running this function the keyboard will be closed.
-let ( << ) selector text = writeIntoElement true selector text
+let write selector text = writeIntoElement true selector text
+
+/// Writes the given text into the element that was found by the given selector and waits until the text was completely entered.
+/// After running this function the keyboard will be closed.
+let ( << ) selector text = write selector text
 
 /// Check that an element exists and is displayed.
 let displayed selector = 
