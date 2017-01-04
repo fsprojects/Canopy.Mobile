@@ -254,8 +254,11 @@ let ( != ) selector value =
     | :? WebDriverTimeoutException -> failwithf "Not Equal check failed.%sExpected NOT: %s Got: %s" System.Environment.NewLine value (find selector).Text
     | ex -> failwithf "Not Equal check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
 
+/// Reads the text from the given selector
+let read selector = (find selector).Text
+
 /// Writes the given text into the element that was found by the given selector and waits until the text was completely entered.
-let WriteIntoElement closeKeyboard selector text =
+let writeIntoElement closeKeyboard selector text =
     click selector
     driver.Keyboard.SendKeys text
     if closeKeyboard then
@@ -267,7 +270,7 @@ let WriteIntoElement closeKeyboard selector text =
 
 /// Writes the given text into the element that was found by the given selector and waits until the text was completely entered.
 /// After running this function the keyboard will be closed.
-let ( << ) selector text = WriteIntoElement true selector text
+let ( << ) selector text = writeIntoElement true selector text
 
 /// Check that an element exists and is displayed.
 let displayed selector = 
