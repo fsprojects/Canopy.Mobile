@@ -133,7 +133,7 @@ let tests =
                 click "tv:Search" 
                 clickAndWait "tv:Invoke Search" "tv:App/Search/Invoke Search"
 
-                Expect.isTrue (exists "#txt_query_prefill") "Text is available"
+                //Expect.isTrue (exists "#txt_query_prefill") "Text is available"
         ]
 
         testCase "can take screenshot" <| fun () ->
