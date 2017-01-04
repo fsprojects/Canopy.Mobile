@@ -2,6 +2,8 @@
 
 This project extends the [canopy](https://github.com/lefthandedgoat/canopy) test project with infrastructure that allows to test mobile projects via [appium](http://appium.io/).
 
+Documentation can be found at the [canopy.mobile](https://fsprojects.github.io/Canopy.Mobile/index.html) web page.
+
 ## Maintainer(s)
 
 - [@forki](https://github.com/forki)
