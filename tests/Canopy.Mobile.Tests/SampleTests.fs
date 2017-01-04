@@ -133,11 +133,11 @@ let tests =
                 click "tv:Search" 
                 clickAndWait "tv:Invoke Search" "tv:App/Search/Invoke Search"
 
-                //Expect.isTrue (exists "#txt_query_prefill") "Text is available"
+                Expect.isTrue (exists "#txt_query_prefill") "Text is available"
         ]
 
         testCase "can take screenshot" <| fun () ->
-            displayed "tv:Animation"
+            waitFor "tv:Animation"
             clickAndWait "tv:Graphics" "tv:BitmapDecode"
 
             let filename = DateTime.Now.ToString("MMM-d_HH-mm-ss-fff")
