@@ -26,6 +26,8 @@ canopy.mobile is a mobile testing framework with one goal in mind, make UI testi
 
 * Clean, concise API. Whenever possible we stick to [canopy](https://github.com/lefthandedgoat/canopy)'s way of doing things.
 
+* Tries to unify Android and iOS testing whenever possible.
+
 * MIT License.
 
 *)

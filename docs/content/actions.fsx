@@ -11,6 +11,20 @@ Actions
 *)
 
 (**
+start
+----
+Starts a new emulator session with the given apk.
+*)
+start DefaultAndroidSettings "myApp.apk"
+
+(**
+quit
+----
+Quit the current emulator session.
+*)
+quit ()
+
+(**
 << (write)
 ----------
 Writes text to element.
@@ -35,3 +49,24 @@ Clicks an element via selector.
 *)
 click "#login"
 click "menu-tv:search"
+
+(**
+clickAndWait
+-----
+Clicks an element via selector and waits for another selector to appear.
+*)
+clickAndWait "#login" "tv:password"
+
+(**
+back
+-----
+Clicks the android back button.
+*)
+back ()
+
+(**
+backAndWit
+-----
+Clicks the android back button and waits for a selector to appear.
+*)
+backAndWait "#login"
