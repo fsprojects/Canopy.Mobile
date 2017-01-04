@@ -11,7 +11,7 @@ canopy.mobile - f#rictionless mobile testing
   <div class="span1"></div>
   <div class="span6">
     <div class="well well-small" id="nuget">
-      The Canopy.Mobile library can be <a href="https://nuget.org/packages/Canopy.Mobile">installed from NuGet</a>:
+      The canopy.mobile library can be <a href="https://nuget.org/packages/Canopy.Mobile">installed from NuGet</a>:
       <pre>PM> Install-Package Canopy.Mobile</pre>
     </div>
   </div>
@@ -30,7 +30,8 @@ canopy.mobile is a mobile testing framework with one goal in mind, make UI testi
 
 * MIT License.
 
-<img src="img/appium-small.png">
+
+<a href="img/appium.gif"><img src="img/appium-small.gif"></a>
 
 *)
 
