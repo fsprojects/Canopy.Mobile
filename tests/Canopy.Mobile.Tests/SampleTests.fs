@@ -5,11 +5,6 @@ open System.IO
 open Expecto
 open System.Collections.Generic
 open OpenQA.Selenium.Appium
-open OpenQA.Selenium.Appium.Android
-open OpenQA.Selenium
-open System.Threading
-open OpenQA.Selenium.Appium.Android.Enums
-open OpenQA.Selenium.Appium.Interfaces
 open System
 open Canopy.Mobile.ExpectoHelper
 
@@ -134,8 +129,11 @@ let tests =
                 clickAndWait "tv:Invoke Search" "tv:App/Search/Invoke Search"
 
                 Expect.isTrue (exists "#txt_query_prefill") "Text is available"
+                Expect.equal (read "#txt_query_prefill") "" "Text is not set"
 
                 "#txt_query_prefill" << "Hello world"
+
+                Expect.equal (read "#txt_query_prefill") "Hello world" "Text is set"
 
                 backAndWait "tv:Invoke Search"
                 backAndWait "tv:Search"
