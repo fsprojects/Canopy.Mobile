@@ -429,7 +429,7 @@ Target "All" DoNothing
   ==> "Build"
   ==> "CopyBinaries"
   ==> "InstallAppium"
-  ==> "RunTests"
+  =?> ("RunTests", not <| hasBuildParam "skiptests")
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
 #if MONO
