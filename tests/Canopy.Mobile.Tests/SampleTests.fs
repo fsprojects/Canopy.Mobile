@@ -135,9 +135,9 @@ let tests =
 
                 Expect.isTrue (exists "#txt_query_prefill") "Text is available"
 
+                backAndWait "tv:Invoke Search"
                 backAndWait "tv:Search"
                 backAndWait "tv:App"
-                backAndWait "tv:Animation"
         ]
 
         testCase "can take screenshot" <| fun () ->
