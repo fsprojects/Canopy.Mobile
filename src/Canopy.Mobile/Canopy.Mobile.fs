@@ -209,11 +209,16 @@ let click selector =
     | ex -> failwithf "Failed to click: %A%sInner Message: %A" selector System.Environment.NewLine ex
 
 
-/// Clicks the Android back button
+/// Clicks the Android back button.
+/// If the keyboard is still open this function hides it.
 let back () =
     try
         wait configuration.interactionTimeout (fun _ ->
             try 
+                try
+                    driver.HideKeyboard()
+                with
+                | _ -> ()
                 driver.PressKeyCode(AndroidKeyCode.Back)
                 true
             with 
