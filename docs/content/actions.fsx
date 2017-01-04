@@ -13,8 +13,25 @@ Actions
 (**
 << (write)
 ----------
-Write text to element.
+Writes text to element.
 *)
 "#firstName" << "Alex"
 //if you dont like the << syntax you can use the write function:
 write "#firstName" "Alex"
+
+
+(**
+read
+----
+Reads the text of an element.
+*)
+let firstName = read "#firstName"
+let linkText = read "#someLink"
+
+(**
+click
+-----
+Clicks an element via selector.
+*)
+click "#login"
+click "menu-tv:search"
