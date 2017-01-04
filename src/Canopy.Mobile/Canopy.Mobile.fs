@@ -255,11 +255,16 @@ let ( != ) selector value =
     | ex -> failwithf "Not Equal check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
 
 /// Writes the given text into the element that was found by the given selector and waits until the text was completely entered.
-let ( << ) selector text =
+let WriteIntoElement closeKeyboard selector text =
     click selector
     driver.Keyboard.SendKeys text
-    driver.HideKeyboard()
+    if closeKeyboard then
+        driver.HideKeyboard()
     selector == text
+
+/// Writes the given text into the element that was found by the given selector and waits until the text was completely entered.
+/// After running this function the keyboard will be closed.
+let ( << ) selector text = WriteIntoElement true selector text
 
 /// Check that an element exists and is displayed.
 let displayed selector = 
