@@ -137,11 +137,11 @@ let rec private findElementsBy by reliable timeout =
         else
             waitResults timeout (fun _ -> driver.FindElements by |> List.ofSeq)
     with
-    | :? WebDriverTimeoutException when by.ToString().StartsWith "//android.widget.TextView" -> 
+    | :? WebDriverTimeoutException when by.ToString().StartsWith "By.XPath: //android.widget.TextView" -> 
         let elements = String.Join(Environment.NewLine + "  ", getAllTexts() |> List.map (fun (x:IWebElement) -> x.Text))
-        CanopyElementNotFoundException(sprintf "can't find elements with By: %A%sThe following text elements are available:%s%s" by Environment.NewLine Environment.NewLine elements)
+        CanopyElementNotFoundException(sprintf "can't find elements with %A%sThe following text elements are available:%s%s" by Environment.NewLine Environment.NewLine elements)
         |> raise
-    | :? WebDriverTimeoutException -> raise <| CanopyElementNotFoundException(sprintf "can't find elements with By: %A" by)
+    | :? WebDriverTimeoutException -> raise <| CanopyElementNotFoundException(sprintf "can't find elements with %A" by)
 
 /// Returns all elements with text on the current page.
 and getAllTexts() = 
