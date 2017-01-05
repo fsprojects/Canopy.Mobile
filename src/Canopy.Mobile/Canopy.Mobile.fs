@@ -217,7 +217,6 @@ let click selector =
                 true
             with 
             | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Failed to click %A, because it could not be found." selector)
-            | :? CanopyException -> reraise()
             | _ -> false)
     with
     | :? CanopyException -> reraise()
