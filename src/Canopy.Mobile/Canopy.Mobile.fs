@@ -208,53 +208,20 @@ let longPress key = driver.LongPressKeyCode(key)
 let longPressMeta key = driver.LongPressKeyCode(key, AndroidKeyMetastate.Meta_Shift_On)
 
 /// Clicks the first element that is found with the selector.
-let clickDirectly selector =
-    try
-        wait configuration.interactionTimeout (fun _ ->
-            try 
-                let element = find selector
-                if element.GetAttribute("clickable") <> "true" then
-                    raise <| CanopyException(sprintf "Failed to click %A, because it is not clickable." selector)
-                element.Click()
-                true
-            with 
-            | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Failed to click %A, because it could not be found" selector)
-            | _ -> false)
-    with
-    | :? CanopyException -> reraise()
-    | ex -> failwithf "Failed to click: %A%sInner Message: %A" selector System.Environment.NewLine ex
-
-/// Gets the parent of the current element.
-let tryGetParent (element:IWebElement) =
-    try
-        Some(driver.ExecuteScript("return arguments[0].parentNode;", element) :?> IWebElement)
-    with
-    | _ -> None
-
-/// Clicks the first element that is found with the selector.
-/// If the element is not clickable itself, this function recursivly tries to click the parent until it finds a clickable element.
 let click selector =
     try
         wait configuration.interactionTimeout (fun _ ->
             try 
                 let element = find selector
-                let rec click (current:IWebElement) =
-                    if current.GetAttribute("clickable") = "true" then
-                        current.Click()
-                    else
-                        match tryGetParent current with
-                        | None -> raise <| CanopyException(sprintf "Failed to click %A, because the element and all it's ancestore elements are not clickable." selector)
-                        | Some parent -> click parent
-
-                click element
+                element.Click()
                 true
             with 
             | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Failed to click %A, because it could not be found." selector)
+            | :? CanopyException -> reraise()
             | _ -> false)
     with
     | :? CanopyException -> reraise()
-    | ex -> failwithf "Failed to click %A%sInner Message: %A" selector System.Environment.NewLine ex
-
+    | ex -> failwithf "Failed to click: %A%sInner Message: %A" selector System.Environment.NewLine ex
 
 /// Clicks the Android back button.
 /// If the keyboard is still open this function hides it.
