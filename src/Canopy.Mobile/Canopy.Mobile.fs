@@ -179,7 +179,7 @@ let tryFindBy by =
     | _ -> None
 
 /// Returns the first element that matches the given selector or None if no such element exists.
-let tryFind selector = findAllBy (toBy selector)
+let tryFind selector = tryFindBy (toBy selector)
 
 /// Returns true when the selector matches an element on the current page or otherwise false.
 let exists selector = 
@@ -208,12 +208,20 @@ let longPress key = driver.LongPressKeyCode(key)
 let longPressMeta key = driver.LongPressKeyCode(key, AndroidKeyMetastate.Meta_Shift_On)
 
 /// Clicks the first element that is found with the selector.
+/// If a text input is focused, this function clicks the button twice in order to get the focus.
 let click selector =
     try
         wait configuration.interactionTimeout (fun _ ->
-            try 
+            try
                 let element = find selector
-                element.Click()
+                match tryFind "//*[@focused='true']" with
+                | Some focused when focused.TagName = "android.widget.EditText" ->
+                    element.Click()
+                    System.Threading.Thread.Sleep 1000
+                    let element = find selector
+                    element.Click()
+                | _ ->
+                    element.Click()
                 true
             with 
             | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Failed to click %A, because it could not be found." selector)
