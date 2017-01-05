@@ -126,7 +126,7 @@ let quit () =
     stopEmulator()
 
 /// Finds elements on the current page for a given By.
-let private findElementsBy by reliable timeout =
+let rec private findElementsBy by reliable timeout =
     try
         if reliable then
             let results = ref []
@@ -136,18 +136,27 @@ let private findElementsBy by reliable timeout =
             !results
         else
             waitResults timeout (fun _ -> driver.FindElements by |> List.ofSeq)
-    with 
+    with
+    | :? WebDriverTimeoutException when by.ToString().StartsWith "//android.widget.TextView" -> 
+        let elements = String.Join(Environment.NewLine + "  ", getAllTexts() |> List.map (fun (x:IWebElement) -> x.Text))
+        CanopyElementNotFoundException(sprintf "can't find elements with By: %A%sThe following text elements are available:%s%s" by Environment.NewLine Environment.NewLine elements)
+        |> raise
     | :? WebDriverTimeoutException -> raise <| CanopyElementNotFoundException(sprintf "can't find elements with By: %A" by)
 
+/// Returns all elements with text on the current page.
+and getAllTexts() = 
+    findAllBy (toBy "//*")
+    |> List.filter (fun (x:IWebElement) -> String.IsNullOrWhiteSpace x.Text |> not)
+
 /// Returns all elements for a given By.
-let findAllBy by = 
+and findAllBy by = 
     try
         findElementsBy by true configuration.elementTimeout
     with
     | _ -> []
 
 /// Returns all elements for a given selector.
-let findAll selector = findAllBy (toBy selector)
+and findAll selector = findAllBy (toBy selector)
 
 /// Returns all elements on the current page.
 let getAllElements() = findAllBy (toBy "//*")
