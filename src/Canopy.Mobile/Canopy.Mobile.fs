@@ -213,15 +213,19 @@ let click selector =
     try
         wait configuration.interactionTimeout (fun _ ->
             try
-                let element = find selector
-                match tryFind "//*[@focused='true']" with
-                | Some focused when focused.TagName = "android.widget.EditText" ->
-                    element.Click()
-                    System.Threading.Thread.Sleep 1000
+                let rec click retries =
                     let element = find selector
-                    element.Click()
-                | _ ->
-                    element.Click()
+                    match tryFind "//*[@focused='true']" with
+                    | Some focused when retries > 0 && focused.TagName = "android.widget.EditText" ->
+                        element.Click()
+                        System.Threading.Thread.Sleep 500
+                        click (retries - 1)
+                    | _ ->
+                        element.Click()
+
+                click 3
+
+                
                 true
             with 
             | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Failed to click %A, because it could not be found." selector)
