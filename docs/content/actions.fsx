@@ -90,3 +90,11 @@ hideKeyboard
 Hides the keyboard if it is open.
 *)
 hideKeyboard()
+
+(**
+sleep
+-----
+Sleeps for `x` seconds.
+*)
+sleep 3
+sleep 5

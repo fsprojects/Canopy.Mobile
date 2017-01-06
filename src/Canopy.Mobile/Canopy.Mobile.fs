@@ -312,6 +312,9 @@ let portrait() = orientation ScreenOrientation.Portrait
 /// Reads the text from the given selector
 let read selector = (find selector).Text
 
+/// Sleeps for x seconds.
+let sleep seconds = System.Threading.Thread.Sleep(TimeSpan.FromSeconds seconds)
+
 /// Writes the given text into the element that was found by the given selector and waits until the text was completely entered.
 let writeIntoElement closeKeyboard selector text =
     click selector
