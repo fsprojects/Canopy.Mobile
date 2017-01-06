@@ -98,11 +98,45 @@
 </code></pre></td>
 </tr>
 </table>
-<h2><a name="backAndWit" class="anchor" href="#backAndWit">backAndWit</a></h2>
+<h2><a name="backAndWait" class="anchor" href="#backAndWait">backAndWait</a></h2>
 <p>Clicks the android back button and waits for a selector to appear.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs13', 15)" onmouseover="showTip(event, 'fs13', 15)" class="f">backAndWait</span> <span class="s">&quot;#login&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="landscape" class="anchor" href="#landscape">landscape</a></h2>
+<p>Sets the orientation to landscape.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs14', 16)" onmouseover="showTip(event, 'fs14', 16)" class="f">landscape</span>()
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="portrait" class="anchor" href="#portrait">portrait</a></h2>
+<p>Sets the orientation to portrait.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs15', 17)" onmouseover="showTip(event, 'fs15', 17)" class="f">portrait</span>()
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="hideKeyboard" class="anchor" href="#hideKeyboard">hideKeyboard</a></h2>
+<p>Hides the keyboard if it is open.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs16', 18)" onmouseover="showTip(event, 'fs16', 18)" class="f">hideKeyboard</span>()
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="sleep" class="anchor" href="#sleep">sleep</a></h2>
+<p>Sleeps for <code>x</code> seconds.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs17', 19)" onmouseover="showTip(event, 'fs17', 19)" class="f">sleep</span> <span class="n">3</span>
+<span onmouseout="hideTip(event, 'fs17', 20)" onmouseover="showTip(event, 'fs17', 20)" class="f">sleep</span> <span class="n">5</span>
 </code></pre></td>
 </tr>
 </table>
@@ -120,6 +154,10 @@
 <div class="tip" id="fs11">val clickAndWait : clickSelector:string -&gt; waitSelector:string -&gt; unit<br /><br />Full name: canopy.mobile.core.clickAndWait</div>
 <div class="tip" id="fs12">val back : unit -&gt; unit<br /><br />Full name: canopy.mobile.core.back</div>
 <div class="tip" id="fs13">val backAndWait : waitSelector:string -&gt; unit<br /><br />Full name: canopy.mobile.core.backAndWait</div>
+<div class="tip" id="fs14">val landscape : unit -&gt; unit<br /><br />Full name: canopy.mobile.core.landscape</div>
+<div class="tip" id="fs15">val portrait : unit -&gt; unit<br /><br />Full name: canopy.mobile.core.portrait</div>
+<div class="tip" id="fs16">val hideKeyboard : unit -&gt; unit<br /><br />Full name: canopy.mobile.core.hideKeyboard</div>
+<div class="tip" id="fs17">val sleep : seconds:float -&gt; unit<br /><br />Full name: canopy.mobile.core.sleep</div>
 
         </div>
         <div class="span3">
@@ -134,6 +172,7 @@
             <li><a href="/Canopy.Mobile/release-notes.html">Release Notes</a></li>
             
             <li class="nav-header">Getting started</li>                              
+            <li><a href="/Canopy.Mobile/selectors.html">Selectors</a></li>
             <li><a href="/Canopy.Mobile/actions.html">Actions</a></li>
 
             <li class="nav-header">Documentation</li>
