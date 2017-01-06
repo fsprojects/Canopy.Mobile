@@ -234,16 +234,21 @@ let click selector =
     | :? CanopyException -> reraise()
     | ex -> failwithf "Failed to click: %A%sInner Message: %A" selector System.Environment.NewLine ex
 
+
+/// Hides the keyboard if it is open
+let hideKeyboard () = 
+    try
+        driver.HideKeyboard()
+    with
+    | _ -> ()
+
 /// Clicks the Android back button.
 /// If the keyboard is still open this function hides it.
 let back () =
     try
         wait configuration.interactionTimeout (fun _ ->
             try 
-                try
-                    driver.HideKeyboard()
-                with
-                | _ -> ()
+                hideKeyboard()
                 driver.PressKeyCode(AndroidKeyCode.Back)
                 true
             with 
@@ -312,7 +317,7 @@ let writeIntoElement closeKeyboard selector text =
     click selector
     driver.Keyboard.SendKeys text
     if closeKeyboard then
-        driver.HideKeyboard()
+        hideKeyboard()
     if selector.StartsWith "edit:" then
         waitFor ("edit:" + text)
     else
@@ -345,7 +350,7 @@ let notDisplayed selector =
     try
         wait configuration.assertionTimeout (fun _ ->
             try 
-                (find selector).Displayed = false
+                not (find selector).Displayed
             with 
             | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Not displayed check for %A failed because it could not be found" selector)
             | _ -> false)

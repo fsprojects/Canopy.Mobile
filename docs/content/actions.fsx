@@ -73,13 +73,20 @@ backAndWait "#login"
 (**
 landscape
 ---------
-Sets the orientation to landscape
+Sets the orientation to landscape.
 *)
 landscape()
 
 (**
 portrait
 --------
-Sets the orientation to portrait
+Sets the orientation to portrait.
 *)
 portrait()
+
+(**
+hideKeyboard
+------------
+Hides the keyboard if it is open.
+*)
+hideKeyboard()
