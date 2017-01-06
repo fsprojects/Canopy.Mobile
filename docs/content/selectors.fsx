@@ -8,7 +8,47 @@ open canopy.mobile
 (**
 Selectors
 =========
+
+canonpy.mobile supports all Appium selectors and adds some conventions on top that allow easier access.
 *)
+
+(**
+Finding elements by id
+----------------------
+
+The # sign allows to find elements by it's resource-id.
+*)
+find "#MyElementID"
+
+(**
+Finding elements by text
+----------------------
+
+canopy.mobile provides conventions to find elements when the displayed text of an element is known. 
+*)
+find "tv:Some displayed text" // looks for textviews with the text
+find "edit:Some entered text" // looks for edit fields with the text
+find "some text" // looks for any element with the text
+
+(**
+
+Selector functions
+==================
+*)
+
+(**
+find
+----
+Returns the first element that matches the given selector.
+*)
+find "tv:Test"
+
+(**
+findAll
+-------
+Returns a list with all elements that matches the given selector.
+*)
+findAll "tv:Test"
 
 (**
 nth
