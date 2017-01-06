@@ -1,11 +1,11 @@
 FRAMEWORK: >= NET451
 NUGET
   remote: https://www.nuget.org/api/v2
-    Appium.WebDriver (2.0.1.1)
+    Appium.WebDriver (3.0.0.1)
       Castle.Core (>= 3.3.3)
       Newtonsoft.Json (>= 9.0.1)
-      Selenium.Support (>= 2.53.1)
-      Selenium.WebDriver (>= 2.53.1)
+      Selenium.Support (>= 3.0.1)
+      Selenium.WebDriver (>= 3.0.1)
     Castle.Core (3.3.3)
     FSharp.Core (4.0.0.1) - redirects: force
     Newtonsoft.Json (9.0.1)
@@ -17,7 +17,7 @@ GROUP Build
 FRAMEWORK: >= NET451
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (4.47.4)
+    FAKE (4.48)
     FSharp.Compiler.Service (2.0.0.6)
     FSharp.Formatting (2.14.4)
       FSharp.Compiler.Service (2.0.0.6)
@@ -28,18 +28,18 @@ NUGET
     SourceLink.Fake (1.1)
 GITHUB
   remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (73e7fea28f73811155feaab0c6ce63f51e48139e)
+    modules/Octokit/Octokit.fsx (4c38cad5f0a1d3f29c22e50ef2bff189be47c730)
       Octokit (>= 0.20)
 GROUP Test
 FRAMEWORK: >= NET451
 NUGET
   remote: https://www.nuget.org/api/v2
     Argu (3.2)
-    Expecto (2.4.1)
+    Expecto (2.4.2)
       Argu (>= 3.2)
       FSharp.Core (>= 3.1.2.5)
-    Expecto.FsCheck (2.4.1)
-      Expecto (>= 2.4.1)
+    Expecto.FsCheck (2.4.2)
+      Expecto (>= 2.4.2)
       FsCheck (>= 2.6.2)
       FSharp.Core (>= 3.1.2.5)
     Expecto.PerfUtil (1.0.12)
