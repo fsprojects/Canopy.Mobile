@@ -295,6 +295,15 @@ let first selector = findAll selector |> List.head
 /// Index starts at 1.
 let last selector = findAll selector |> List.last
 
+/// Set Orientation
+let orientation orientation = driver.Orientation <- orientation
+
+/// Set Orientation to Landscape
+let landscape() = orientation ScreenOrientation.Landscape
+
+/// Set Orientation to Portrait
+let portrait() = orientation ScreenOrientation.Portrait
+
 /// Reads the text from the given selector
 let read selector = (find selector).Text
 

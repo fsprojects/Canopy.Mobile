@@ -33,7 +33,6 @@ Writes text to element.
 //if you dont like the << syntax you can use the write function:
 write "#firstName" "Alex"
 
-
 (**
 read
 ----
@@ -72,22 +71,15 @@ Clicks the android back button and waits for a selector to appear.
 backAndWait "#login"
 
 (**
-nth
----
-Gets the nth element with the given selector. Index starts at 1.
+landscape
+---------
+Sets the orientation to landscape
 *)
-nth "tv:Test"
+landscape()
 
 (**
-first
------
-Gets the first element with the given selector.
+portrait
+--------
+Sets the orientation to portrait
 *)
-first "tv:Test"
-
-(**
-last
-----
-Gets the last element with the given selector.
-*)
-last "tv:Test"
+portrait()
