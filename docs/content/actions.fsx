@@ -52,21 +52,42 @@ click "menu-tv:search"
 
 (**
 clickAndWait
------
+------------
 Clicks an element via selector and waits for another selector to appear.
 *)
 clickAndWait "#login" "tv:password"
 
 (**
 back
------
+----
 Clicks the android back button.
 *)
 back ()
 
 (**
-backAndWit
------
+backAndWait
+-----------
 Clicks the android back button and waits for a selector to appear.
 *)
 backAndWait "#login"
+
+(**
+nth
+---
+Gets the nth element with the given selector. Index starts at 1.
+*)
+nth "tv:Test"
+
+(**
+first
+-----
+Gets the first element with the given selector.
+*)
+first "tv:Test"
+
+(**
+last
+----
+Gets the last element with the given selector.
+*)
+last "tv:Test"

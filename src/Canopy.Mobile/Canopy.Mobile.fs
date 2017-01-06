@@ -282,6 +282,19 @@ let ( != ) selector value =
     | :? WebDriverTimeoutException -> failwithf "Not Equal check failed.%sExpected NOT: %s Got: %s" System.Environment.NewLine value (find selector).Text
     | ex -> failwithf "Not Equal check failed for unknown reasons.%sInner Message: %s" System.Environment.NewLine ex.Message
 
+
+/// Gets the nth element with the given selector.
+/// Index starts at 1.
+let nth n selector = findAll selector |> List.item (n + 1)
+
+/// Gets the first element with the given selector.
+/// Index starts at 1.
+let first selector = findAll selector |> List.head
+
+/// Gets the last element with the given selector.
+/// Index starts at 1.
+let last selector = findAll selector |> List.last
+
 /// Reads the text from the given selector
 let read selector = (find selector).Text
 
