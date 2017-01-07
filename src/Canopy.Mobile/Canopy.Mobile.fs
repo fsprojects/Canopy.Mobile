@@ -126,26 +126,35 @@ let quit () =
     stopEmulator()
 
 /// Finds elements on the current page for a given By.
-let rec private findElementsBy by reliable timeout =
+let rec private findElementsBy (by : By option) (selector : string option) reliable timeout =
+    let by' =
+        match by with
+        | Some by -> by
+        | None ->
+            match selector with
+            | Some selector -> toBy selector
+            | None -> failwith "You must provide a By or a selector"
     try
         if reliable then
             let results = ref []
             wait timeout (fun _ ->
-                results := driver.FindElements by |> List.ofSeq
+                results := driver.FindElements by' |> List.ofSeq
                 not <| List.isEmpty !results)
             !results
         else
-            waitResults timeout (fun _ -> driver.FindElements by |> List.ofSeq)
+            waitResults timeout (fun _ -> driver.FindElements by' |> List.ofSeq)
     with
-    | :? WebDriverTimeoutException when by.ToString().StartsWith "By.XPath: //android.widget.TextView" -> 
-        let elements =
-            getAllTexts() 
-            |> List.map (fun (x:IWebElement) -> Environment.NewLine + "   - " + x.Text)
-            |> fun xs -> String.Join("",xs)
+    | :? WebDriverTimeoutException -> 
+        let selector = 
+            match selector with
+            | Some selector -> selector
+            | None -> 
+                let bySelector = by.Value.ToString()
+                bySelector.Substring(bySelector.IndexOf(": ") + 2)
 
-        CanopyElementNotFoundException(sprintf "can't find elements with %A%sThe following text elements are available:%s%s" by Environment.NewLine Environment.NewLine elements)
-        |> raise
-    | :? WebDriverTimeoutException -> raise <| CanopyElementNotFoundException(sprintf "can't find elements with %A" by)
+        let suggestions = getSuggestions selector
+        CanopyElementNotFoundException(sprintf "can't find elements with %A%sDid you mean?:%s%A" selector Environment.NewLine Environment.NewLine suggestions)
+        |> raise    
 
 /// Returns all elements with text on the current page.
 and getAllTexts() = 
@@ -155,7 +164,7 @@ and getAllTexts() =
 /// Returns all elements for a given By.
 and findAllBy by = 
     try
-        findElementsBy by true configuration.elementTimeout
+        findElementsBy (Some by) None true configuration.elementTimeout
     with
     | _ -> []
 
@@ -163,13 +172,47 @@ and findAllBy by =
 and findAll selector = findAllBy (toBy selector)
 
 /// Returns all elements on the current page.
-let getAllElements() = findAllBy (toBy "//*")
+and getAllElements() = findAllBy (toBy "//*")
+
+and private getSuggestions selector =
+    let generateSuggestions text (element : string) (resourceId : string) = 
+        let psuedoSelectorSuggestion =
+            match element with
+            | null -> ""
+            | "android.widget.TextView" -> sprintf """tv:%s""" text
+            | "android.widget.EditText" -> sprintf """edit:%s""" text
+            | _ -> ""
+            
+        let xpathAndTextSuggestion =
+            match element with
+            | null -> ""
+            | "android.widget.TextView" -> sprintf """//android.widget.TextView[@text="%s"]""" text
+            | "android.widget.EditText" -> sprintf """//android.widget.EditText[@text="%s"]""" text
+            | _ -> ""
+
+        let resourceIdSuggestion = 
+            match resourceId with
+            | null -> ""
+            | _ when resourceId.Contains(":id/") -> sprintf """#%s""" (resourceId.Substring(resourceId.IndexOf(":id/") + 4)) 
+            | _ -> ""        
+            
+        [ text; element; psuedoSelectorSuggestion; xpathAndTextSuggestion; resourceId; resourceIdSuggestion ]
+
+    getAllElements ()
+    |> List.map (fun element -> generateSuggestions element.Text element.TagName (element.GetAttribute("resourceId")))
+    |> List.concat
+    |> List.distinct
+    |> List.filter (fun suggestion -> suggestion <> null && suggestion <> "")
+    |> List.map (fun suggestion -> canopy.mobile.EditDistance.editdistance selector suggestion)
+    |> List.sortByDescending (fun a -> a.similarity)
+    |> List.map (fun result -> result.selector)
+    |> fun results -> if results.Length >= 5 then List.take 5 results else results    
 
 /// Returns the first element for a given By.
-let findBy by = findElementsBy by true configuration.elementTimeout |> List.head
+let findBy by = findElementsBy (Some by) None true configuration.elementTimeout |> List.head
 
 /// Returns the first element that matches the given selector.
-let find selector = findBy (toBy selector)
+let find selector = findElementsBy None (Some selector) true configuration.elementTimeout |> List.head
 
 /// Returns the first element for a given By or None if no such element exists.
 let tryFindBy by = 
@@ -184,7 +227,7 @@ let tryFind selector = tryFindBy (toBy selector)
 /// Returns true when the selector matches an element on the current page or otherwise false.
 let exists selector = 
     try
-        findElementsBy (toBy selector) true 1.0 |> List.isEmpty |> not
+        findElementsBy None (Some selector) true 1.0 |> List.isEmpty |> not
     with
     | _ -> false
 

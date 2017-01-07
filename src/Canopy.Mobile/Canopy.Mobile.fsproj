@@ -70,6 +70,7 @@
   -->
   <Import Project="..\..\.paket\paket.targets" />
   <ItemGroup>
+    <Compile Include="JaroWinkler.fs" />
     <Compile Include="Configuration.fs" />
     <Compile Include="Appium.fs" />
     <Compile Include="UmlautsUTF8.fs" />
