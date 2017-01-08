@@ -1,3 +1,6 @@
+### 1.5.0 - 08.01.2017
+* Suggestions plausible selectors on find failure - https://github.com/fsprojects/Canopy.Mobile/pull/29
+
 ### 1.4.0 - 06.01.2017
 * Starts Android emulator directly from Canopy.Mobile
 * Start appium directly from Canopy.Mobile
