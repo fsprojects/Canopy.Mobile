@@ -1,3 +1,6 @@
+### 1.6.0 - 30.06.2017
+* Allow to test from device
+
 ### 1.5.0 - 08.01.2017
 * Suggestions plausible selectors on find failure - https://github.com/fsprojects/Canopy.Mobile/pull/29
 

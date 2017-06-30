@@ -91,14 +91,38 @@ let getAndroidCapabilities (settings:AndroidSettings) appName =
     capabilities.SetCapability("app", appName)
     capabilities
 
+let mutable emulatorStarted = false
+
 /// Starts the webdriver with the given app.
 let start settings appName =
+    printfn "Starting appium in emulator"
     let capabilities = getAndroidCapabilities settings appName
     appium.start()
 
     let testServerAddress = Uri "http://127.0.0.1:4723/wd/hub"
     driver <- new AndroidDriver<IWebElement>(testServerAddress, capabilities, TimeSpan.FromSeconds(120.0))    
-        
+    emulatorStarted <- true
+    printfn "Done starting"
+
+let getDeviceCapabilities appName =
+    let capabilities = DesiredCapabilities()
+    capabilities.SetCapability("platformName", "Android")
+    capabilities.SetCapability("platform", "Android")
+    capabilities.SetCapability("automationName", "Appium")
+    capabilities.SetCapability("deviceName", "Android")
+    capabilities.SetCapability("deviceReadyTimeout", 1000)
+    capabilities.SetCapability("androidDeviceReadyTimeout", 1000)
+    capabilities.SetCapability("app", appName)
+    capabilities
+
+/// Starts the given app on a device
+let startOnDevice appName =
+    printfn "Starting appium on device"
+    let capabilities = getDeviceCapabilities appName
+    appium.start()
+
+    let testServerAddress = Uri "http://127.0.0.1:4723/wd/hub"
+    driver <- new AndroidDriver<IWebElement>(testServerAddress, capabilities, TimeSpan.FromSeconds(120.0))    
     printfn "Done starting"
 
 /// Stops the emulator process that was started with canopy mobile
@@ -123,7 +147,9 @@ let quit () =
         driver.Quit()
 
     appium.stop()
-    stopEmulator()
+    if emulatorStarted then
+        stopEmulator()
+    emulatorStarted <- false
 
 /// Finds elements on the current page for a given By.
 let rec private findElementsBy (by : By option) (selector : string option) reliable timeout =
@@ -232,7 +258,9 @@ let exists selector =
     | _ -> false
 
 /// Waits until the given selector returns an element or throws an exception when the timeout is reached.
-let waitFor selector = find selector |> ignore
+let waitFor selector =
+    printfn "Waiting for %A" selector
+    find selector |> ignore
 
 //keys
 let home = AndroidKeyCode.Home
@@ -254,6 +282,7 @@ let longPressMeta key = driver.LongPressKeyCode(key, AndroidKeyMetastate.Meta_Sh
 /// If a text input is focused, this function clicks the button twice in order to get the focus.
 let click selector =
     try
+        printfn "Click %A" selector
         wait configuration.interactionTimeout (fun _ ->
             try
                 let rec click retries =
@@ -289,6 +318,7 @@ let hideKeyboard () =
 /// If the keyboard is still open this function hides it.
 let back () =
     try
+        printfn "Android back button press"
         wait configuration.interactionTimeout (fun _ ->
             try 
                 hideKeyboard()
