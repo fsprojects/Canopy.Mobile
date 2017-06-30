@@ -38,7 +38,7 @@
 <p>Starts a new emulator session with the given apk.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="f">start</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="i">DefaultAndroidSettings</span> <span class="s">&quot;myApp.apk&quot;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">start</span> <span class="i">DefaultAndroidSettings</span> <span class="s">&quot;myApp.apk&quot;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -46,7 +46,7 @@
 <p>Quit the current emulator session.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="f">quit</span> ()
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">quit</span> ()
 </code></pre></td>
 </tr>
 </table>
@@ -58,7 +58,7 @@
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="s">&quot;#firstName&quot;</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Alex&quot;</span>
 <span class="c">//if you dont like the &lt;&lt; syntax you can use the write function:</span>
-<span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="f">write</span> <span class="s">&quot;#firstName&quot;</span> <span class="s">&quot;Alex&quot;</span>
+<span class="i">write</span> <span class="s">&quot;#firstName&quot;</span> <span class="s">&quot;Alex&quot;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -67,8 +67,8 @@
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="i">firstName</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 8)" onmouseover="showTip(event, 'fs8', 8)" class="f">read</span> <span class="s">&quot;#firstName&quot;</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs9', 9)" onmouseover="showTip(event, 'fs9', 9)" class="i">linkText</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="f">read</span> <span class="s">&quot;#someLink&quot;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">firstName</span> <span class="o">=</span> <span class="i">read</span> <span class="s">&quot;#firstName&quot;</span>
+<span class="k">let</span> <span class="i">linkText</span> <span class="o">=</span> <span class="i">read</span> <span class="s">&quot;#someLink&quot;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -77,8 +77,8 @@
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs10', 11)" onmouseover="showTip(event, 'fs10', 11)" class="f">click</span> <span class="s">&quot;#login&quot;</span>
-<span onmouseout="hideTip(event, 'fs10', 12)" onmouseover="showTip(event, 'fs10', 12)" class="f">click</span> <span class="s">&quot;menu-tv:search&quot;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">click</span> <span class="s">&quot;#login&quot;</span>
+<span class="i">click</span> <span class="s">&quot;menu-tv:search&quot;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -86,7 +86,7 @@
 <p>Clicks an element via selector and waits for another selector to appear.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs11', 13)" onmouseover="showTip(event, 'fs11', 13)" class="f">clickAndWait</span> <span class="s">&quot;#login&quot;</span> <span class="s">&quot;tv:password&quot;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">clickAndWait</span> <span class="s">&quot;#login&quot;</span> <span class="s">&quot;tv:password&quot;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -94,7 +94,7 @@
 <p>Clicks the android back button.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs12', 14)" onmouseover="showTip(event, 'fs12', 14)" class="f">back</span> ()
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">back</span> ()
 </code></pre></td>
 </tr>
 </table>
@@ -102,7 +102,7 @@
 <p>Clicks the android back button and waits for a selector to appear.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs13', 15)" onmouseover="showTip(event, 'fs13', 15)" class="f">backAndWait</span> <span class="s">&quot;#login&quot;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">backAndWait</span> <span class="s">&quot;#login&quot;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -110,7 +110,7 @@
 <p>Sets the orientation to landscape.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs14', 16)" onmouseover="showTip(event, 'fs14', 16)" class="f">landscape</span>()
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">landscape</span>()
 </code></pre></td>
 </tr>
 </table>
@@ -118,7 +118,7 @@
 <p>Sets the orientation to portrait.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs15', 17)" onmouseover="showTip(event, 'fs15', 17)" class="f">portrait</span>()
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">portrait</span>()
 </code></pre></td>
 </tr>
 </table>
@@ -126,7 +126,7 @@
 <p>Hides the keyboard if it is open.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs16', 18)" onmouseover="showTip(event, 'fs16', 18)" class="f">hideKeyboard</span>()
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">hideKeyboard</span>()
 </code></pre></td>
 </tr>
 </table>
@@ -135,29 +135,12 @@
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs17', 19)" onmouseover="showTip(event, 'fs17', 19)" class="f">sleep</span> <span class="n">3</span>
-<span onmouseout="hideTip(event, 'fs17', 20)" onmouseover="showTip(event, 'fs17', 20)" class="f">sleep</span> <span class="n">5</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">sleep</span> <span class="n">3</span>
+<span class="i">sleep</span> <span class="n">5</span>
 </code></pre></td>
 </tr>
 </table>
 
-<div class="tip" id="fs1">namespace canopy</div>
-<div class="tip" id="fs2">namespace canopy.mobile</div>
-<div class="tip" id="fs3">val start : settings:AndroidSettings -&gt; appName:&#39;a -&gt; unit<br /><br />Full name: canopy.mobile.core.start</div>
-<div class="tip" id="fs4">val DefaultAndroidSettings : AndroidSettings<br /><br />Full name: canopy.mobile.core.DefaultAndroidSettings</div>
-<div class="tip" id="fs5">val quit : unit -&gt; unit<br /><br />Full name: canopy.mobile.core.quit</div>
-<div class="tip" id="fs6">val write : selector:string -&gt; text:string -&gt; unit<br /><br />Full name: canopy.mobile.core.write</div>
-<div class="tip" id="fs7">val firstName : string<br /><br />Full name: Actions.firstName</div>
-<div class="tip" id="fs8">val read : selector:string -&gt; string<br /><br />Full name: canopy.mobile.core.read</div>
-<div class="tip" id="fs9">val linkText : string<br /><br />Full name: Actions.linkText</div>
-<div class="tip" id="fs10">val click : selector:string -&gt; unit<br /><br />Full name: canopy.mobile.core.click</div>
-<div class="tip" id="fs11">val clickAndWait : clickSelector:string -&gt; waitSelector:string -&gt; unit<br /><br />Full name: canopy.mobile.core.clickAndWait</div>
-<div class="tip" id="fs12">val back : unit -&gt; unit<br /><br />Full name: canopy.mobile.core.back</div>
-<div class="tip" id="fs13">val backAndWait : waitSelector:string -&gt; unit<br /><br />Full name: canopy.mobile.core.backAndWait</div>
-<div class="tip" id="fs14">val landscape : unit -&gt; unit<br /><br />Full name: canopy.mobile.core.landscape</div>
-<div class="tip" id="fs15">val portrait : unit -&gt; unit<br /><br />Full name: canopy.mobile.core.portrait</div>
-<div class="tip" id="fs16">val hideKeyboard : unit -&gt; unit<br /><br />Full name: canopy.mobile.core.hideKeyboard</div>
-<div class="tip" id="fs17">val sleep : seconds:float -&gt; unit<br /><br />Full name: canopy.mobile.core.sleep</div>
 
         </div>
         <div class="span3">
