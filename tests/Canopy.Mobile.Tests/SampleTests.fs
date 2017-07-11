@@ -19,14 +19,6 @@ let tests =
                 let dictionary : Dictionary<string, obj> = driver.SessionDetails.["desired"] |> unbox
                 Expect.isGreaterThan dictionary.Count 0 "desired data is set"
         ]
-
-        
-        testList "device tests" [
-            testCase "can get device time" <| fun () ->
-                let time = driver.DeviceTime
-
-                Expect.equal time.Length 28 "time has correct format"
-        ]
         
         testList "app strings tests" [
             testCase "can get app strings" <| fun () ->
@@ -53,13 +45,9 @@ let tests =
         ]
         
         testList "element tests" [
-            testCase "can get all elements" <| fun () ->
-                let elements = getAllElements()
-                Expect.isGreaterThan elements.Length 20 "all elements are found"
-
             testCase "can find element by Android UI Automator" <| fun () ->
                 driver.StartActivity("io.appium.android.apis", ".ApiDemos")
-                let byAndroidUIAutomator = new ByAndroidUIAutomator("new UiSelector().clickable(true)")
+                let byAndroidUIAutomator = ByAndroidUIAutomator("new UiSelector().clickable(true)")
                 let element = (find "#content").FindElement(byAndroidUIAutomator)
 
                 Expect.isNotNull element.Text "text is set"
