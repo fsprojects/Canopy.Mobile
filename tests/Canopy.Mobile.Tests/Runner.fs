@@ -22,6 +22,13 @@ let downloadDemoApp () =
 
     localFile.FullName
 
+let startOnEmulator app =
+    let settings = 
+        { DefaultAndroidSettings with 
+            AVDName = "AVD_for_Nexus_6_by_Google"
+            Silent = true }
+
+    start settings app
 
 [<EntryPoint>]
 let main args =
@@ -29,12 +36,11 @@ let main args =
         try
             let app = downloadDemoApp()
             
-            let settings = 
-                { DefaultAndroidSettings with 
-                    AVDName = "AVD_for_Nexus_6_by_Google"
-                    Silent = args |> Array.contains "debug" |> not }
+            try
+                startOnDevice app
+            with 
+            | _ -> startOnEmulator app
 
-            start settings app
             runTestsWithArgs { defaultConfig with ``parallel`` = false } args tests
         with e ->
             printfn "Error: %s" e.Message
