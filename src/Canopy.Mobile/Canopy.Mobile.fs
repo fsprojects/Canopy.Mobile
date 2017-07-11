@@ -187,10 +187,16 @@ and getAllTexts() =
     findAllBy (toBy "//*")
     |> List.filter (fun (x:IWebElement) -> String.IsNullOrWhiteSpace x.Text |> not)
 
-/// Returns all elements for a given By.
+/// Returns all elements for a given By - without timeout
 and findAllBy by = 
     try
         findElementsBy (Some by) None true configuration.elementTimeout
+    with
+    | _ -> []
+
+and findAllByNow by =
+    try
+        findElementsBy (Some by) None true 0.
     with
     | _ -> []
 
@@ -240,14 +246,14 @@ let findBy by = findElementsBy (Some by) None true configuration.elementTimeout 
 /// Returns the first element that matches the given selector.
 let find selector = findElementsBy None (Some selector) true configuration.elementTimeout |> List.head
 
-/// Returns the first element for a given By or None if no such element exists.
+/// Returns the first element for a given By or None if no such element exists right now.
 let tryFindBy by = 
     try 
-        findAllBy by |> List.tryHead
+        findAllByNow by |> List.tryHead
     with
     | _ -> None
 
-/// Returns the first element that matches the given selector or None if no such element exists.
+/// Returns the first element that matches the given selector or None if no such element exists right now.
 let tryFind selector = tryFindBy (toBy selector)
 
 /// Returns true when the selector matches an element on the current page or otherwise false.

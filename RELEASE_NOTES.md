@@ -1,3 +1,6 @@
+### 1.6.1 - 11.07.2017
+* Faster clicking on device
+
 ### 1.6.0 - 30.06.2017
 * Allow to test from device
 
