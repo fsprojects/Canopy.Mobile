@@ -178,7 +178,7 @@ let rec private findElementsBy (by : By option) (selector : string option) relia
                 let bySelector = by.Value.ToString()
                 bySelector.Substring(bySelector.IndexOf(": ") + 2)
 
-        let suggestions = getSuggestions selector
+        let suggestions = GetSuggestions selector
         CanopyElementNotFoundException(sprintf "can't find elements with %A%sDid you mean?:%s%A" selector Environment.NewLine Environment.NewLine suggestions)
         |> raise    
 
@@ -206,7 +206,8 @@ and findAll selector = findAllBy (toBy selector)
 /// Returns all elements on the current page.
 and getAllElements() = findAllBy (toBy "//*")
 
-and private getSuggestions selector =
+/// Returns similar elements for a given selector
+and GetSuggestions selector =
     let generateSuggestions text (element : string) (resourceId : string) = 
         let psuedoSelectorSuggestion =
             match element with
@@ -240,6 +241,7 @@ and private getSuggestions selector =
     |> List.map (fun result -> result.selector)
     |> fun results -> if results.Length >= 5 then List.take 5 results else results    
 
+    
 /// Returns the first element for a given By.
 let findBy by = findElementsBy (Some by) None true configuration.elementTimeout |> List.head
 
@@ -306,7 +308,9 @@ let click selector =
                 
                 true
             with 
-            | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Failed to click %A, because it could not be found." selector)
+            | :? CanopyElementNotFoundException ->
+                let suggestions = GetSuggestions selector
+                raise <| CanopyException(sprintf "Failed to click %A, because it could not be found.%sDid you mean?:%s%A" selector Environment.NewLine Environment.NewLine suggestions)
             | _ -> false)
     with
     | :? CanopyException -> reraise()
@@ -345,7 +349,9 @@ let ( == ) selector value =
             try 
                 (find selector).Text = value
             with 
-            | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Equality check for %A failed because it could not be found" selector)
+            | :? CanopyElementNotFoundException ->
+                let suggestions = GetSuggestions selector
+                raise <| CanopyException(sprintf "Equality check for %A failed because it could not be found.%sDid you mean?:%s%A" selector Environment.NewLine Environment.NewLine suggestions)
             | _ -> false)
     with
     | :? CanopyException -> reraise()
@@ -359,7 +365,9 @@ let ( != ) selector value =
             try 
                 (find selector).Text <> value
             with 
-            | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Not Equal check for %A failed because it could not be found" selector)
+            | :? CanopyElementNotFoundException -> 
+                let suggestions = GetSuggestions selector
+                raise <| CanopyException(sprintf "Not Equal check for %A failed because it could not be found.%sDid you mean?:%s%A" selector Environment.NewLine Environment.NewLine suggestions)
             | _ -> false)
     with
     | :? CanopyException -> reraise()
@@ -420,7 +428,9 @@ let displayed selector =
             try 
                 (find selector).Displayed
             with 
-            | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Displayed check for %A failed because it could not be found" selector)
+            | :? CanopyElementNotFoundException -> 
+                let suggestions = GetSuggestions selector
+                raise <| CanopyException(sprintf "Displayed check for %A failed because it could not be found.%sDid you mean?:%s%A" selector Environment.NewLine Environment.NewLine suggestions)
             | _ -> false)
     with
     | :? CanopyException -> reraise()
@@ -434,7 +444,9 @@ let notDisplayed selector =
             try 
                 not (find selector).Displayed
             with 
-            | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Not displayed check for %A failed because it could not be found" selector)
+            | :? CanopyElementNotFoundException ->
+                let suggestions = GetSuggestions selector
+                raise <| CanopyException(sprintf "Not displayed check for %A failed because it could not be found.%sDid you mean?:%s%A" selector Environment.NewLine Environment.NewLine suggestions)
             | _ -> false)
     with
     | :? CanopyException -> reraise()

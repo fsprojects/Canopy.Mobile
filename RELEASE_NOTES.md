@@ -1,3 +1,6 @@
+### 1.6.2 - 12.07.2017
+* Always show suggestions
+
 ### 1.6.1 - 11.07.2017
 * Faster clicking on device
 
