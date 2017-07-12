@@ -206,10 +206,10 @@ and findAll selector = findAllBy (toBy selector)
 /// Returns all elements on the current page.
 and getAllElements() = findAllBy (toBy "//*")
 
-/// Returns similar elements for a given selector
-and GetSuggestions selector =
+/// Returns all selectors for all elements the current page.
+and GetAllElementSelectors() =
     let generateSuggestions text (element : string) (resourceId : string) = 
-        let psuedoSelectorSuggestion =
+        let pseudoSelectorSuggestion =
             match element with
             | null -> ""
             | "android.widget.TextView" -> sprintf """tv:%s""" text
@@ -229,13 +229,23 @@ and GetSuggestions selector =
             | _ when resourceId.Contains(":id/") -> sprintf """#%s""" (resourceId.Substring(resourceId.IndexOf(":id/") + 4)) 
             | _ -> ""        
             
-        [ text; element; psuedoSelectorSuggestion; xpathAndTextSuggestion; resourceId; resourceIdSuggestion ]
+        [ text; element; pseudoSelectorSuggestion; xpathAndTextSuggestion; resourceId; resourceIdSuggestion ]
 
     getAllElements ()
     |> List.map (fun element -> generateSuggestions element.Text element.TagName (element.GetAttribute("resourceId")))
     |> List.concat
     |> List.distinct
     |> List.filter (fun suggestion -> suggestion <> null && suggestion <> "")
+
+/// Prints a description of the current view on the console
+and DescribeCurrentView() =
+    printfn "Available selectors:"
+    for selector in GetAllElementSelectors() do
+        printfn "%s" selector
+
+/// Returns similar elements for a given selector
+and GetSuggestions selector =
+    GetAllElementSelectors()
     |> List.map (fun suggestion -> canopy.mobile.EditDistance.editdistance selector suggestion)
     |> List.sortByDescending (fun a -> a.similarity)
     |> List.map (fun result -> result.selector)

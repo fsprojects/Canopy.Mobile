@@ -1,3 +1,6 @@
+### 1.6.3 - 12.07.2017
+* Allow to describe the current view
+
 ### 1.6.2 - 12.07.2017
 * Always show suggestions
 
