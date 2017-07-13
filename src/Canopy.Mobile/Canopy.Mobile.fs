@@ -296,23 +296,35 @@ let longPress key = driver.LongPressKeyCode(key)
 /// Long press a key with meta state
 let longPressMeta key = driver.LongPressKeyCode(key, AndroidKeyMetastate.Meta_Shift_On)
 
-/// Clicks the first element that is found with the selector.
-/// If a text input is focused, this function clicks the button twice in order to get the focus.
-let click selector =
+let private clickAndMaybeWait selector waitSelector =
     try
         printfn "Click %A" selector
         wait configuration.interactionTimeout (fun _ ->
             try
                 let rec click retries =
                     let element = find selector
-                    match tryFind "//*[@focused='true']" with
-                    | Some focused when retries > 0 && focused.TagName = "android.widget.EditText" ->
-                        printfn "Focus on editbox. Clicking again."
+                    if element.TagName = "android.widget.EditText" then
                         element.Click()
-                        System.Threading.Thread.Sleep 500
-                        click (retries - 1)
-                    | _ ->
-                        element.Click()
+                        match waitSelector with
+                        | Some waitSelector -> waitFor waitSelector
+                        | _ -> ()
+
+                    else
+                        match tryFind "//*[@focused='true']" with
+                        | Some focused when retries > 0 && focused.TagName = "android.widget.EditText" ->
+                            element.Click()
+                            System.Threading.Thread.Sleep 500
+
+                            match waitSelector with
+                            | Some waitSelector when tryFind waitSelector <> None -> ()
+                            | _ ->
+                                printfn "Focus on editbox. Clicking again."
+                                click (retries - 1)
+                        | _ ->
+                            element.Click()
+                            match waitSelector with
+                            | Some waitSelector -> waitFor waitSelector
+                            | _ -> ()
 
                 click 3
                 true
@@ -324,6 +336,10 @@ let click selector =
     with
     | :? CanopyException -> reraise()
     | ex -> failwithf "Failed to click: %A%sInner Message: %A" selector System.Environment.NewLine ex
+
+/// Clicks the first element that is found with the selector.
+/// If a text input is focused, this function clicks the button twice in order to get the focus.
+let click selector = clickAndMaybeWait selector None
 
 /// Hides the keyboard if it is open
 let rec hideKeyboard () = 
@@ -484,8 +500,7 @@ let screenshot path fileName =
 let clickAndWait clickSelector waitSelector =
     if exists waitSelector then
         failwithf "The selector %s already matched before the click. This makes it impossible to detect page transistions." waitSelector
-    click clickSelector
-    waitFor waitSelector
+    clickAndMaybeWait clickSelector (Some waitSelector)
 
 /// Clicks the Android back button and waits for the waitSelector to appear.
 let backAndWait waitSelector =
