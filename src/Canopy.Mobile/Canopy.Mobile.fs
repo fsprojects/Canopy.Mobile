@@ -305,21 +305,28 @@ let click selector =
         printfn "Click %A" selector
         wait configuration.interactionTimeout (fun _ ->
             try
-                let rec click retries =
+                let rec click hasToMatch retries =
+                    let skip = 
+                        if hasToMatch then
+                            false
+                        else
+                            tryFind selector = None
+                    
+                    if skip then () else
                     let element = find selector
                     match tryFind "//*[@focused='true']" with
                     | Some focused when retries > 0 && focused.TagName = "android.widget.EditText" ->
                         element.Click()
                         System.Threading.Thread.Sleep 500
-                        click (retries - 1)
+                        click true (retries - 1)
                     | _ ->
                         element.Click()
                         if hasWritten then
                             hasWritten <- false
                             System.Threading.Thread.Sleep 500
-                            click (retries - 1)
+                            click false (retries - 1)
 
-                click 3
+                click true 3
 
                 hasWritten <- false
                 true
