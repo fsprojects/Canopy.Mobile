@@ -4,6 +4,9 @@ module canopy.mobile.configuration
 /// TimeOut for find operations
 let mutable elementTimeout = 20.0
 
+/// TimeOut for "instant" operations
+let mutable instantTimeout = 5.0
+
 /// TimeOut for interaction operations
 let mutable interactionTimeout = 30.0
 

@@ -196,7 +196,7 @@ and findAllBy by =
 
 and findAllByNow by =
     try
-        findElementsBy (Some by) None true 0.
+        findElementsBy (Some by) None true configuration.instantTimeout
     with
     | _ -> []
 
@@ -296,8 +296,6 @@ let longPress key = driver.LongPressKeyCode(key)
 /// Long press a key with meta state
 let longPressMeta key = driver.LongPressKeyCode(key, AndroidKeyMetastate.Meta_Shift_On)
 
-let mutable private hasWritten = false
-
 /// Clicks the first element that is found with the selector.
 /// If a text input is focused, this function clicks the button twice in order to get the focus.
 let click selector =
@@ -305,30 +303,18 @@ let click selector =
         printfn "Click %A" selector
         wait configuration.interactionTimeout (fun _ ->
             try
-                let rec click hasToMatch retries =
-                    let skip = 
-                        if hasToMatch then
-                            false
-                        else
-                            tryFind selector = None
-                    
-                    if skip then () else
+                let rec click retries =
                     let element = find selector
                     match tryFind "//*[@focused='true']" with
                     | Some focused when retries > 0 && focused.TagName = "android.widget.EditText" ->
+                        printfn "Focus on editbox. Clicking again."
                         element.Click()
                         System.Threading.Thread.Sleep 500
-                        click true (retries - 1)
+                        click (retries - 1)
                     | _ ->
                         element.Click()
-                        if hasWritten then
-                            hasWritten <- false
-                            System.Threading.Thread.Sleep 500
-                            click false (retries - 1)
 
-                click true 3
-
-                hasWritten <- false
+                click 3
                 true
             with 
             | :? CanopyElementNotFoundException ->
@@ -357,7 +343,6 @@ let back () =
             try 
                 hideKeyboard()
                 driver.PressKeyCode(AndroidKeyCode.Back)
-                hasWritten <- false
                 true
             with 
             | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Failed to click back button.")
@@ -438,7 +423,6 @@ let writeIntoElement closeKeyboard selector text =
         waitFor ("edit:" + text)
     else
         selector == text
-    hasWritten <- true
 
 /// Writes the given text into the element that was found by the given selector and waits until the text was completely entered.
 /// After running this function the keyboard will be closed.
@@ -502,7 +486,6 @@ let clickAndWait clickSelector waitSelector =
         failwithf "The selector %s already matched before the click. This makes it impossible to detect page transistions." waitSelector
     click clickSelector
     waitFor waitSelector
-    hasWritten <- false
 
 /// Clicks the Android back button and waits for the waitSelector to appear.
 let backAndWait waitSelector =
@@ -510,4 +493,3 @@ let backAndWait waitSelector =
         failwithf "The selector %s already matched before the click of the Android back button. This makes it impossible to detect page transistions." waitSelector
     back()
     waitFor waitSelector
-    hasWritten <- false

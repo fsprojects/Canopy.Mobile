@@ -1,4 +1,4 @@
-### 1.6.7 - 13.07.2017
+### 1.6.8 - 13.07.2017
 * Check if we have written to textbox. Then we need to click "out"
 
 ### 1.6.3 - 12.07.2017
