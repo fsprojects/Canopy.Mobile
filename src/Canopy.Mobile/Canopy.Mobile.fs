@@ -296,6 +296,8 @@ let longPress key = driver.LongPressKeyCode(key)
 /// Long press a key with meta state
 let longPressMeta key = driver.LongPressKeyCode(key, AndroidKeyMetastate.Meta_Shift_On)
 
+let mutable private hasWritten = false
+
 /// Clicks the first element that is found with the selector.
 /// If a text input is focused, this function clicks the button twice in order to get the focus.
 let click selector =
@@ -307,15 +309,26 @@ let click selector =
                     let element = find selector
                     match tryFind "//*[@focused='true']" with
                     | Some focused when retries > 0 && focused.TagName = "android.widget.EditText" ->
+                        printfn "Removing focus from %s and clicked again" focused.TagName 
                         element.Click()
                         System.Threading.Thread.Sleep 500
                         click (retries - 1)
-                    | _ ->
+                    | Some focused when retries > 0 ->
                         element.Click()
+                        printfn "%b Removed focus from %s and clicked again" hasWritten focused.TagName 
+                        if hasWritten then
+                            System.Threading.Thread.Sleep 500
+                            click (retries - 1)
+                    | _ ->
+                        printfn "%b Removed focus and clicked again" hasWritten
+                        element.Click()
+                        if hasWritten then
+                            System.Threading.Thread.Sleep 500
+                            click (retries - 1)
 
                 click 3
 
-                
+                hasWritten <- false
                 true
             with 
             | :? CanopyElementNotFoundException ->
@@ -344,6 +357,7 @@ let back () =
             try 
                 hideKeyboard()
                 driver.PressKeyCode(AndroidKeyCode.Back)
+                hasWritten <- false
                 true
             with 
             | :? CanopyElementNotFoundException -> raise <| CanopyException(sprintf "Failed to click back button.")
@@ -412,8 +426,6 @@ let read selector = (find selector).Text
 
 /// Sleeps for x seconds.
 let sleep seconds = System.Threading.Thread.Sleep(TimeSpan.FromSeconds seconds)
-
-let mutable private hasWritten = false
 
 /// Writes the given text into the element that was found by the given selector and waits until the text was completely entered.
 let writeIntoElement closeKeyboard selector text =
@@ -489,8 +501,6 @@ let clickAndWait clickSelector waitSelector =
     if exists waitSelector then
         failwithf "The selector %s already matched before the click. This makes it impossible to detect page transistions." waitSelector
     click clickSelector
-    if hasWritten then
-        click clickSelector
     waitFor waitSelector
     hasWritten <- false
 
