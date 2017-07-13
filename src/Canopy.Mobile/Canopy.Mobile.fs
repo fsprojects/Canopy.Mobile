@@ -309,20 +309,13 @@ let click selector =
                     let element = find selector
                     match tryFind "//*[@focused='true']" with
                     | Some focused when retries > 0 && focused.TagName = "android.widget.EditText" ->
-                        printfn "Removing focus from %s and clicked again" focused.TagName 
                         element.Click()
                         System.Threading.Thread.Sleep 500
                         click (retries - 1)
-                    | Some focused when retries > 0 ->
-                        element.Click()
-                        printfn "%b Removed focus from %s and clicked again" hasWritten focused.TagName 
-                        if hasWritten then
-                            System.Threading.Thread.Sleep 500
-                            click (retries - 1)
                     | _ ->
-                        printfn "%b Removed focus and clicked again" hasWritten
                         element.Click()
                         if hasWritten then
+                            hasWritten <- false
                             System.Threading.Thread.Sleep 500
                             click (retries - 1)
 
