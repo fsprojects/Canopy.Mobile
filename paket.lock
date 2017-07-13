@@ -6,7 +6,7 @@ NUGET
       Newtonsoft.Json (>= 9.0.1)
       Selenium.Support (>= 3.0.1)
       Selenium.WebDriver (>= 3.0.1)
-    Castle.Core (4.1)
+    Castle.Core (4.1.1)
     FSharp.Core (4.2.1) - redirects: force
     Newtonsoft.Json (10.0.3)
     Selenium.Support (3.4)
@@ -17,7 +17,7 @@ GROUP Build
 RESTRICTION: >= net451
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (4.62.1)
+    FAKE (4.62.3)
     FSharp.Compiler.Service (2.0.0.6)
     FSharp.Formatting (2.14.4)
       FSharp.Compiler.Service (2.0.0.6)
@@ -28,7 +28,7 @@ NUGET
     SourceLink.Fake (1.1)
 GITHUB
   remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (b5933798c1944051bf358a460fcdc8ffbd678dfc)
+    modules/Octokit/Octokit.fsx (9b496581e49c116cff9911570df871eb0258ac83)
       Octokit (>= 0.20)
 GROUP Test
 RESTRICTION: >= net451
