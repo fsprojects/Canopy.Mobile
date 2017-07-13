@@ -326,11 +326,12 @@ let click selector =
     | :? CanopyException -> reraise()
     | ex -> failwithf "Failed to click: %A%sInner Message: %A" selector System.Environment.NewLine ex
 
-
 /// Hides the keyboard if it is open
-let hideKeyboard () = 
-    try
+let rec hideKeyboard () = 
+    try 
         driver.HideKeyboard()
+        System.Threading.Thread.Sleep(100)
+        hideKeyboard()
     with
     | _ -> ()
 
@@ -412,16 +413,20 @@ let read selector = (find selector).Text
 /// Sleeps for x seconds.
 let sleep seconds = System.Threading.Thread.Sleep(TimeSpan.FromSeconds seconds)
 
+let mutable private hasWritten = false
+
 /// Writes the given text into the element that was found by the given selector and waits until the text was completely entered.
 let writeIntoElement closeKeyboard selector text =
     click selector
     driver.Keyboard.SendKeys text
     if closeKeyboard then
         hideKeyboard()
+
     if selector.StartsWith "edit:" then
         waitFor ("edit:" + text)
     else
         selector == text
+    hasWritten <- true
 
 /// Writes the given text into the element that was found by the given selector and waits until the text was completely entered.
 /// After running this function the keyboard will be closed.
@@ -484,7 +489,10 @@ let clickAndWait clickSelector waitSelector =
     if exists waitSelector then
         failwithf "The selector %s already matched before the click. This makes it impossible to detect page transistions." waitSelector
     click clickSelector
+    if hasWritten then
+        click clickSelector
     waitFor waitSelector
+    hasWritten <- false
 
 /// Clicks the Android back button and waits for the waitSelector to appear.
 let backAndWait waitSelector =
@@ -492,3 +500,4 @@ let backAndWait waitSelector =
         failwithf "The selector %s already matched before the click of the Android back button. This makes it impossible to detect page transistions." waitSelector
     back()
     waitFor waitSelector
+    hasWritten <- false

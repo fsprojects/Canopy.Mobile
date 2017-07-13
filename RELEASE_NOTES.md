@@ -1,3 +1,6 @@
+### 1.6.4 - 13.07.2017
+* Check if we have written to textbox. Then we need to click "out"
+
 ### 1.6.3 - 12.07.2017
 * Allow to describe the current view
 
