@@ -1,13 +1,7 @@
-### 1.6.9 - 13.07.2017
+### 1.7.0 - 17.07.2017
 * Check if we have written to textbox. Then we need to click "out"
-
-### 1.6.3 - 12.07.2017
 * Allow to describe the current view
-
-### 1.6.2 - 12.07.2017
 * Always show suggestions
-
-### 1.6.1 - 11.07.2017
 * Faster clicking on device
 
 ### 1.6.0 - 30.06.2017

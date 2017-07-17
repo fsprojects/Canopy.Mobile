@@ -271,7 +271,7 @@ let tryFind selector = tryFindBy (toBy selector)
 /// Returns true when the selector matches an element on the current page or otherwise false.
 let exists selector = 
     try
-        findElementsBy None (Some selector) true 1.0 |> List.isEmpty |> not
+       tryFind selector <> None
     with
     | _ -> false
 
