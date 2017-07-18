@@ -1,3 +1,6 @@
+### 1.7.1 - 18.07.2017
+* Adding a bit more tracing
+
 ### 1.7.0 - 17.07.2017
 * Check if we have written to textbox. Then we need to click "out"
 * Allow to describe the current view

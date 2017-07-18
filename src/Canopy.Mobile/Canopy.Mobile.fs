@@ -178,6 +178,8 @@ let rec private findElementsBy (by : By option) (selector : string option) relia
                 let bySelector = by.Value.ToString()
                 bySelector.Substring(bySelector.IndexOf(": ") + 2)
 
+        printfn "Trying to find suggestions for %A..." selector
+
         let suggestions = GetSuggestions selector
         CanopyElementNotFoundException(sprintf "can't find elements with %A%sDid you mean?:%s%A" selector Environment.NewLine Environment.NewLine suggestions)
         |> raise    
