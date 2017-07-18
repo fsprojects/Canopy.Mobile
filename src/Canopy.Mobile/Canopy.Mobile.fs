@@ -154,7 +154,7 @@ let quit () =
 let findAllSelector = "//*"
 
 /// Finds elements on the current page for a given By.
-let rec private findElementsBy (by : By option) (selector : string option) reliable timeout =
+let rec private findElementsBy getSuggestions (by : By option) (selector : string option) reliable timeout =
     let by' =
         match by with
         | Some by -> by
@@ -172,7 +172,7 @@ let rec private findElementsBy (by : By option) (selector : string option) relia
         else
             waitResults timeout (fun _ -> driver.FindElements by' |> List.ofSeq)
     with
-    | :? WebDriverTimeoutException -> 
+    | :? WebDriverTimeoutException when getSuggestions -> 
         let selector = 
             match selector with
             | Some selector -> selector
@@ -195,13 +195,13 @@ and getAllTexts() =
 /// Returns all elements for a given By - without timeout
 and findAllBy by = 
     try
-        findElementsBy (Some by) None true configuration.elementTimeout
+        findElementsBy false (Some by) None true configuration.elementTimeout
     with
     | _ -> []
 
 and findAllByNow by =
     try
-        findElementsBy (Some by) None true configuration.instantTimeout
+        findElementsBy false (Some by) None true configuration.instantTimeout
     with
     | _ -> []
 
@@ -259,10 +259,10 @@ and GetSuggestions (selector:string) =
 
     
 /// Returns the first element for a given By.
-let findBy by = findElementsBy (Some by) None true configuration.elementTimeout |> List.head
+let findBy by = findElementsBy true (Some by) None true configuration.elementTimeout |> List.head
 
 /// Returns the first element that matches the given selector.
-let find selector = findElementsBy None (Some selector) true configuration.elementTimeout |> List.head
+let find selector = findElementsBy true None (Some selector) true configuration.elementTimeout |> List.head
 
 /// Returns the first element for a given By or None if no such element exists right now.
 let tryFindBy by = 

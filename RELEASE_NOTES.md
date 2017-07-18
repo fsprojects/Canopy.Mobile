@@ -1,3 +1,6 @@
+### 1.7.4 - 18.07.2017
+* BUGFIX: Faster suggestions
+
 ### 1.7.3 - 18.07.2017
 * BUGFIX: Removed StackOverflow when suggesting replacements for //*
 
