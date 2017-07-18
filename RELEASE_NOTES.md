@@ -1,5 +1,5 @@
-### 1.7.1 - 18.07.2017
-* Adding a bit more tracing
+### 1.7.2 - 18.07.2017
+* BUGFIX: Removed StackOverflow when suggesting replacements for //*
 
 ### 1.7.0 - 17.07.2017
 * Check if we have written to textbox. Then we need to click "out"

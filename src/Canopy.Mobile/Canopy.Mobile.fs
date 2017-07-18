@@ -151,6 +151,8 @@ let quit () =
         stopEmulator()
     emulatorStarted <- false
 
+let findAllSelector = "//*"
+
 /// Finds elements on the current page for a given By.
 let rec private findElementsBy (by : By option) (selector : string option) reliable timeout =
     let by' =
@@ -177,16 +179,17 @@ let rec private findElementsBy (by : By option) (selector : string option) relia
             | None -> 
                 let bySelector = by.Value.ToString()
                 bySelector.Substring(bySelector.IndexOf(": ") + 2)
-
-        printfn "Trying to find suggestions for %A..." selector
+       
+        if selector = findAllSelector then reraise() else
+        printfn "Trying to find suggestions for %s..." selector
 
         let suggestions = GetSuggestions selector
-        CanopyElementNotFoundException(sprintf "can't find elements with %A%sDid you mean?:%s%A" selector Environment.NewLine Environment.NewLine suggestions)
+        CanopyElementNotFoundException(sprintf "can't find elements with %s%sDid you mean?:%s%A" selector Environment.NewLine Environment.NewLine suggestions)
         |> raise    
 
 /// Returns all elements with text on the current page.
 and getAllTexts() = 
-    findAllBy (toBy "//*")
+    findAllBy (toBy findAllSelector)
     |> List.filter (fun (x:IWebElement) -> String.IsNullOrWhiteSpace x.Text |> not)
 
 /// Returns all elements for a given By - without timeout
@@ -206,7 +209,7 @@ and findAllByNow by =
 and findAll selector = findAllBy (toBy selector)
 
 /// Returns all elements on the current page.
-and getAllElements() = findAllBy (toBy "//*")
+and getAllElements() = findAllBy (toBy findAllSelector)
 
 /// Returns all selectors for all elements the current page.
 and GetAllElementSelectors() =
@@ -247,6 +250,7 @@ and DescribeCurrentView() =
 
 /// Returns similar elements for a given selector
 and GetSuggestions selector =
+    if selector = findAllSelector then [] else
     GetAllElementSelectors()
     |> List.map (fun suggestion -> canopy.mobile.EditDistance.editdistance selector suggestion)
     |> List.sortByDescending (fun a -> a.similarity)
