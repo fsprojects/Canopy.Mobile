@@ -180,7 +180,7 @@ let rec private findElementsBy (by : By option) (selector : string option) relia
                 let bySelector = by.Value.ToString()
                 bySelector.Substring(bySelector.IndexOf(": ") + 2)
        
-        if selector = findAllSelector then reraise() else
+        if selector.StartsWith findAllSelector then reraise() else
         printfn "Trying to find suggestions for %s..." selector
 
         let suggestions = GetSuggestions selector
@@ -249,8 +249,8 @@ and DescribeCurrentView() =
         printfn "%s" selector
 
 /// Returns similar elements for a given selector
-and GetSuggestions selector =
-    if selector = findAllSelector then [] else
+and GetSuggestions (selector:string) =
+    if selector.StartsWith findAllSelector then [] else
     GetAllElementSelectors()
     |> List.map (fun suggestion -> canopy.mobile.EditDistance.editdistance selector suggestion)
     |> List.sortByDescending (fun a -> a.similarity)
