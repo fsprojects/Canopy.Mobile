@@ -1,7 +1,6 @@
-### 1.7.4 - 18.07.2017
+### 1.8.0 - 11.09.2017
+* BUGFIX: Use correct method for screenshots
 * BUGFIX: Faster suggestions
-
-### 1.7.3 - 18.07.2017
 * BUGFIX: Removed StackOverflow when suggesting replacements for //*
 
 ### 1.7.0 - 17.07.2017

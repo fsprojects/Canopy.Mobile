@@ -500,7 +500,7 @@ let screenshot path fileName =
     if File.Exists fileName then
         File.Delete fileName
         
-    screenShot.SaveAsFile(fileName, Drawing.Imaging.ImageFormat.Png)
+    screenShot.SaveAsFile(fileName, ScreenshotImageFormat.Png)
 
 /// Clicks an element and waits for the waitSelector to appear.
 let clickAndWait clickSelector waitSelector =

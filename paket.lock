@@ -7,48 +7,48 @@ NUGET
       Selenium.Support (>= 3.0.1)
       Selenium.WebDriver (>= 3.0.1)
     Castle.Core (4.1.1)
-    FSharp.Core (4.2.1) - redirects: force
+    FSharp.Core (4.2.3) - redirects: force
     Newtonsoft.Json (10.0.3)
-    Selenium.Support (3.4)
-      Selenium.WebDriver (>= 3.4)
-    Selenium.WebDriver (3.4)
+    Selenium.Support (3.5.2)
+      Selenium.WebDriver (>= 3.5.2)
+    Selenium.WebDriver (3.5.2)
 
 GROUP Build
 RESTRICTION: >= net451
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (4.62.3)
+    FAKE (4.63)
     FSharp.Compiler.Service (2.0.0.6)
     FSharp.Formatting (2.14.4)
       FSharp.Compiler.Service (2.0.0.6)
       FSharpVSPowerTools.Core (>= 2.3 < 2.4)
     FSharpVSPowerTools.Core (2.3)
       FSharp.Compiler.Service (>= 2.0.0.3)
-    Octokit (0.24)
+    Octokit (0.26)
     SourceLink.Fake (1.1)
 GITHUB
   remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (9b496581e49c116cff9911570df871eb0258ac83)
+    modules/Octokit/Octokit.fsx (0bde6564e7a9218200cee8c74b71d67fbe66fe51)
       Octokit (>= 0.20)
 GROUP Test
 RESTRICTION: >= net451
 NUGET
   remote: https://www.nuget.org/api/v2
     Argu (3.7)
-    Expecto (5.0)
+    Expecto (5.0.1)
       Argu (>= 3.7)
       FSharp.Core (>= 4.1.12)
       Mono.Cecil (>= 0.10.0-beta5)
-    Expecto.FsCheck (5.0)
-      Expecto (>= 5.0)
+    Expecto.FsCheck (5.0.1)
+      Expecto (>= 5.0.1)
       FsCheck (>= 2.8)
       FSharp.Core (>= 4.1.12)
     Expecto.PerfUtil (1.0.12)
       Expecto (>= 1.0.12)
       FSharp.Core (>= 3.1.2.5)
       PerfUtil (>= 0.1.8)
-    FsCheck (2.9)
+    FsCheck (2.10)
       FSharp.Core (>= 4.1)
-    FSharp.Core (4.2.1) - redirects: force
+    FSharp.Core (4.2.3) - redirects: force
     Mono.Cecil (0.10.0-beta6)
     PerfUtil (0.1.8)
