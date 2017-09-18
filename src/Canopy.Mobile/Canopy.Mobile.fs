@@ -305,6 +305,7 @@ let longPressMeta key = driver.LongPressKeyCode(key, AndroidKeyMetastate.Meta_Sh
 let private clickAndMaybeWait selector waitSelector =
     try
         printfn "Click %A" selector
+        let waiting = ref false
         wait configuration.interactionTimeout (fun _ ->
             try
                 let rec click retries =
@@ -312,7 +313,9 @@ let private clickAndMaybeWait selector waitSelector =
                     if element.TagName = "android.widget.EditText" then
                         element.Click()
                         match waitSelector with
-                        | Some waitSelector -> waitFor waitSelector
+                        | Some waitSelector -> 
+                            waiting := true
+                            waitFor waitSelector
                         | _ -> ()
 
                     else
@@ -329,12 +332,22 @@ let private clickAndMaybeWait selector waitSelector =
                         | _ ->
                             element.Click()
                             match waitSelector with
-                            | Some waitSelector -> waitFor waitSelector
+                            | Some waitSelector -> 
+                                waiting := true
+                                waitFor waitSelector
                             | _ -> ()
 
                 click 3
                 true
             with 
+            | :? CanopyElementNotFoundException when !waiting ->
+                match waitSelector with
+                | Some waitSelector -> 
+                    let suggestions = GetSuggestions waitSelector
+                    raise <| CanopyException(sprintf "Failed to find %A after clicking %A.%sDid you mean?:%s%A" waitSelector selector Environment.NewLine Environment.NewLine suggestions)
+                | _ ->
+                    let suggestions = GetSuggestions selector
+                    raise <| CanopyException(sprintf "Failed to click %A, because it could not be found.%sDid you mean?:%s%A" selector Environment.NewLine Environment.NewLine suggestions)
             | :? CanopyElementNotFoundException ->
                 let suggestions = GetSuggestions selector
                 raise <| CanopyException(sprintf "Failed to click %A, because it could not be found.%sDid you mean?:%s%A" selector Environment.NewLine Environment.NewLine suggestions)
@@ -505,12 +518,12 @@ let screenshot path fileName =
 /// Clicks an element and waits for the waitSelector to appear.
 let clickAndWait clickSelector waitSelector =
     if exists waitSelector then
-        failwithf "The selector %s already matched before the click. This makes it impossible to detect page transistions." waitSelector
+        failwithf "The selector %s already matched before the click. This makes it impossible to detect page transitions." waitSelector
     clickAndMaybeWait clickSelector (Some waitSelector)
 
 /// Clicks the Android back button and waits for the waitSelector to appear.
 let backAndWait waitSelector =
     if exists waitSelector then
-        failwithf "The selector %s already matched before the click of the Android back button. This makes it impossible to detect page transistions." waitSelector
+        failwithf "The selector %s already matched before the click of the Android back button. This makes it impossible to detect page transitions." waitSelector
     back()
     waitFor waitSelector

@@ -1,3 +1,6 @@
+### 1.8.1 - 18.09.2017
+* BUGFIX: Better error message for Click And Wait
+
 ### 1.8.0 - 11.09.2017
 * BUGFIX: Use correct method for screenshots
 * BUGFIX: Faster suggestions
