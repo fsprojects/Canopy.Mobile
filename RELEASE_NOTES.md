@@ -1,3 +1,6 @@
+### 1.8.2 - 19.10.2017
+* BUGFIX: Move from recursive calls in wait to a loop - https://github.com/fsprojects/Canopy.Mobile/pull/33
+
 ### 1.8.1 - 18.09.2017
 * BUGFIX: Better error message for Click And Wait
 
