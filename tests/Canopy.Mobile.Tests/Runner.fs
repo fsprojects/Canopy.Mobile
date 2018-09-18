@@ -25,7 +25,7 @@ let downloadDemoApp () =
 let startOnEmulator app =
     let settings = 
         { DefaultAndroidSettings with 
-            AVDName = "AVD_for_Nexus_6_by_Google"
+            AVDName = "Nexus_6_API_28"
             Silent = true }
 
     start settings app
