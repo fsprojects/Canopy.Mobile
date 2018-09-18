@@ -6,49 +6,48 @@ NUGET
       Newtonsoft.Json (>= 9.0.1)
       Selenium.Support (>= 3.0.1)
       Selenium.WebDriver (>= 3.0.1)
-    Castle.Core (4.1.1)
-    FSharp.Core (4.2.3) - redirects: force
-    Newtonsoft.Json (10.0.3)
-    Selenium.Support (3.5.2)
-      Selenium.WebDriver (>= 3.5.2)
-    Selenium.WebDriver (3.5.2)
+    Castle.Core (4.3.1)
+    FSharp.Core (4.5.2) - redirects: force
+    Newtonsoft.Json (11.0.2)
+    Selenium.Support (3.14)
+      Selenium.WebDriver (>= 3.14)
+    Selenium.WebDriver (3.14)
 
 GROUP Build
 RESTRICTION: >= net451
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (4.63.2)
+    FAKE (5.3)
     FSharp.Compiler.Service (2.0.0.6)
     FSharp.Formatting (2.14.4)
       FSharp.Compiler.Service (2.0.0.6)
       FSharpVSPowerTools.Core (>= 2.3 < 2.4)
     FSharpVSPowerTools.Core (2.3)
       FSharp.Compiler.Service (>= 2.0.0.3)
-    Octokit (0.26)
+    Octokit (0.32)
     SourceLink.Fake (1.1)
 GITHUB
   remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (0bde6564e7a9218200cee8c74b71d67fbe66fe51)
+    modules/Octokit/Octokit.fsx (7e6ab7004d39ecf4f83b317c15df9370fb3bddd4)
       Octokit (>= 0.20)
 GROUP Test
 RESTRICTION: >= net451
 NUGET
   remote: https://www.nuget.org/api/v2
-    Argu (3.7)
-    Expecto (5.0.1)
-      Argu (>= 3.7)
-      FSharp.Core (>= 4.1.12)
-      Mono.Cecil (>= 0.10.0-beta5)
-    Expecto.FsCheck (5.0.1)
-      Expecto (>= 5.0.1)
-      FsCheck (>= 2.8)
-      FSharp.Core (>= 4.1.12)
+    Argu (5.1) - restriction: || (&& (>= net451) (>= netstandard2.0)) (>= net461)
+      FSharp.Core (>= 4.0.0.1)
+    Expecto (8.3)
+      Argu (>= 5.1) - restriction: || (&& (>= net451) (>= netstandard2.0)) (>= net461)
+      Mono.Cecil (>= 0.10) - restriction: || (&& (>= net451) (>= netstandard2.0)) (>= net461)
+    Expecto.FsCheck (8.3)
+      Expecto (>= 8.3) - restriction: || (&& (>= net451) (>= netstandard2.0)) (>= net461)
+      FsCheck (>= 2.10.4) - restriction: || (&& (>= net451) (>= netstandard2.0)) (>= net461)
     Expecto.PerfUtil (1.0.12)
       Expecto (>= 1.0.12)
       FSharp.Core (>= 3.1.2.5)
       PerfUtil (>= 0.1.8)
-    FsCheck (2.10)
-      FSharp.Core (>= 4.1)
-    FSharp.Core (4.2.3) - redirects: force
-    Mono.Cecil (0.10.0-beta6)
+    FsCheck (2.11) - restriction: || (&& (>= net451) (>= netstandard2.0)) (>= net461)
+      FSharp.Core (>= 4.0.0.1)
+    FSharp.Core (4.5.2) - redirects: force
+    Mono.Cecil (0.10) - restriction: || (&& (>= net451) (>= netstandard2.0)) (>= net461)
     PerfUtil (0.1.8)
